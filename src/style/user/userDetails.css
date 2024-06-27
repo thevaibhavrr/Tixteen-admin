@@ -1,0 +1,83 @@
+.user-details-container {
+    padding: 20px;
+    background-color: var(--light-blue-color);
+    font-family: var(--inter-font);
+  }
+  
+  .user-card {
+    background-color: var(--white-color);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .user-header {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    background-color: var(--dark-yellow-color);
+  }
+  
+  .user-profile-img {
+    width: 200px;
+    height: 200px;
+    border-radius: 5%;
+    object-fit: cover;
+    margin-right: 20px;
+  }
+
+.user-section video {
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 10px;
+    max-width: 200px;
+    margin-left: 20px;
+  }
+  
+  
+  .user-info h1 {
+    font-size: 1.5em;
+    margin: 0;
+    color: var(--white-color);
+  }
+  
+  .user-info p {
+    margin: 5px 0;
+    color: var(--white-color);
+  }
+  
+  .user-body {
+    padding: 20px;
+  }
+  
+  .user-section {
+    margin-bottom: 20px;
+  }
+  
+  .user-section h2 {
+    font-size: 1.2em;
+    border-bottom: 2px solid var(--light-gray-color);
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+  }
+  
+  .user-section p {
+    margin: 5px 0;
+  }
+  
+  .user-footer {
+    padding: 20px;
+    background-color: var(--light-yellow-color);
+  }
+  
+  .user-footer h2 {
+    font-size: 1.2em;
+    margin: 0 0 10px 0;
+  }
+  
+  .user-footer p {
+    margin: 5px 0;
+  }
+  

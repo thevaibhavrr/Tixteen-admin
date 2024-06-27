@@ -1,0 +1,203 @@
+
+
+   .campaign-details-unique {
+    background-color: var(--light-blue-color);
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    font-family: var(--inter-font);
+  }
+  
+  .campaign-banner-unique {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    object-fit: contain;
+    max-width: 1200px;
+  }
+  
+  .campaign-content-unique {
+    padding: 20px;
+    background-color: var(--white-color);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: -100px;
+    position: relative;
+    z-index: 1;
+  }
+  
+  .campaign-title-unique {
+    font-family: var(--lilita-font);
+    font-size: 2.5rem;
+    color: var(--dark-yellow-color);
+  }
+  
+  .campaign-company-unique,
+  .campaign-type-unique,
+  .campaign-product-unique,
+  .campaign-industry-unique,
+  .campaign-language-unique,
+  .campaign-age-unique,
+  .campaign-gender-unique,
+  .campaign-description-unique,
+  .campaign-deliverables-unique,
+  .campaign-hashtags-unique,
+  .campaign-platform-unique,
+  .campaign-link-unique,
+  .campaign-tags-unique,
+  .campaign-do-unique,
+  .campaign-dont-unique,
+  .campaign-price-unique,
+  .campaign-deadline-unique,
+  .campaign-screenshots-unique,
+  .campaign-location-unique {
+    font-family: var(--kumbh-font);
+    font-size: 1.1rem;
+    margin: 10px 0;
+    color: var(--dark-gray-color);
+  }
+  
+  .campaign-followers-unique {
+    background-color: var(--light-yellow-color);
+    padding: 10px;
+    border-radius: 5px;
+    margin: 10px 0;
+  }
+  
+  .campaign-followers-unique h3 {
+    font-family: var(--lilita-font);
+    color: var(--dark-yellow-color);
+  }
+  
+  .campaign-followers-unique p {
+    font-family: var(--kumbh-font);
+    color: var(--dark-gray-color);
+    margin: 5px 0;
+  }
+  
+  .campaign-product-image-unique {
+    width: 100%;
+    object-fit: contain;
+    border-radius: 10px;
+    margin: 10px 0;
+    max-width: 1200px;
+  }
+  
+  .campaign-link-unique a {
+    color: var(--blue-color);
+    text-decoration: none;
+  }
+  
+  .campaign-link-unique a:hover {
+    text-decoration: underline;
+  }
+  
+  .campaign-location-unique h3 {
+    font-family: var(--lilita-font);
+    color: var(--dark-yellow-color);
+  }
+  
+  .campaign-location-unique p {
+    font-family: var(--kumbh-font);
+    color: var(--dark-gray-color);
+    margin: 5px 0;
+  }
+  
+  .view-applied-users-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px 0;
+    padding: 10px 20px;
+    background-color: var(--blue-color);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .view-applied-users-button svg {
+    margin-left: 10px;
+  }
+
+  .applied-users-list-unique {
+    margin-top: 20px;
+  }
+  
+  .applied-user-card-unique {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    margin-bottom: 10px;
+    border: 1px solid var(--light-gray-color);
+    border-radius: 5px;
+    background-color: var(--white-color);
+  }
+  
+  .applied-user-content-unique {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+  }
+  
+  .user-image-unique {
+    width: 200px;
+    height: 200px;
+    border-radius: 5%;
+    margin-right: 20px;
+  }
+  
+  .user-details-unique {
+    flex: 1;
+  }
+  
+  .user-actions-unique {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .accept-button-unique {
+    background-color: var(--green-color);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  
+  .deny-button-unique {
+    background-color: rgba(255, 0, 0, 0.598);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  .view-more-button-unique {
+    background-color: var(--blue-color);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  
+  .more-details-unique {
+    margin-top: 10px;
+    padding: 10px;
+    border-top: 1px solid var(--light-gray-color);
+    animation: slide-down 0.3s ease-out;
+  }
+  
+  @keyframes slide-down {
+    from {
+      max-height: 0;
+      opacity: 0;
+    }
+    to {
+      max-height: 500px; /* Adjust as needed */
+      opacity: 1;
+    }
+  }
+  
