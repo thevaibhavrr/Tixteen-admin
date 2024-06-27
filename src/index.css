@@ -1,0 +1,64 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+/* google fonts */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Lilita+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Linden+Hill:ital@0;1&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@100..900&display=swap');
+
+/* root */
+
+:root {
+  /* fonts */
+  --inter-font: "Inter", sans-serif;
+  --lilita-font: "Lilita One", sans-serif;
+  --linden-font: "Linden Hill", serif;
+  --kumbh-font: "Kumbh Sans", sans-serif;
+
+  /* colors */
+  --light-blue-color: rgba(245, 245, 245, 255);
+  --dark-yellow-color: rgba(255, 203, 0, 255);
+  --light-yellow-color: rgba(255, 251, 235, 255);
+  --third-yellow-color: #FBDD03;
+  --dark-gray-color: rgba(29, 28, 28, 255);
+  --light-gray-color: #a8a7a7;
+  --green-color: #1dd03a;
+  --blue-color: #1a50dc;
+  --white-color : white;
+  --black-color: black;
+  /* --secondary-yellow-color:rgba(255,203,0,255); */
+}
+
+.bold_text {
+  font-weight: bold;
+}
+.little_bold_text {
+  font-weight: 600;
+}
+.main_all_page_default_padding {
+  padding: 0px 20px;
+}
+.css_for_link_tag {
+  text-decoration: none;
+}
+
+.secondayHeader_parent_div{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 10;
+  height: 16vh;
+}
