@@ -1,0 +1,55 @@
+.manage-industry-chart {
+    padding: 20px;
+}
+
+.manage-industry-chart table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.manage-industry-chart th, .manage-industry-chart td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.manage-industry-chart th {
+    background-color: #f2f2f2;
+}
+
+.manage-industry-chart .bi-pencil-square,
+.manage-industry-chart .bi-trash3 {
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+
+
+.popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.popup-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    width: 400px;
+}
+
+.popup-content h2 {
+    margin-top: 0;
+}
+
+.popup-content button {
+    margin-right: 10px;
+    padding: 5px 10px;
+}

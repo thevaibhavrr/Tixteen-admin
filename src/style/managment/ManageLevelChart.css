@@ -1,0 +1,117 @@
+
+.manage-level-chart {
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.manage-level-chart h2 {
+    text-align: center;
+    font-family: var(--lilita-font);
+    margin-bottom: 20px;
+}
+
+.manage-level-chart table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--inter-font);
+}
+
+.manage-level-chart table th, .manage-level-chart table td {
+    border: 1px solid var(--light-gray-color);
+    padding: 10px;
+    text-align: left;
+    font-family: var(--inter-font);
+}
+
+.manage-level-chart table th {
+    background-color: var(--light-blue-color);
+    font-weight: bold;
+}
+
+.manage-level-chart table input[type="text"] {
+    width: calc(50% - 5px);
+    margin-right: 5px;
+    padding: 5px;
+    box-sizing: border-box;
+    border: 1px solid var(--light-gray-color);
+    border-radius: 3px;
+    font-family: var(--inter-font);
+}
+
+.manage-level-chart table input[type="text"]:last-of-type {
+    margin-right: 0;
+}
+
+/* .manage-level-chart  */
+.add-level-button {
+    padding: 10px 20px;
+    background-color: var(--dark-yellow-color);
+    color: var(--white-color);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: var(--inter-font);
+    display: block;
+    margin: 20px auto;
+}
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.edit-modal {
+    top: 10% !important ;
+}
+
+.modal-content {
+    background-color: var(--white-color);
+    padding: 20px;
+    border-radius: 5px;
+    width: 80%;
+    max-width: 500px;
+}
+
+.modal-content h3 {
+    font-family: var(--lilita-font);
+    margin-bottom: 20px;
+}
+
+.modal-content label {
+    display: block;
+    font-family: var(--inter-font);
+    margin: 10px 0 5px;
+}
+
+.modal-content input[type="text"] {
+    width: calc(50% - 5px);
+    margin-right: 5px;
+    padding: 5px;
+    box-sizing: border-box;
+    border: 1px solid var(--light-gray-color);
+    border-radius: 3px;
+    font-family: var(--inter-font);
+}
+
+.modal-content button {
+    padding: 10px 20px;
+    background-color: var(--dark-yellow-color);
+    color: var(--white-color);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: var(--inter-font);
+    margin-top: 20px;
+    margin-right: 10px;
+}
+
+.modal-content button:last-of-type {
+    margin-right: 0;
+}

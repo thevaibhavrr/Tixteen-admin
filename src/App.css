@@ -1,0 +1,8 @@
+.back_icon_main_div{
+    position: absolute;
+    left: 1%;
+    top: 10%;
+    cursor: pointer;
+    padding: 10px 40px;
+    color: black;
+}

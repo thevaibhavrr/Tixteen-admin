@@ -109,8 +109,10 @@
     justify-content: center;
     margin: 20px 0;
     padding: 10px 20px;
-    background-color: var(--blue-color);
-    color: white;
+    background-color: var(--dark-yellow-color);
+    color: var(--light-blue-color);
+    font-weight: 600;
+    font-family: var(--inter-font);
     border: none;
     border-radius: 5px;
     cursor: pointer;

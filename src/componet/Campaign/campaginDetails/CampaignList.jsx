@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import "../../../style/campaign/campaignList.css";
 import { Link } from 'react-router-dom';
@@ -46,13 +47,16 @@ const CampaignList = () => {
                             <p>ID: {campaign.id}</p>
                             <p>Status: {campaign.status}</p>
                             <p>Deadline: {campaign.deadline}</p>
-                            <Link to={`/campaign-details/${campaign.id}`} >
-                            <button className="view-more-button">View More</button>
+                            <Link to={`/campaign/campaign-details/${campaign.id}`} >
+                                <button className="view-more-button">View More</button>
                             </Link>
                         </div>
                     </div>
                 ))}
             </div>
+            <Link to="/campaign/create-campaign" className="create-campaign-button">
+                Create New Campaign
+            </Link>
         </div>
     );
 };

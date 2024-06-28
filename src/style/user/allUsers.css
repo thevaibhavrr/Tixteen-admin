@@ -1,0 +1,252 @@
+/* usersPage.css
+
+.all-user-users-page {
+    padding: 20px;
+    font-family: var(--inter-font);
+  }
+  
+  .all-user-top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: var(--light-blue-color);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .all-user-tabs {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .tab-button {
+    padding: 10px 20px;
+    border: none;
+    border: 1px solid var(--light-gray-color);
+    color: var(--dark-gray-color);
+    cursor: pointer;
+    border-radius: 5px;
+    font-family: var(--kumbh-font);
+  }
+  
+  .tab-button.active {
+    background-color: var(--dark-yellow-color);
+    color: var(--white-color);
+    border: 1px solid var(--dark-yellow-color);
+    
+  }
+  
+  .all-user-state-filter {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--white-color);
+  }
+  
+  #state {
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid var(--light-gray-color);
+    font-family: var(--kumbh-font);
+  }
+  
+  
+  .all-user-users-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  
+  .all-user-user-card {
+    background: var(--light-blue-color);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: calc(33.333% - 20px);
+  }
+  
+  .all-user-user-image {
+    width: 150px;
+    height: 150px;
+    border-radius: 5%;
+    object-fit: cover;
+    margin-bottom: 10px;
+  }
+  
+  .all-user-user-info {
+    text-align: center;
+  }
+  
+  .all-user-view-more-button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: var(--dark-yellow-color);
+    color: var(--white-color);
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-family: var(--kumbh-font);
+  }
+   */
+   .all-user-users-page {
+    padding: 20px;
+    font-family: var(--inter-font);
+  }
+  
+  .all-user-top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: var(--light-blue-color);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .all-user-tabs {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .tab-button {
+    padding: 10px 20px;
+    border: none;
+    border: 1px solid var(--light-gray-color);
+    color: var(--dark-gray-color);
+    cursor: pointer;
+    border-radius: 5px;
+    font-family: var(--kumbh-font);
+  }
+  
+  .tab-button.active {
+    background-color: var(--dark-yellow-color);
+    color: var(--white-color);
+    border: 1px solid var(--dark-yellow-color);
+  }
+  
+  .all-user-state-filter {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--white-color);
+  }
+  
+  #state {
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid var(--light-gray-color);
+    font-family: var(--kumbh-font);
+  }
+  
+  .all-user-users-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  
+  .all-user-user-card {
+    background: var(--light-blue-color);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: calc(33.333% - 20px);
+  }
+  
+  .all-user-user-image {
+    width: 150px;
+    height: 150px;
+    border-radius: 5%;
+    object-fit: cover;
+    margin-bottom: 10px;
+  }
+  
+  .all-user-user-info {
+    text-align: center;
+  }
+  
+  .all-user-view-more-button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: var(--dark-yellow-color);
+    color: var(--white-color);
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-family: var(--kumbh-font);
+  }
+  
+  /* Media Queries */
+  
+  @media (max-width: 1024px) {
+    .all-user-user-card {
+      width: calc(50% - 20px);
+    }
+    
+  .all-user-top-bar {
+    margin-bottom: 20px;
+    padding: 10px;
+    font-size: 13px;
+  }
+  .tab-button {
+    padding: 8px 12px;
+  }
+  .all-user-state-filter {
+    font-size: 13px;
+  }
+  }
+  
+  @media (max-width: 768px) {
+    .all-user-user-card {
+      width: 100%;
+    }
+    .all-user-users-list {
+      flex-direction: column;
+      align-items: center;
+    }
+    
+
+    /* bar */
+    .all-user-user-card {
+      width: calc(50% - 20px);
+    }
+    
+  .all-user-top-bar {
+    margin-bottom: 20px;
+    padding: 10px;
+    font-size: 10px;
+  }
+  .tab-button {
+    padding: 6px 8px;
+  }
+  .all-user-state-filter {
+    font-size: 10px;
+  }
+  .all-user-state-filter-text{
+    font-size: 10px;
+  }
+  }
+  
+  @media (max-width: 480px) {
+    .all-user-top-bar {
+      flex-direction: column;
+      align-items: center;
+    }
+    .all-user-tabs {
+      flex-direction: column;
+      align-items: center;
+    }
+    .all-user-state-filter {
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+  

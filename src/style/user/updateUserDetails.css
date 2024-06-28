@@ -1,0 +1,53 @@
+
+
+.update-user-details-page {
+  padding: 20px;
+  font-family: var(--inter-font);
+}
+
+.update-user-details-page h2 {
+  text-align: center;
+  color: var(--dark-gray-color);
+  font-family: var(--lilita-font);
+}
+
+.update-user-details-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: var(--light-blue-color);
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.update-user-details-field {
+  display: flex;
+  flex-direction: column;
+}
+
+.update-user-details-field label {
+  margin-bottom: 5px;
+  color: var(--dark-gray-color);
+  font-family: var(--kumbh-font);
+}
+
+.update-user-details-field input {
+  padding: 10px;
+  border: 1px solid var(--light-gray-color);
+  border-radius: 5px;
+  font-family: var(--inter-font);
+}
+
+.update-user-details-submit {
+  padding: 10px 20px;
+  background-color: var(--dark-yellow-color);
+  color: var(--white-color);
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  font-family: var(--kumbh-font);
+  align-self: center;
+}

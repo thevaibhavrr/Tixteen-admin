@@ -4,20 +4,25 @@ import CampaignList from './componet/Campaign/campaginDetails/CampaignList';
 import { Route, Routes } from "react-router-dom";
 import CampaignDetails from './componet/Campaign/campaginDetails/CampaignDetails';
 import CampaignUpdate from './componet/Campaign/campaginUpdate/CampaignUpdate';
-import UserDetails from './componet/Campaign/UserDetails';
+import UserDetails from './componet/users/UserDetails';
+import AllUser from './componet/users/allUsers';
+import Navbar from './componet/Header/Navbar';
+import UpdateUserDetails from './componet/users/UpdateUserDetails';
+import Campaign from './pages/Campaign';
+import User from './pages/User';
+import ManageLevelChart from './componet/Management/ManageLevelChart';
+import Management from './pages/Management';
 
 
 const App = () => {
   return (
     <div className="App">
+      <Navbar />
        <Routes>
-       <Route path="/" element={<MainCreateCampagin />} />
-       <Route path="/CampaignList" element={<CampaignList />} />
-       <Route path="/campaign-details/:id" element={<CampaignDetails />} />
-       <Route path='/update-campaign/:id' element={<CampaignUpdate />} />
-
-       {/* user */}
-       <Route path="/user-details/:id" element={<UserDetails />} />
+        <Route path="/campaign/*" element={<Campaign />} />
+        <Route path='/user/*' element={<User />} />
+        <Route path='/management/*' element={<Management />} />
+        <Route path='/'element={<CampaignList/>} />
        </Routes>
       
     </div>

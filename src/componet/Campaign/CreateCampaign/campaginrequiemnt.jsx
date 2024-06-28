@@ -30,8 +30,8 @@ function CampaignRequirement({ totalSum }) {
             </div>
             <div className='create_campaign_select_category_section'>
                 <div>SELECT CATEGORY</div>
-                <div className="create_campaign_select_input">
-                    <div>
+                <div className="create_campaign_select_input ">
+                    <div className=' ' >
                         <input type="radio" name="category" value="Broadcast" onChange={(e) => setSelectedCategory(e.target.value)} />
                         <label htmlFor="Broadcast">Broadcast</label>
                     </div>

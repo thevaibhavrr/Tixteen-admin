@@ -1,6 +1,8 @@
 import "../../style/user/userDetails.css";
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import EditIcon from "../../utils/EditIcon";
+import BackIcon from "../../utils/BackIcon";
 const UserDetails = () => {
     const [followersCount, setFollowersCount] = useState(null);
 
@@ -69,8 +71,12 @@ const UserDetails = () => {
 
 
     return (
+        <>
+                <BackIcon path={`user/all-users`} />
+
         <div className="user-details-container">
             <div className="user-card">
+            <EditIcon path={`user/update-user-details/${user.id}`}/>
                 <div className="user-header">
                     <img src={user.profile_img} alt={user.user_name} className="user-profile-img" />
                     <div className="user-info">
@@ -132,106 +138,9 @@ const UserDetails = () => {
 
             </div>
         </div>
+        </>
     );
 };
 
 export default UserDetails;
 
-
-// UserDetails.js
-
-// import React, { useEffect, useState } from 'react';
-// import axios from 'axios';
-// import '../../style/userDetails.css';
-
-// function UserDetails() {
-//   const [user, setUser] = useState(null);
-//   const [followersCount, setFollowersCount] = useState(null);
-
-//   useEffect(() => {
-//     // Fetch user details from your state management or API
-//     const fetchedUser = {
-//       primary_platforms: [],
-//       _id: "6666ea2c122dd58cb0178f47",
-//       id: "35",
-//       user_name: "Manish Singh",
-//       gender: "Male",
-//       dob: "18-05-2002",
-//       age: "30",
-//       profile_img: "defaultuser.png",
-//       intro_video: "https://w7.pngwing.com/pngs/178/595/png-transparent-user-profile-computer-icons-login-user-avatars-thumbnail.png",
-//       language: "English, Hindi",
-//       level: "L2",
-//       mobile: "9717467030",
-//       mobile_2: "9919848294",
-//       email: "manishurajput6@gmail.com",
-//       industry: "Business & Finance, Entertainment, Photography, Sports & fitness, Technology",
-//       content_type: "video, post",
-//       primary_platform: "instagram",
-//     };
-//     setUser(fetchedUser);
-
-//     // Fetch Instagram followers count
-// const fetchInstagramFollowers = async () => {
-//   try {
-//     const response = await axios.get(
-//       `https://graph.facebook.com/17841401994416697`,
-//       {
-//         params: {
-//           fields: `business_discovery.username(${fetchedUser.primary_platform}){followers_count,media_count}`,
-//           access_token: 'YOUR_ACCESS_TOKEN'
-//         }
-//       }
-//     );
-//     setFollowersCount(response.data.business_discovery.followers_count);
-//   } catch (error) {
-//     console.error('Error fetching Instagram followers', error);
-//   }
-// };
-
-//     if (fetchedUser.primary_platform === 'instagram') {
-//       fetchInstagramFollowers();
-//     }
-//   }, []);
-
-//   if (!user) {
-//     return <div>Loading...</div>;
-//   }
-
-//   return (
-//     <div className="user-details-page">
-//       <div className="user-header">
-//         <img src={user.profile_img} alt={user.user_name} className="user-profile-image" />
-//         <h1>{user.user_name}</h1>
-//       </div>
-//       <div className="user-body">
-//         <div className="user-section">
-//           <h2>Details</h2>
-//           <p><strong>Gender:</strong> {user.gender}</p>
-//           <p><strong>Age:</strong> {user.age}</p>
-//           <p><strong>Language:</strong> {user.language}</p>
-//           <p><strong>Level:</strong> {user.level}</p>
-//           <p><strong>Mobile:</strong> {user.mobile}</p>
-//           <p><strong>Email:</strong> {user.email}</p>
-//           <p><strong>Industry:</strong> {user.industry}</p>
-//           <p><strong>Content Type:</strong> {user.content_type}</p>
-//         </div>
-//         <div className="user-section">
-//           <h2>Introduction Video</h2>
-//           <video width="100%" controls>
-//             <source src={user.intro_video} type="video/mp4" />
-//             Your browser does not support the video tag.
-//           </video>
-//         </div>
-// {followersCount !== null && (
-//   <div className="user-section">
-//     <h2>Instagram Followers</h2>
-//     <p>{followersCount} followers</p>
-//   </div>
-// )}
-//       </div>
-//     </div>
-//   );
-// }
-
-// export default UserDetails;
