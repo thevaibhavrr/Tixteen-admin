@@ -1,0 +1,36 @@
+/* LeadLifeSpan.css */
+.LeadLifeSpan-container {
+    margin-top: 20px;
+  }
+  
+  .LeadLifeSpan-title {
+    font-weight: bold;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+  }
+  
+  .LeadLifeSpan-filters span {
+    margin-right: 10px;
+    cursor: pointer;
+  }
+  
+  .LeadLifeSpan-born {
+    margin-top: 10px;
+    margin-bottom: 20px;
+    font-weight: bold;
+  }
+  
+  .LeadLifeSpan-table th,
+  .LeadLifeSpan-table td {
+    text-align: center;
+    vertical-align: middle;
+  }
+  
+  .LeadLifeSpan-success {
+    color: green;
+  }
+  
+  .LeadLifeSpan-danger {
+    color: red;
+  }
+  

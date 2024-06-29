@@ -1,0 +1,27 @@
+.main_status_bar_div{
+    display: flex;
+    width: 100%;
+    gap: 2px;
+    width: 100%;
+}
+.status_bar_status_bar{
+    height: 20px;
+    margin: 5px;
+    border-radius: 3px;
+    background: #616060;
+}
+.status_bar_status_bar_text{
+    border: 1px solid black;
+    border-top: none;
+    text-align: center;
+
+}
+.on-time-status-bar{
+    background: rgb(0, 179, 0);
+}
+.delay-status-bar{
+    background: var(--dark-yellow-color);
+}
+.over-delay-status-bar{
+    background: red;
+}

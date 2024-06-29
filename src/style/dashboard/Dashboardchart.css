@@ -1,0 +1,24 @@
+.main_earning_chart_div {
+    /* padding: 20px 0px; */
+    width: 600px;
+    border: 1px solid var(--light-gray-color);
+    /* padding: 20px; */
+    border-radius: 30px
+  }
+  .bar_cart_first {
+    fill: var(--dark-yellow-color);
+  }
+
+
+  .earining_summary_total_count {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    gap: 10px 20px;
+    font-family: var(--inter-font);
+    font-weight: 500;
+  }
+  .main_data_chart_div_earning {
+    margin: 0px;
+    padding: 0px;
+  }

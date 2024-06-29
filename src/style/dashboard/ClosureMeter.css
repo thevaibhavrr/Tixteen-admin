@@ -1,0 +1,26 @@
+/* ClosureMeter.css */
+.ClosureMeter-container {
+    margin-top: 20px;
+    max-width: 400px;
+  }
+  
+  .ClosureMeter-title {
+    font-weight: bold;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+  }
+  
+  .ClosureMeter-table th,
+  .ClosureMeter-table td {
+    text-align: center;
+    vertical-align: middle;
+  }
+  
+  .ClosureMeter-success {
+    color: green;
+  }
+  
+  .ClosureMeter-danger {
+    color: red;
+  }
+  

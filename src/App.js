@@ -12,6 +12,8 @@ import Campaign from './pages/Campaign';
 import User from './pages/User';
 import ManageLevelChart from './componet/Management/ManageLevelChart';
 import Management from './pages/Management';
+import CalendarComponent from './componet/dashboard/CalendarComponent';
+import MainDasboard from './componet/dashboard/MainDasboard';
 
 
 const App = () => {
@@ -22,7 +24,7 @@ const App = () => {
         <Route path="/campaign/*" element={<Campaign />} />
         <Route path='/user/*' element={<User />} />
         <Route path='/management/*' element={<Management />} />
-        <Route path='/'element={<CampaignList/>} />
+        <Route path='/'element={<MainDasboard/>} />
        </Routes>
       
     </div>

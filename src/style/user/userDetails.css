@@ -61,6 +61,9 @@
     border-bottom: 2px solid var(--light-gray-color);
     padding-bottom: 5px;
     margin-bottom: 10px;
+    background-color: var(--light-yellow-color);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
   }
   
   .user-section p {
