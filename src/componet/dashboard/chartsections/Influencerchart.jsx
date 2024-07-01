@@ -1,54 +1,4 @@
 
-// import React, { useState } from 'react';
-// import BarChartComponent from '../BarChart';
-
-// const data = [
-//     { name: 'Mar 11', data1: 1, data2: 2 },
-//     { name: 'Mar 12', data1: 4, data2: 3 },
-//     { name: 'Mar 13', data1: 0, data2: 1 },
-//     { name: 'Mar 14', data1: 11, data2: 5 },
-// ];
-
-// function Influencerchart() {
-//     const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
-
-//     const handleYearChange = (e) => {
-//         const selectedYear = Number(e.target.value);
-//         setSelectedYear(selectedYear);
-//         console.log(selectedYear);
-//     };
-
-//     return (
-//         <div>
-//             <div>
-//                 <h3>Influencer</h3>
-//             </div>
-//             <div>
-//                 <div>
-//                     <div className="my-2">
-//                         <select className='p-2' value={selectedYear} onChange={handleYearChange}>
-//                             {Array.from({ length: 10 }, (_, i) => {
-//                                 const startYear = 2022 + i * 2;
-//                                 const endYear = startYear + 1;
-//                                 return (
-//                                     <option key={`${startYear}-${endYear}`} value={startYear}>
-//                                         {`${startYear} - ${endYear}`}
-//                                     </option>
-//                                 );
-//                             })}
-//                         </select>
-//                     </div>
-//                 </div>
-//                 <div>
-//                     <BarChartComponent data={data} />
-//                 </div>
-//             </div>
-//         </div>
-//     )
-// }
-
-// export default Influencerchart;
-
 import React, { useState } from 'react';
 import BarChartComponent from '../BarChart';
 
@@ -93,6 +43,8 @@ const data = [
 
 function Influencerchart() {
     const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+    const [includeData1, setIncludeData1] = useState(true);
+    const [includeData2, setIncludeData2] = useState(true);
 
     const handleYearChange = (e) => {
         const selectedYear = Number(e.target.value);
@@ -100,7 +52,22 @@ function Influencerchart() {
         console.log(selectedYear);
     };
 
-    const filteredData = data.filter(item => item.year === selectedYear);
+    const handleCheckboxChange = (e) => {
+        const { name, checked } = e.target;
+        if (name === 'data1') {
+            setIncludeData1(checked);
+        } else if (name === 'data2') {
+            setIncludeData2(checked);
+        }
+    };
+
+    const filteredData = data
+        .filter(item => item.year === selectedYear)
+        .map(item => ({
+            name: item.name,
+            ...(includeData1 && { data1: item.data1 }),
+            ...(includeData2 && { data2: item.data2 })
+        }));
 
     return (
         <div>
@@ -121,6 +88,26 @@ function Influencerchart() {
                                 );
                             })}
                         </select>
+                    </div>
+                    <div className="my-2 d-flex justify-content-center gap-5">
+                        <label>
+                            <input
+                                type="checkbox"
+                                name="data1"
+                                checked={includeData1}
+                                onChange={handleCheckboxChange}
+                            />
+                            Register
+                        </label>
+                        <label>
+                            <input
+                                type="checkbox"
+                                name="data2"
+                                checked={includeData2}
+                                onChange={handleCheckboxChange}
+                            />
+                            Rejected
+                        </label>
                     </div>
                 </div>
                 <div>
