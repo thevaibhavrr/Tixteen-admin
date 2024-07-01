@@ -5,12 +5,14 @@ import EarningsBarChart from './Dashboardchart'
 import DasbordBottomGraph from './DasbordBottomGraph'
 import LeadLifeSpan from './LeadLife'
 import ClosureMeter from './ClosureMeter'
+import FirstsectionDashboard from './FirstsectionDashboard'
 
 function MainDasboard() {
   return (
     <div style={{padding:" 100px"}} >
         <DashbordSummaryHeading/>
-        <CalendarComponent/>
+      <FirstsectionDashboard/>
+        {/* <CalendarComponent/> */}
         <EarningsBarChart/>
         <DasbordBottomGraph/>
         <LeadLifeSpan/>

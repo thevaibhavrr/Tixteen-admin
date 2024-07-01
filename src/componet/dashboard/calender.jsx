@@ -1,195 +1,73 @@
-// import '../../style/dashboard/CalendarComponent.css';
-// import React, { useState } from 'react';
-// import Calendar from 'react-calendar';
-// import 'react-calendar/dist/Calendar.css';
 
-// const Calender = () => {
-//     const [date, setDate] = useState(new Date());
-//     const months = [
-//         { value: 0, label: 'January' },
-//         { value: 1, label: 'February' },
-//         { value: 2, label: 'March' },
-//         { value: 3, label: 'April' },
-//         { value: 4, label: 'May' },
-//         { value: 5, label: 'June' },
-//         { value: 6, label: 'July' },
-//         { value: 7, label: 'August' },
-//         { value: 8, label: 'September' },
-//         { value: 9, label: 'October' },
-//         { value: 10, label: 'November' },
-//         { value: 11, label: 'December' },
-//     ];
-
-//     const years = Array.from({ length: 10 }, (_, i) => {
-//         const year = 2024 + i;
-//         return { value: year, label: year.toString() };
-//     });
-
-//     const handleCalendarChange = (newDate) => {
-//         setDate(newDate);
-//     };
-
-//     const getMonthName = (monthIndex) => {
-//         const months = [
-//             'January', 'February', 'March', 'April', 'May', 'June',
-//             'July', 'August', 'September', 'October', 'November', 'December'
-//         ];
-//         return months[monthIndex];
-//     };
-
-//     return (
-//         <div >
-//             <div className='calendar_main_div' >
-//                 <h3>{getMonthName(date.getMonth())} {date.getFullYear()}</h3>
-//                 <Calendar
-//                     value={date}
-//                     onChange={handleCalendarChange}
-//                     className="custom-calendar"
-//                     nextLabel={"Next"}
-//                     prevLabel={"Back"}
-//                     next2Label={null}
-//                     prev2Label={null}
-//                     formatDay={(locale, date) => date.getDate().toString()}
-//                 />
-//             </div>
-//         </div>
-//     );
-// };
-
-// export default Calender;
-
-
-// import '../../style/dashboard/CalendarComponent.css';
-// import React, { useState } from 'react';
-// import Calendar from 'react-calendar';
-// import 'react-calendar/dist/Calendar.css';
-
-// const Calender = () => {
-//     const [date, setDate] = useState(new Date());
-
-//     const data = [
-//         { day: 'Saturday', week: 1, month: 6, text: 'Hello' },  // July 1st Saturday
-//         { day: 'Friday', week: 2, month: 6, text: 'Jai' }       // July 2nd Friday
-//     ];
-
-//     const handleCalendarChange = (newDate) => {
-//         setDate(newDate);
-//     };
-
-//     const getMonthName = (monthIndex) => {
-//         const months = [
-//             'January', 'February', 'March', 'April', 'May', 'June',
-//             'July', 'August', 'September', 'October', 'November', 'December'
-//         ];
-//         return months[monthIndex];
-//     };
-
-//     const getTextForDate = (currentDate) => {
-//         const currentMonth = currentDate.getMonth();
-//         const currentDay = currentDate.toLocaleDateString('en-US', { weekday: 'long' });
-//         const currentWeek = Math.ceil((currentDate.getDate() - 1) / 7) + 1;
-
-//         const match = data.find(item => item.day === currentDay && item.week === currentWeek && item.month === currentMonth);
-
-//         return match ? match.text : null;
-//     };
-
-//     const renderDay = (date) => {
-//         const text = getTextForDate(date);
-//         return (
-//             <div>
-//                 {date.getDate()}
-//                 {text && <div className="custom-text">{text}</div>}
-//             </div>
-//         );
-//     };
-
-//     return (
-//         <div>
-//             <div className='calendar_main_div'>
-//                 <h3>{getMonthName(date.getMonth())} {date.getFullYear()}</h3>
-//                 <Calendar
-//                     value={date}
-//                     onChange={handleCalendarChange}
-//                     className="custom-calendar"
-//                     nextLabel={"Next"}
-//                     prevLabel={"Back"}
-//                     next2Label={null}
-//                     prev2Label={null}
-//                     formatDay={(locale, date) => renderDay(date)}
-//                 />
-//             </div>
-//         </div>
-//     );
-// };
-
-// export default Calender;
-
-import '../../style/dashboard/CalendarComponent.css';
 import React, { useState } from 'react';
-import Calendar from 'react-calendar';
-import 'react-calendar/dist/Calendar.css';
+import { Calendar, momentLocalizer } from 'react-big-calendar';
+import moment from 'moment';
+import 'react-big-calendar/lib/css/react-big-calendar.css';
+import '../../style/dashboard/CalendarComponent.css';
 
-const Calender = () => {
-    const [date, setDate] = useState(new Date());
+const localizer = momentLocalizer(moment);
 
-    const data = [
-        { day: 'Saturday', week: 2, month: 6, text: 'Hello', backgroundColor: 'lightblue', textColor: 'black' },  // July 1st Saturday
-        { day: 'Friday', week: 2, month: 6, text: 'Jai', backgroundColor: 'lightgreen', textColor: 'blue' },       // July 2nd Friday
-        { day: 'Sunday', week: 2, month: 6, text: '42', backgroundColor: 'lightred', textColor: 'blue' }       // July 2nd Friday
-    ];
+const events = [
+    { title: 'Hello', start: new Date(2024, 6, 6), end: new Date(2024, 6, 6), allDay: true, backgroundColor: 'lightblue', textColor: 'black' },
+    { title: 'Jai', start: new Date(2024, 6, 12), end: new Date(2024, 6, 12), allDay: true, backgroundColor: 'lightgreen', textColor: 'blue' },
+];
 
-    const handleCalendarChange = (newDate) => {
-        setDate(newDate);
+const CustomCalendar = ({events}) => {
+    const [currentDate, setCurrentDate] = useState(new Date());
+    const [selectedMonth, setSelectedMonth] = useState(currentDate.getMonth());
+    const [selectedYear, setSelectedYear] = useState(currentDate.getFullYear());
+
+    const eventPropGetter = (event) => {
+        const backgroundColor = event.backgroundColor || 'lightgray';
+        const color = event.textColor || 'black';
+        return { style: { backgroundColor, color, fontWeight: 'bold' } };
     };
 
-    const getMonthName = (monthIndex) => {
-        const months = [
-            'January', 'February', 'March', 'April', 'May', 'June',
-            'July', 'August', 'September', 'October', 'November', 'December'
-        ];
-        return months[monthIndex];
+    const handleMonthChange = (e) => {
+        setSelectedMonth(Number(e.target.value));
+        const newDate = new Date(selectedYear, e.target.value, 1);
+        setCurrentDate(newDate);
     };
 
-    const getTextForDate = (currentDate) => {
-        const currentMonth = currentDate.getMonth();
-        const currentDay = currentDate.toLocaleDateString('en-US', { weekday: 'long' });
-        const currentWeek = Math.ceil((currentDate.getDate() - 1) / 7) + 1;
-
-        const match = data.find(item => item.day === currentDay && item.week === currentWeek && item.month === currentMonth);
-
-        return match ? match : null;
-    };
-
-    const renderDay = (date) => {
-        const match = getTextForDate(date);
-        const style = match ? { backgroundColor: match.backgroundColor, color: match.textColor, fontWeight: 'bolder' } : {};
-
-        return (
-            <div style={style} className="custom-day">
-                {date.getDate()}
-                {match && <div className="custom-text">{match.text}</div>}
-            </div>
-        );
+    const handleYearChange = (e) => {
+        setSelectedYear(Number(e.target.value));
+        const newDate = new Date(e.target.value, selectedMonth, 1);
+        setCurrentDate(newDate);
     };
 
     return (
-        <div>
-            <div className='calendar_main_div'>
-                <h3>{getMonthName(date.getMonth())} {date.getFullYear()}</h3>
+        <div className="dashboard_calendar_container  ">
+            <div className=" my-2 ">
+                <select className=' p-2 mx-3 '  value={selectedMonth} onChange={handleMonthChange}>
+                    {moment.months().map((month, index) => (
+                        <option key={index} value={index}>
+                            {month}
+                        </option>
+                    ))}
+                </select>
+                <select  className=' p-2' value={selectedYear} onChange={handleYearChange}>
+                    {Array.from({ length: 10 }, (_, i) => i + 2024).map((year) => (
+                        <option key={year} value={year}>
+                            {year}
+                        </option>
+                    ))}
+                </select>
+            </div>
+            <div>
+
                 <Calendar
-                    value={date}
-                    onChange={handleCalendarChange}
-                    className="custom-calendar"
-                    nextLabel={"Next"}
-                    prevLabel={"Back"}
-                    next2Label={null}
-                    prev2Label={null}
-                    formatDay={(locale, date) => renderDay(date)}
+                    localizer={localizer}
+                    events={events}
+                    date={currentDate}
+                    view="month"
+                    onNavigate={(date) => setCurrentDate(date)}
+                    style={{ height: 500, width: "600px" }}
+                    eventPropGetter={eventPropGetter}
+                    toolbar={false}
                 />
             </div>
         </div>
     );
 };
 
-export default Calender;
+export default CustomCalendar;

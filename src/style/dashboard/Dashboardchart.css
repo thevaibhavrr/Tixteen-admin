@@ -3,7 +3,9 @@
     width: 600px;
     border: 1px solid var(--light-gray-color);
     /* padding: 20px; */
-    border-radius: 30px
+    border-radius: 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
   }
   .bar_cart_first {
     fill: var(--dark-yellow-color);
