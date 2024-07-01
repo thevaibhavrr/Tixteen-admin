@@ -76,6 +76,7 @@ function Influencerchart() {
             </div>
             <div>
                 <div>
+                    <div className="my-2 d-flex justify-content-center align-items-center gap-5">
                     <div className="my-2">
                         <select className='p-2' value={selectedYear} onChange={handleYearChange}>
                             {Array.from({ length: 10 }, (_, i) => {
@@ -89,7 +90,6 @@ function Influencerchart() {
                             })}
                         </select>
                     </div>
-                    <div className="my-2 d-flex justify-content-center gap-5">
                         <label>
                             <input
                                 type="checkbox"
