@@ -134,3 +134,17 @@ input:checked + .slider:before {
 .react-select__menu {
   z-index: 100;
 }
+
+.custom-day {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}
+
+.custom-text {
+  margin-top: 5px;
+  font-weight: bold;
+}
