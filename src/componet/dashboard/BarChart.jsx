@@ -29,8 +29,8 @@ const BarChartComponent = ({ data }) => {
                         <XAxis dataKey="name" />
                         <YAxis />
                         <Tooltip />
-                        <Bar dataKey="data1" className='bar_chart_first' barSize={24} fill="#8884d8" />
-                        {hasData2 && <Bar dataKey="data2" fill="#ff0000" barSize={24} />}
+                        <Bar dataKey="data1" className='bar_chart_first' barSize={24} fill="#90EE90" />
+                        {hasData2 && <Bar dataKey="data2" fill="#FF7F7F" barSize={24} />}
                     </BarChart>
                 </ResponsiveContainer>
             </div>
