@@ -3,8 +3,8 @@ import CustomCalendar from '../calender';
 
 function Campaigncalender () {
     const events = [
-        { title: 'Magic biscuit', start: new Date(2024, 6, 6), end: new Date(2024, 6, 6), allDay: true, backgroundColor: 'lightgreen', textColor: 'black' },
-        { title: 'sun glasses', start: new Date(2024, 6, 12), end: new Date(2024, 6, 12), allDay: true, backgroundColor: '#E23F44', textColor: 'black' },
+        { title: 'Magic biscuit', start: new Date(2024, 6, 6), end: new Date(2024, 6, 6), allDay: true, backgroundColor: 'lightgreen', textColor: 'black',id:1 },
+        { title: 'sun glasses', start: new Date(2024, 6, 12), end: new Date(2024, 6, 12), allDay: true, backgroundColor: '#E23F44', textColor: 'black',id:2 },
     ];
     return (
         <div>

@@ -8,13 +8,13 @@ import SecondSectionDashboard from './SecondSectionDashboard'
 
 function MainDasboard() {
   return (
-    <div style={{padding:" 100px"}} >
-        <DashbordSummaryHeading/>
-      <FirstsectionDashboard/>
-        <SecondSectionDashboard/>
-        <DasbordBottomGraph/>
-        <LeadLifeSpan/>
-        <ClosureMeter/>
+    <div style={{ padding: " 100px" }} >
+      <DashbordSummaryHeading />
+      <FirstsectionDashboard />
+      <SecondSectionDashboard />
+      <DasbordBottomGraph />
+      <LeadLifeSpan />
+      <ClosureMeter />
     </div>
   )
 }
