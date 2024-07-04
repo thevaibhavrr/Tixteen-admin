@@ -1,55 +1,46 @@
 
-import React, { useState } from 'react';
-import BarChartComponent from '../BarChart';
-
-const data = [
-    { name: 'Jan', data1: 1, data2: 2, year: 2022 },
-    { name: 'Feb', data1: 4, data2: 3, year: 2022 },
-    { name: 'Mar', data1: 0, data2: 1, year: 2022 },
-    { name: 'Apr', data1: 11, data2: 5, year: 2022 },
-    { name: 'May', data1: 2, data2: 3, year: 2022 },
-    { name: 'Jun', data1: 5, data2: 4, year: 2022 },
-    { name: 'Jul', data1: 1, data2: 2, year: 2022 },
-    { name: 'Aug', data1: 12, data2: 6, year: 2022 },
-    { name: 'Sep', data1: 3, data2: 4, year: 2022 },
-    { name: 'Oct', data1: 6, data2: 5, year: 2022 },
-    { name: 'Nov', data1: 2, data2: 3, year: 2022 },
-    { name: 'Dec', data1: 13, data2: 7, year: 2022 },
-    { name: 'Jan', data1: 2, data2: 3, year: 2024 },
-    { name: 'Feb', data1: 5, data2: 4, year: 2024 },
-    { name: 'Mar', data1: 1, data2: 2, year: 2024 },
-    { name: 'Apr', data1: 12, data2: 6, year: 2024 },
-    { name: 'May', data1: 3, data2: 4, year: 2024 },
-    { name: 'Jun', data1: 6, data2: 5, year: 2024 },
-    { name: 'Jul', data1: 2, data2: 3, year: 2024 },
-    { name: 'Aug', data1: 13, data2: 7, year: 2024 },
-    { name: 'Sep', data1: 3, data2: 4, year: 2024 },
-    { name: 'Oct', data1: 6, data2: 5, year: 2024 },
-    { name: 'Nov', data1: 2, data2: 3, year: 2024 },
-    { name: 'Dec', data1: 13, data2: 7, year: 2024 },
-    { name: 'Jan', data1: 3, data2: 4, year: 2026 },
-    { name: 'Feb', data1: 6, data2: 5, year: 2026 },
-    { name: 'Mar', data1: 2, data2: 3, year: 2026 },
-    { name: 'Apr', data1: 13, data2: 7, year: 2026 },
-    { name: 'May', data1: 4, data2: 5, year: 2026 },
-    { name: 'Jun', data1: 7, data2: 6, year: 2026 },
-    { name: 'Jul', data1: 3, data2: 4, year: 2026 },
-    { name: 'Aug', data1: 14, data2: 8, year: 2026 },
-    { name: 'Sep', data1: 4, data2: 5, year: 2026 },
-    { name: 'Oct', data1: 7, data2: 6, year: 2026 },
-    { name: 'Nov', data1: 3, data2: 4, year: 2026 },
-    { name: 'Dec', data1: 14, data2: 8, year: 2026 },
-];
+import React, { useState, useEffect } from 'react';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import axios from 'axios';
+import { makeApi } from '../../../api/callApi.tsx';
+import PrimaryLoader from '../../../utils/PrimaryLoader.jsx';
 
 function Influencerchart() {
     const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
     const [includeData1, setIncludeData1] = useState(true);
     const [includeData2, setIncludeData2] = useState(true);
+    const [data, setData] = useState([]);
+    const [loading, setLoading] = useState(false);
+
+    const fetchData = async (year) => {
+        setLoading(true);
+        try {
+            const response = await makeApi(`/v1/admin/api/get-monthly-user-counts?year=${year}&rejected=true&verified=true`,"GET");
+            const { rejectedMonthlyCounts, verifiedMonthlyCounts } = response.data.data;
+
+            const mergedData = rejectedMonthlyCounts.map((item, index) => ({
+                name: item.month,
+                data1: verifiedMonthlyCounts[index].count,
+                data2: item.count,
+                year
+            }));
+
+            setData(mergedData);
+        } catch (error) {
+            console.error('Error fetching data', error);
+        }finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchData(selectedYear);
+    }, [selectedYear]);
 
     const handleYearChange = (e) => {
         const selectedYear = Number(e.target.value);
         setSelectedYear(selectedYear);
-        console.log(selectedYear);
+        fetchData(selectedYear);
     };
 
     const handleCheckboxChange = (e) => {
@@ -61,13 +52,11 @@ function Influencerchart() {
         }
     };
 
-    const filteredData = data
-        .filter(item => item.year === selectedYear)
-        .map(item => ({
-            name: item.name,
-            ...(includeData1 && { data1: item.data1 }),
-            ...(includeData2 && { data2: item.data2 })
-        }));
+    const filteredData = data.map(item => ({
+        name: item.name,
+        ...(includeData1 && { data1: item.data1 }),
+        ...(includeData2 && { data2: item.data2 })
+    }));
 
     return (
         <div>
@@ -77,19 +66,15 @@ function Influencerchart() {
             <div>
                 <div>
                     <div className="my-2 d-flex justify-content-center align-items-center gap-5">
-                    <div className="my-2">
-                        <select className='p-2' value={selectedYear} onChange={handleYearChange}>
-                            {Array.from({ length: 10 }, (_, i) => {
-                                const startYear = 2022 + i * 2;
-                                const endYear = startYear + 1;
-                                return (
-                                    <option key={`${startYear}-${endYear}`} value={startYear}>
-                                        {`${startYear} - ${endYear}`}
+                        <div className="my-2">
+                            <select className='p-2' value={selectedYear} onChange={handleYearChange}>
+                                {Array.from({ length: 10 }, (_, i) => i + 2020).map((year) => (
+                                    <option key={year} value={year}>
+                                        {year}
                                     </option>
-                                );
-                            })}
-                        </select>
-                    </div>
+                                ))}
+                            </select>
+                        </div>
                         <label>
                             <input
                                 type="checkbox"
@@ -97,7 +82,7 @@ function Influencerchart() {
                                 checked={includeData1}
                                 onChange={handleCheckboxChange}
                             />
-                            Register
+                            Verified
                         </label>
                         <label>
                             <input
@@ -110,8 +95,35 @@ function Influencerchart() {
                         </label>
                     </div>
                 </div>
-                <div>
-                    <BarChartComponent data={filteredData} />
+                <div className='main_earning_chart_div'>
+                    {loading ? (
+                         <div>
+                         <PrimaryLoader />
+                     </div>
+                    ):(
+
+                    <div className="main_data_chart_div_earning">
+                        <ResponsiveContainer width="100%" height={400}>
+                            <BarChart
+                                height={300}
+                                data={filteredData}
+                                margin={{
+                                    top: 20, right: 30, left: 20, bottom: 5,
+                                }}
+                                borderRadius={5}
+                            >
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis dataKey="name" />
+                                <YAxis />
+                                <Tooltip />
+                                {includeData1 && <Bar dataKey="data1" className='bar_chart_first' barSize={24} fill="#90EE90" />}
+                                {includeData2 && <Bar dataKey="data2" fill="#FF7F7F" barSize={24} />}
+                            </BarChart>
+                        </ResponsiveContainer>
+                    </div>
+                    )}
+
+                    
                 </div>
             </div>
         </div>

@@ -1,57 +1,113 @@
-import React, { useState } from 'react'
-import BarChartComponent from '../BarChart';
+import React, { useState, useEffect } from 'react';
+import {
+    BarChart,
+    Bar,
+    XAxis,
+    YAxis,
+    CartesianGrid,
+    Tooltip,
+    ResponsiveContainer,
+} from 'recharts';
+import { makeApi } from "../../../api/callApi.tsx";
+import PrimaryLoader from '../../../utils/PrimaryLoader.jsx';
 
-const data = [
-    { name: 'Jan', data1: 1, year: 2022 },
-    { name: 'Feb', data1: 4, year: 2022 },
-    { name: 'Mar', data1: 0, year: 2022 },
-    { name: 'Apr', data1: 11, year: 2022 },
-    { name: 'Jul', data1: 2, year: 2024 },
-    { name: 'Aug', data1: 13, year: 2024 },
-    { name: 'Sep', data1: 3, year: 2024 },
-    { name: 'Oct', data1: 6, year: 2024 },
-    { name: 'Nov', data1: 2, year: 2024 },
-]
-function CampaignEarningChart() {
-    const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+const CampaignEarningChart = () => {
+    const [selectedYear, setSelectedYear] = useState(2023);
+    const [apiData, setApiData] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            setIsLoading(true);
+            setError(null); 
+
+            try {
+                const response = await makeApi(`/v1/admin/api/get-monthly-campaign-counts?year=${selectedYear}`, 'GET');
+                setApiData(response.data.data);
+            } catch (error) {
+                console.error('Error fetching API data:', error);
+                setError('An error occurred while fetching data.');
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchData();
+    }, [selectedYear]);
 
     const handleYearChange = (e) => {
         const selectedYear = Number(e.target.value);
         setSelectedYear(selectedYear);
-        console.log(selectedYear);
     };
 
-    const filteredData = data.filter(item => item.year === selectedYear)
+    const renderChart = () => {
+        if (isLoading) {
+            return <p>
+                <PrimaryLoader/>
+            </p>;
+        }
 
+        if (error) {
+            return <p>Error: {error}</p>;
+        }
 
-    return (<div>
+        if (!apiData) {
+            return <p>No data available for the selected year.</p>;
+        }
+
+        const { monthlyCounts } = apiData;
+        const chartData = Object.entries(monthlyCounts).map(([month, count]) => ({
+            name: month,
+            value: count,
+            year: selectedYear,
+        }));
+
+        return (
+            <ResponsiveContainer width="100%" height={400}>
+                <BarChart
+                    height={300}
+                    data={chartData}
+                    margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                    borderRadius={5}
+                >
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="name" />
+                    <YAxis />
+                    <Tooltip />
+                    <Bar dataKey="value" className="bar_chart_first" barSize={24} fill="#90EE90" />
+                </BarChart>
+            </ResponsiveContainer>
+        );
+    };
+
+    return (
         <div>
-            <h3>Campaign</h3>
-        </div>
-        <div>
+            <div>
+                <h3>Campaign</h3>
+            </div>
             <div>
                 <div className="my-2 d-flex justify-content-center align-items-center gap-5">
                     <div className="my-2">
                         <select className='p-2' value={selectedYear} onChange={handleYearChange}>
-                            {Array.from({ length: 10 }, (_, i) => {
-                                const startYear = 2022 + i * 2;
-                                const endYear = startYear + 1;
-                                return (
-                                    <option key={`${startYear}-${endYear}`} value={startYear}>
-                                        {`${startYear} - ${endYear}`}
-                                    </option>
-                                );
-                            })}
+                            {Array.from({ length: 10 }, (_, i) => i + 2020).map((year) => (
+                                <option key={year} value={year}>
+                                    {year}
+                                </option>
+                            ))}
                         </select>
                     </div>
                 </div>
             </div>
             <div>
-                <BarChartComponent data={filteredData} />
+                <div className="main_earning_chart_div">
+                    {/* chart */}
+                    <div className="main_data_chart_div_earning">{renderChart()}</div>
+                    <div className='text-center bg-warning ' > Total: {apiData?.total}</div>
+                </div>
             </div>
         </div>
-    </div>
-    )
-}
+    );
+};
 
-export default CampaignEarningChart
+export default CampaignEarningChart;

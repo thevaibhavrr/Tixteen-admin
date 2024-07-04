@@ -1,0 +1,95 @@
+/* Scoped CSS for Influencercalender */
+.influencer-calendar .rbc-month-row {
+    overflow: visible !important;
+  }
+  /* UserSummaryPopup.css */
+.user-summary-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  max-width: 700px;
+  background-color: var(--third-yellow-color);
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  z-index: 100;
+  font-family: var(--inter-font);
+  height: 100%;
+  overflow: scroll;
+}
+
+.user-summary-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.user-summary-header h2 {
+  font-size: 24px;
+  font-weight: bold;
+  color: var(--dark-gray-color);
+}
+
+.close-btn {
+  background-color: var(--dark-gray-color);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.close-btn:hover {
+  background-color: var(--light-gray-color);
+}
+
+.user-summary-content {
+  margin-top: 10px;
+}
+
+.user-details {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-radius: 8px;
+  background-color: var(--light-yellow-color);
+  margin-bottom: 10px;
+}
+
+.user-details img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  margin-right: 20px;
+}
+
+.user-info {
+  flex: 1;
+}
+
+.user-info h3 {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: var(--dark-gray-color);
+}
+
+.user-info p {
+  margin: 5px 0;
+  color: var(--black-color);
+}
+
+.view-profile {
+  color: var(--blue-color);
+  text-decoration: none;
+  font-weight: bold;
+  margin-left: auto;
+}
+
+.view-profile:hover {
+  text-decoration: underline;
+}
