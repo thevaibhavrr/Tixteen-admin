@@ -10,7 +10,7 @@ function ManagementBar() {
         setFilter(filterName);
         navigate(`/management/${filterName.toLowerCase()}-management`);
     };
-
+ 
     return (
         <div>
             <div className="campaign-list-topbar p-3">

@@ -14,6 +14,7 @@ import ManageLevelChart from './componet/Management/ManageLevelChart';
 import Management from './pages/Management';
 import CalendarComponent from './componet/dashboard/CalendarComponent';
 import MainDasboard from './componet/dashboard/MainDasboard';
+import SendMessage from './componet/Management/SendMessage';
 
 
 const App = () => {
@@ -25,6 +26,7 @@ const App = () => {
         <Route path='/user/*' element={<User />} />
         <Route path='/management/*' element={<Management />} />
         <Route path='/'element={<MainDasboard/>} />
+        <Route path='/y'element={<SendMessage/>} />
        </Routes>
       
     </div>
