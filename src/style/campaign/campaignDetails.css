@@ -76,11 +76,16 @@
   }
   
   .campaign-product-image-unique {
-    width: 100%;
+    width: 150px;
     object-fit: contain;
     border-radius: 10px;
     margin: 10px 0;
-    max-width: 1200px;
+    transition: all 0.8s ease-in-out;
+    cursor: se-resize;
+  }
+  .campaign-product-image-unique:hover {
+    width: 70%;
+    max-width: 700px; ;
   }
   
   .campaign-link-unique a {

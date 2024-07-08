@@ -301,9 +301,6 @@ function AllUser() {
       case 'New':
         setFilteredUsers(users.filter(user => user.verification === 'New'));
         break;
-      case 'Pending':
-        setFilteredUsers(users.filter(user => user.verification === 'Pending'));
-        break;
       case 'Rejected':
         setFilteredUsers(users.filter(user => user.verification === 'Rejected'));
         break;
@@ -336,7 +333,7 @@ function AllUser() {
     <div className="all-user-users-page">
       <div className="all-user-top-bar">
         <div className="all-user-tabs">
-          {['All', 'New', 'Pending', 'Rejected', 'Verified', 'Suspended', 'Sleep mode', 'Prime Content'].map(tab => (
+          {['All', 'New', 'Rejected', 'Verified', 'Suspended', 'Sleep mode', 'Prime Content'].map(tab => (
             <button
               key={tab}
               className={`tab-button ${selectedTab === tab ? 'active' : ''}`}
@@ -345,6 +342,9 @@ function AllUser() {
               {tab}
             </button>
           ))}
+        </div>
+        <div>
+          <input type='text' placeholder='Search...' className=' tab-button all-user-search' style={{cursor: 'text'}} />
         </div>
         <div className="all-user-state-filter">
           <label htmlFor="state" className='all-user-state-filter-text'>Filter by State:</label>

@@ -21,8 +21,6 @@ export const makeApi = async (
 			method,
 			// url: `http://localhost:8000${endpoint}`, 
 			url: `https://tixteen-backend.onrender.com${endpoint}`,
-			// url: `https://pajiweb.onrender.com${endpoint}`, 
-			// url: `https://sk-backend-uvv5.onrender.com${endpoint}`,
 
 			headers,
 			data,

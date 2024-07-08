@@ -50,6 +50,18 @@
     border-radius: 10px;
     overflow: hidden;
     background-color: var(--white-color);
+    position: relative;
+  }
+  
+  .new_user_on_campaign_badge {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    background-color: var(--dark-yellow-color);
+    color: var(--white-color);
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-family: var(--inter-font);
   }
   
   .campaign-banner {

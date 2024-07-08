@@ -40,7 +40,8 @@ const CampaignList = () => {
             </div>
             <div className="campaign-list-content">
                 {filteredCampaigns.map(campaign => (
-                    <div key={campaign.id} className="campaign-item">
+                    <div key={campaign.id} className="campaign-item ">
+                        <div className='new_user_on_campaign_badge' >10</div>
                         <img src={campaign.banner} alt={campaign.name} className="campaign-banner" />
                         <div className="campaign-details">
                             <h3>{campaign.name}</h3>
