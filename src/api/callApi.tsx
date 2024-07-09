@@ -21,7 +21,6 @@ export const makeApi = async (
 			method,
 			// url: `http://localhost:8000${endpoint}`, 
 			url: `https://tixteen-backend.onrender.com${endpoint}`,
-
 			headers,
 			data,
 		}

@@ -21,6 +21,8 @@ function ManagementBar() {
                     <button onClick={() => handleFilterClick('Platform')} className={filter === 'Platform' ? 'active' : ''}>Platform</button>
                     <button onClick={() => handleFilterClick('Checklist')} className={filter === 'Checklist' ? 'active' : ''}>Checklist</button>
                     <button onClick={() => handleFilterClick('Notice')} className={filter === 'Notice' ? 'active' : ''}>Notice</button>
+                    {/* send message */}
+                    <button onClick={() => handleFilterClick('Send-message')} className={filter === 'Send Message' ? 'active' : ''}>Send Message</button>
                 </div>
             </div>
         </div>
