@@ -7,8 +7,10 @@ import ManageLanguageChart from '../componet/Management/ManageLanguageChart';
 import ManagePlatform from '../componet/Management/ManagePlatform';
 import ManageCheckList from '../componet/Management/ManageCheckList';
 import SendMessageForCamp from '../componet/Management/SendMessage';
+import ProformaInvoices from '../componet/Management/Invoice/ProformaInvoices';
+import AddProformaInvoice from '../componet/Management/Invoice/AddProformaInvoice';
 
-
+ 
 function Management() {
   return (
     <div>
@@ -20,6 +22,9 @@ function Management() {
         <Route path='/platform-management' element={<ManagePlatform/>} />
         <Route path="/checklist-management" element={<ManageCheckList />} />
         <Route path="/send-message-management" element={<SendMessageForCamp />} />
+        <Route path='/invoices-management' element={<ProformaInvoices />} />
+        <Route path='/Add-invoices-management' element={<AddProformaInvoice />} />
+
         </Routes>
     </div>
   )

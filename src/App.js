@@ -1,20 +1,13 @@
 import React from 'react';
-import MainCreateCampagin from './componet/Campaign/MainCreateCampagin';
-import CampaignList from './componet/Campaign/campaginDetails/CampaignList';
 import { Route, Routes } from "react-router-dom";
-import CampaignDetails from './componet/Campaign/campaginDetails/CampaignDetails';
-import CampaignUpdate from './componet/Campaign/campaginUpdate/CampaignUpdate';
-import UserDetails from './componet/users/UserDetails';
-import AllUser from './componet/users/allUsers';
 import Navbar from './componet/Header/Navbar';
-import UpdateUserDetails from './componet/users/UpdateUserDetails';
 import Campaign from './pages/Campaign';
 import User from './pages/User';
-import ManageLevelChart from './componet/Management/ManageLevelChart';
 import Management from './pages/Management';
-import CalendarComponent from './componet/dashboard/CalendarComponent';
 import MainDasboard from './componet/dashboard/MainDasboard';
-import SendMessage from './componet/Management/SendMessage';
+import AddProformaInvoice from './componet/Management/Invoice/AddProformaInvoice';
+import ProformaInvoices from './componet/Management/Invoice/ProformaInvoices';
+import Invoice from './componet/Management/Invoice/profomInvoicedetails';
 
 
 const App = () => {
@@ -26,7 +19,9 @@ const App = () => {
         <Route path='/user/*' element={<User />} />
         <Route path='/management/*' element={<Management />} />
         <Route path='/'element={<MainDasboard/>} />
-        <Route path='/y'element={<SendMessage/>} />
+        <Route path='/y'element={<AddProformaInvoice/>} />
+        <Route path='/z'element={<Invoice/>} />
+
        </Routes>
       
     </div>
