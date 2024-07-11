@@ -8,6 +8,7 @@ import MainDasboard from './componet/dashboard/MainDasboard';
 import AddProformaInvoice from './componet/Management/Invoice/AddProformaInvoice';
 import ProformaInvoices from './componet/Management/Invoice/ProformaInvoices';
 import Invoice from './componet/Management/Invoice/profomInvoicedetails';
+import EditInvoiceDetails from './componet/Management/Invoice/editInvoicedetails';
 
 
 const App = () => {
@@ -20,7 +21,7 @@ const App = () => {
         <Route path='/management/*' element={<Management />} />
         <Route path='/'element={<MainDasboard/>} />
         <Route path='/y'element={<AddProformaInvoice/>} />
-        <Route path='/z'element={<Invoice/>} />
+        <Route path='/z/:id'element={<EditInvoiceDetails/>} />
 
        </Routes>
       

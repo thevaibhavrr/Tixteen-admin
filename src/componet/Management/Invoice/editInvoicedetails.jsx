@@ -1,65 +1,50 @@
 
 import "../../../style/managment/invoice/AddProformaInvoice.css";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import BackIcon from "../../../utils/BackIcon";
-import axios from "axios";
-import {makeApi} from "../../../api/callApi.tsx";
+import { useParams } from 'react-router-dom';
+import { makeApi } from "../../../api/callApi.tsx";
 
-
-const dummyUsers = [
-    { id: 1, clientName: 'John Doe', address: '123 Main St', contact: '1234567890', gst: '123456', stateCode: 'CA' },
-    { id: 2, clientName: 'Jane Smith', address: '456 Elm St', contact: '9876543210', gst: '654321', stateCode: 'NY' }
-];
-
-const initialInvoiceDetails = {
-    clientName: '',
-    address: '',
-    contact: '',
-    gst: '',
-    stateCode: '',
-    products: [
-        {
-            productName: '',
-            hsn: '',
-            qty: '',
-            rate: '',
-            taxableAmount: '',
-            cgstRate: '',
-            cgstAmount: '',
-            sgstRate: '',
-            sgstAmount: '',
-            igstRate: '',
-            igstAmount: ''
-        }
-    ]
-};
-
-const AddProformaInvoice = () => {
-    const [invoiceDetails, setInvoiceDetails] = useState(initialInvoiceDetails);
+const EditInvoiceDetails = () => {
+    const { id } = useParams();
+    const [invoiceDetails, setInvoiceDetails] = useState({
+        clientName: '',
+        address: '',
+        contact: '',
+        gst: '',
+        stateCode: ''
+    });
+    const [products, setProducts] = useState([]);
     const [alert, setAlert] = useState('');
 
-    const handleInputChange = (field, value) => {
-        setInvoiceDetails({
-            ...invoiceDetails,
-            [field]: value
-        });
-    };
-
-    const handleProductChange = (index, field, value) => {
-        const newProducts = [...invoiceDetails.products];
-        newProducts[index][field] = value;
-        setInvoiceDetails({
-            ...invoiceDetails,
-            products: newProducts
-        });
-    };
-
-    const addMoreProducts = () => {
-        setInvoiceDetails({
-            ...invoiceDetails,
-            products: [
-                ...invoiceDetails.products,
-                {
+    useEffect(() => {
+        const fetchInvoiceData = async () => {
+            try {
+                const response = await makeApi(`/v1/admin/api/get-my-bill/${id}`, "GET");
+                const bill = response.data.mybill;
+                const products = response.data.mybillwithproduct.map(product => ({
+                    id: product._id,
+                    productName: product.product,
+                    hsn: product.hsn,
+                    qty: product.qty,
+                    rate: product.rate,
+                    taxableAmount: product.taxable,
+                    cgstRate: product.cgst_Rate,
+                    cgstAmount: product.cgst_Amount,
+                    sgstRate: product.sgst_Rate,
+                    sgstAmount: product.sgst_Amount,
+                    igstRate: product.igst_Rate,
+                    igstAmount: product.igst_Amount
+                }));
+                console.log("Products:", products);
+                setInvoiceDetails({
+                    clientName: bill.client_name,
+                    address: bill.address,
+                    contact: bill.contact_no,
+                    gst: bill.gst,
+                    stateCode: bill.state_code
+                });
+                setProducts(products.length ? products : [{
                     productName: '',
                     hsn: '',
                     qty: '',
@@ -71,14 +56,56 @@ const AddProformaInvoice = () => {
                     sgstAmount: '',
                     igstRate: '',
                     igstAmount: ''
-                }
-            ]
+                }]);
+            } catch (error) {
+                console.error("Error fetching invoice data:", error);
+            }
+        };
+
+        fetchInvoiceData();
+    }, [id]);
+
+
+
+    useEffect(() => {
+        console.log('Updated Products:', products);
+    }, [products]);
+
+    const handleInputChange = (field, value) => {
+        setInvoiceDetails({
+            ...invoiceDetails,
+            [field]: value
         });
+    };
+
+    const handleProductChange = (index, field, value) => {
+        const newProducts = [...products];
+        newProducts[index][field] = value;
+        setProducts(newProducts);
+    };
+
+    const addMoreProducts = () => {
+        setProducts([
+            ...products,
+            {
+                productName: '',
+                hsn: '',
+                qty: '',
+                rate: '',
+                taxableAmount: '',
+                cgstRate: '',
+                cgstAmount: '',
+                sgstRate: '',
+                sgstAmount: '',
+                igstRate: '',
+                igstAmount: ''
+            }
+        ]);
     };
 
     const handleSave = async () => {
         try {
-            const { data: myBillData } = await makeApi("/v1/admin/api/create-my-bill","POST", {
+            const updatedInvoice = {
                 client_name: invoiceDetails.clientName,
                 address: invoiceDetails.address,
                 gst: invoiceDetails.gst,
@@ -86,14 +113,14 @@ const AddProformaInvoice = () => {
                 state_code: invoiceDetails.stateCode,
                 bill_date: new Date(),
                 status: 'Performa', // example status
-                invoice_status: 'Tax', // example status
-                invoice_no: 'INV-' + Math.floor(Math.random() * 10000), // example invoice number
-                tax_invoice_no: 'TX-' + Math.floor(Math.random() * 10000), // example tax invoice number
-                report: 'Active' // example report
-            });
+                invoice_status: 'Active', // example status
+            };
 
-            const billItemsData = invoiceDetails.products.map(product => ({
-                Invoice_no: myBillData.mybill.invoice_no,
+            const invoiceResponse = await makeApi(`/v1/admin/api/update-my-bill/${id}`, "PUT", updatedInvoice);
+
+            const billItemsData = products.map(product => ({
+                _id: product.id,
+                Invoice_no: invoiceResponse.data.mybill.invoice_no,
                 product: product.productName,
                 hsn: product.hsn,
                 qty: product.qty,
@@ -105,35 +132,15 @@ const AddProformaInvoice = () => {
                 sgst_Amount: product.sgstAmount,
                 igst_Rate: product.igstRate,
                 igst_Amount: product.igstAmount,
-                tax_invoice_no: myBillData.mybill.tax_invoice_no
+                tax_invoice_no: invoiceResponse.data.mybill.tax_invoice_no
             }));
 
-            await makeApi("/v1/admin/api/create-bill-items","POST" ,billItemsData);
+            await makeApi(`/v1/admin/api/update-bill-items`, "PUT", billItemsData);
 
             setAlert('Invoice saved successfully!');
-            setInvoiceDetails(initialInvoiceDetails); // Reset form
         } catch (error) {
             console.error('Error saving invoice:', error);
             setAlert('Error saving invoice. Please try again.');
-        }
-    };
-
-    const handleUserSelect = (event) => {
-        const userId = event.target.value;
-        if (userId) {
-            const selectedUser = dummyUsers.find(user => user.id === parseInt(userId));
-            if (selectedUser) {
-                setInvoiceDetails({
-                    ...invoiceDetails,
-                    clientName: selectedUser.clientName,
-                    address: selectedUser.address,
-                    contact: selectedUser.contact,
-                    gst: selectedUser.gst,
-                    stateCode: selectedUser.stateCode
-                });
-            }
-        } else {
-            setInvoiceDetails(initialInvoiceDetails);
         }
     };
 
@@ -143,7 +150,7 @@ const AddProformaInvoice = () => {
                 <BackIcon path={"management/invoices-management"} />
             </div>
             <div className="add-proforma-invoice" style={{ padding: "0px 70px" }}>
-                <h2>Add Proforma Invoice</h2>
+                <h2>Edit Proforma Invoice</h2>
                 {alert && <div className="alert">{alert}</div>}
                 <div className="form-group">
                     <label>Client Name:</label>
@@ -152,12 +159,6 @@ const AddProformaInvoice = () => {
                         value={invoiceDetails.clientName}
                         onChange={(e) => handleInputChange('clientName', e.target.value)}
                     />
-                    <select onChange={handleUserSelect}>
-                        <option value="">Select Existing User</option>
-                        {dummyUsers.map(user => (
-                            <option key={user.id} value={user.id}>{user.clientName}</option>
-                        ))}
-                    </select>
                 </div>
                 <div className="form-group">
                     <label>Address:</label>
@@ -208,7 +209,7 @@ const AddProformaInvoice = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {invoiceDetails.products.map((product, index) => (
+                        {products.map((product, index) => (
                             <tr key={index}>
                                 <td>
                                     <input
@@ -272,6 +273,7 @@ const AddProformaInvoice = () => {
                                         value={product.sgstAmount}
                                         onChange={(e) => handleProductChange(index, 'sgstAmount', e.target.value)}
                                     />
+
                                 </td>
                                 <td>
                                     <input
@@ -291,11 +293,11 @@ const AddProformaInvoice = () => {
                         ))}
                     </tbody>
                 </table>
-                <button className="add-product-button" onClick={addMoreProducts}>Add More</button>
-                <button className="save-button" onClick={handleSave}>Save</button>
+                <button onClick={addMoreProducts}>Add More Products</button>
+                <button onClick={handleSave}>Save Invoice</button>
             </div>
         </>
     );
 };
 
-export default AddProformaInvoice;
+export default EditInvoiceDetails;

@@ -9,6 +9,8 @@ import ManageCheckList from '../componet/Management/ManageCheckList';
 import SendMessageForCamp from '../componet/Management/SendMessage';
 import ProformaInvoices from '../componet/Management/Invoice/ProformaInvoices';
 import AddProformaInvoice from '../componet/Management/Invoice/AddProformaInvoice';
+import Invoice from '../componet/Management/Invoice/profomInvoicedetails';
+import TaxInvoices from '../componet/Management/Invoice/Taxinvoice';
 
  
 function Management() {
@@ -24,6 +26,10 @@ function Management() {
         <Route path="/send-message-management" element={<SendMessageForCamp />} />
         <Route path='/invoices-management' element={<ProformaInvoices />} />
         <Route path='/Add-invoices-management' element={<AddProformaInvoice />} />
+        <Route path='/invoice/details/:id'element={<Invoice/>} />
+        {/* TaxInvoices */}
+        <Route path='/tax-invoices-management' element={<TaxInvoices />} />
+
 
         </Routes>
     </div>
