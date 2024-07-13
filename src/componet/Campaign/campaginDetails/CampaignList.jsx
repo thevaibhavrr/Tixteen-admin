@@ -1,64 +1,94 @@
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import "../../../style/campaign/campaignList.css";
 import { Link } from 'react-router-dom';
-
-const campaigns = [
-    { id: '1', status: 'Complete', name: 'Campaign 1', banner: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhGDLn6BTUQ4ww_OdggaZkgDLbLn0kuFHQVg&s', deadline: '2024-07-01' },
-    { id: '2', status: 'Verified', name: 'Campaign 2', banner: 'https://c8.alamy.com/comp/2C7M8WF/abstract-banner-design-green-web-banner-template-ad-banner-design-using-green-color-2C7M8WF.jpg', deadline: '2024-07-02' },
-    { id: '3', status: 'Rejected', name: 'Campaign 3', banner: 'https://static.vecteezy.com/system/resources/previews/005/253/595/original/business-banner-social-media-cover-template-free-vector.jpg', deadline: '2024-07-03' },
-    { id: '4', status: 'Complete', name: 'Campaign 4', banner: 'https://d1csarkz8obe9u.cloudfront.net/posterpreviews/business-banner-template-design-f4b281ca556e3d500e78fc6260273284_screen.jpg?ts=1561497794', deadline: '2024-07-04' },
-    { id: '5', status: 'Verified', name: 'Campaign 5', banner: 'https://static.vecteezy.com/system/resources/thumbnails/006/872/124/small/holiday-travel-social-media-banner-template-web-banner-template-free-vector.jpg', deadline: '2024-07-05' },
-    { id: '6', status: 'Complete', name: 'Campaign 6', banner: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTAHnUL95UGoB9TYlCXVl-y-61iXwgsCVV0Fw&s', deadline: '2024-07-06' },
-];
+import { makeApi } from '../../../api/callApi.tsx';
 
 const CampaignList = () => {
     const [filter, setFilter] = useState('All');
     const [searchTerm, setSearchTerm] = useState('');
+    const [campaignList, setCampaignList] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const banner = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhGDLn6BTUQ4ww_OdggaZkgDLbLn0kuFHQVg&s'
 
-    const filteredCampaigns = campaigns.filter(campaign => {
+    useEffect(() => {
+        const fetchAllCampaigns = async () => {
+            try {
+                setLoading(true);
+                const response = await makeApi('/v1/all-campaigns-for-admin', 'GET');
+                // const response = await makeApi('/api/products', 'GET');
+
+                setCampaignList(response?.data.data || []);
+            } catch (error) {
+                console.error('Error fetching campaigns:', error);
+            } finally {
+                setLoading(false);
+            }
+        }
+        fetchAllCampaigns();
+    }, []);
+
+    // Function to format deadline date to DD/MM/YY
+    const formatDate = (deadline) => {
+        const dateObj = new Date(deadline);
+        const day = dateObj.getDate().toString().padStart(2, '0');
+        const month = (dateObj.getMonth() + 1).toString().padStart(2, '0'); // Months are zero indexed
+        const year = dateObj.getFullYear().toString().slice(-2); // Extract last two digits of the year
+        return `${day}/${month}/${year}`;
+    };
+
+    const filteredCampaigns = campaignList.filter(campaign => {
         return (filter === 'All' || campaign.status === filter) &&
-            (searchTerm === '' || campaign.name.toLowerCase().includes(searchTerm.toLowerCase()));
+            (searchTerm === '' || campaign.campaign_name.toLowerCase().includes(searchTerm.toLowerCase()));
     });
 
     return (
-        <div className="campaign-list-container">
-            <div className="campaign-list-topbar">
-                <input
-                    type="text"
-                    placeholder="Search..."
-                    className="campaign-list-search"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                />
-                <div className="campaign-list-filters">
-                    <button onClick={() => setFilter('All')} className={filter === 'All' ? 'active' : ''}>All</button>
-                    <button onClick={() => setFilter('Complete')} className={filter === 'Complete' ? 'active' : ''}>Complete</button>
-                    <button onClick={() => setFilter('Verified')} className={filter === 'Verified' ? 'active' : ''}>Verified</button>
-                    <button onClick={() => setFilter('Rejected')} className={filter === 'Rejected' ? 'active' : ''}>Rejected</button>
-                </div>
-            </div>
-            <div className="campaign-list-content">
-                {filteredCampaigns.map(campaign => (
-                    <div key={campaign.id} className="campaign-item ">
-                        <div className='new_user_on_campaign_badge' >10</div>
-                        <img src={campaign.banner} alt={campaign.name} className="campaign-banner" />
-                        <div className="campaign-details">
-                            <h3>{campaign.name}</h3>
-                            <p>ID: {campaign.id}</p>
-                            <p>Status: {campaign.status}</p>
-                            <p>Deadline: {campaign.deadline}</p>
-                            <Link to={`/campaign/campaign-details/${campaign.id}`} >
-                                <button className="view-more-button">View More</button>
-                            </Link>
+        <>
+            {loading ? <div>Loading...</div> : (
+                <div className="campaign-list-container">
+                    <div className="campaign-list-topbar">
+                        <input
+                            type="text"
+                            placeholder="Search..."
+                            className="campaign-list-search"
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                        />
+                        <div className="campaign-list-filters">
+                            <button onClick={() => setFilter('All')} className={filter === 'All' ? 'active' : ''}>All</button>
+                            <button onClick={() => setFilter('Completed')} className={filter === 'Completed' ? 'active' : ''}>Complete</button>
+                            <button onClick={() => setFilter('Verified')} className={filter === 'Verified' ? 'active' : ''}>Verified</button>
+                            <button onClick={() => setFilter('Rejected')} className={filter === 'Rejected' ? 'active' : ''}>Rejected</button>
                         </div>
                     </div>
-                ))}
-            </div>
-            <Link to="/campaign/create-campaign" className="create-campaign-button">
-                Create New Campaign
-            </Link>
-        </div>
+                    <div className="campaign-list-content">
+                        {filteredCampaigns.map(campaign => (
+                            <div key={campaign._id} className="campaign-item">
+                                {campaign.NewApplyRequest ? 
+                                    <div className='new_user_on_campaign_badge border  '>{campaign.NewApplyRequest}</div>
+                                    :null
+                                    
+                                } 
+                                {/* <img src={campaign.banner} alt={campaign.campaign_name} className="campaign-banner" /> */}
+                                <img src={banner} alt={campaign.campaign_name} className="campaign-banner" />
+                                <div className="campaign-details">
+                                    <h3>{campaign.campaign_name}</h3>
+                                    {/* <p>ID: {campaign.id}</p> */}
+                                    <p>Status: {campaign.status}</p>
+                                    <p>Deadline: {formatDate(campaign.dead_line)}</p>
+                                    <Link to={`/campaign/campaign-details/${campaign.campaign_no}`}>
+                                        <button className="view-more-button">View More</button>
+                                    </Link>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                    <Link to="/campaign/create-campaign" className="create-campaign-button">
+                        Create New Campaign
+                    </Link>
+                </div>
+            )}
+        </>
     );
 };
 
