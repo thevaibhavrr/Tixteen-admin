@@ -76,6 +76,7 @@ const CampaignList = () => {
                                     {/* <p>ID: {campaign.id}</p> */}
                                     <p>Status: {campaign.status}</p>
                                     <p>Deadline: {formatDate(campaign.dead_line)}</p>
+                                    {/* <p>Deadline: {campaign.dead_line}</p> */}
                                     <Link to={`/campaign/campaign-details/${campaign.campaign_no}`}>
                                         <button className="view-more-button">View More</button>
                                     </Link>
