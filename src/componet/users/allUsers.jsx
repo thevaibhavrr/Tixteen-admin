@@ -15,11 +15,78 @@ function AllUser() {
   const [currentPage, setCurrentPage] = useState(1);
   const [showPopup, setShowPopup] = useState(false);
   const [editUser, setEditUser] = useState({});
+  const [ApplyFilterPopup, setApplyFilterPopup] = useState(false);
+  const [filterGender, setFilterGender] = useState("");
+  const [IndustryList, setIndustryList] = useState([]);
+  const [citiesList, setCitiesList] = useState([]);
+  const [countryList, setCountryList] = useState([]);
+  const [filterIndustry, setFilterIndustry] = useState("");
+  const [filterPrimaryPlatform, setFilterPrimaryPlatform] = useState("");
+  const [languageList, setLanguageList] = useState([
+    {
+      id: 1,
+      name: "English"
+    },
+    {
+      id: 2,
+      name: "Hindi"
+    },
+    {
+      id: 3,
+      name: "Panjabi"
+    },
+    {
+      id: 4,
+      name: "Telugu"
+    },
+    {
+      id: 5,
+      name: "Tamil"
+    },
+    {
+      id: 6,
+      name: "Malayalam"
+    },
+    {
+      id: 7,
+      name: "Kannada"
+    },
+    {
+      id: 8,
+      name: "Odia"
+    },
+    {
+      id: 9,
+      name: "Bengali"
+    },
+    {
+      id: 10,
+      name: "Marathi"
+    },
+    {
+      id: 11,
+      name: "Gujarati"
+    },
+    {
+      id: 12,
+      name: "Assamese"
+    },
+    {
+      id: 13,
+      name: "Punjabi"
+    },
+    {
+      id: 14,
+      name: "Bhojpuri"
+    },
+  ]);
+  const [filterLanguage, setFilterLanguage] = useState("");
+
 
   const fetchUsers = async () => {
     setLoading(true);
     try {
-      const response = await makeApi(`/V1/influencers?name=${searchQuery}&verification=${selectedVerification}&level=${selectedLevel}&perPage=50&page=${currentPage}`, 'GET');
+      const response = await makeApi(`/V1/influencers?name=${searchQuery}&verification=${selectedVerification}&level=${selectedLevel}&gender=${filterGender}&industry=${filterIndustry}&language=${filterLanguage}&primary_platform=${filterPrimaryPlatform}&perPage=50&page=${currentPage}`, 'GET');
       const newUsers = response.data.data;
       const total = response.data.dataCount;
 
@@ -32,9 +99,82 @@ function AllUser() {
     }
   };
 
+  const FetchIndustryList = async () => {
+    setLoading(true);
+    try {
+      const res = await makeApi('/v1/get-all-industries', 'GET');
+      setIndustryList(res.data.data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  const FetchCountryList = async () => {
+    setLoading(true);
+    try {
+      const res = await makeApi('/v1/get-all-countries', 'GET');
+      setCountryList(res.data.data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  const FetchCitiesList = async () => {
+    setLoading(true);
+    try {
+      const res = await makeApi('/v1/get-all-cities', 'GET');
+      await setCitiesList(res.data.data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  }
+  useEffect(() => {
+    FetchCitiesList();
+    FetchIndustryList();
+    FetchCountryList();
+  }, []);
+
+
+
+
   useEffect(() => {
     fetchUsers();
-  }, [searchQuery, selectedVerification, selectedLevel, currentPage]);
+  }, [searchQuery, filterGender, filterPrimaryPlatform,filterIndustry, filterLanguage, selectedVerification, selectedLevel, currentPage]);
+
+  const toggleIndustry = (industryName) => {
+    let updatedFilterIndustry;
+    if (filterIndustry.includes(industryName)) {
+      updatedFilterIndustry = filterIndustry
+        .split(',')
+        .filter(name => name !== industryName)
+        .join(',');
+    } else {
+      updatedFilterIndustry = filterIndustry
+        ? `${filterIndustry},${industryName}`
+        : industryName;
+    }
+    setFilterIndustry(updatedFilterIndustry);
+  };
+  const toggleLanguage = (languageName) => {
+    let updatedFilterLanguage;
+    if (filterLanguage.includes(languageName)) {
+      updatedFilterLanguage = filterLanguage
+        .split(',')
+        .filter(name => name !== languageName)
+        .join(',');
+    } else {
+      updatedFilterLanguage = filterLanguage
+        ? `${filterLanguage},${languageName}`
+        : languageName;
+    }
+    setFilterLanguage(updatedFilterLanguage);
+  };
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
@@ -118,6 +258,15 @@ function AllUser() {
                 {tab}
               </button>
             ))}
+            <button
+              className={`tab-button `}
+              onClick={() => setApplyFilterPopup(true)}
+            >
+              Filters
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-filter" viewBox="0 0 16 16">
+                <path d="M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5m-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5" />
+              </svg>
+            </button>
           </div>
           <div>
             <input
@@ -159,7 +308,7 @@ function AllUser() {
                 </div>
                 <div className='all-user-user-details-small'>
                   <div>
-                  <p><strong>Age:</strong> {calculateAge(user.dob)}</p>
+                    <p><strong>Age:</strong> {calculateAge(user.dob)}</p>
                   </div>
                   <div>
                     <p><strong>Gender:</strong> {user.gender}</p>
@@ -248,7 +397,7 @@ function AllUser() {
         </div>
 
       </div>
-
+      {/* edit user verification status */}
       {showPopup && (
         <div className="popup_for_edit_user">
           <div className="popup-inner_for_edit_user">
@@ -283,6 +432,114 @@ function AllUser() {
           </div>
         </div>
       )}
+      {/* appply filter popup */}
+      {ApplyFilterPopup && (
+        <>
+          <div className="popup_for_edit_user">
+            <div className="popup-inner_for_edit_user">
+              <h3>Apply Filter </h3>
+              <div>
+                {/* Gender */}
+                <div>
+                  <label>
+                    Gender:
+                    <select
+                      value={filterGender}
+                      onChange={(e) => setFilterGender(e.target.value)}
+                    >
+                      <option value="">All</option>
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                    </select>
+                  </label>
+                </div>
+                  {/* primary_platform dropdown */}
+                <div>
+                  <label>
+                    Primary Platform:
+                    <select
+                      value={filterPrimaryPlatform}
+                      onChange={(e) => setFilterPrimaryPlatform(e.target.value)}
+                    >
+                      <option value="">All</option>
+                      <option value="Facebook">Facebook</option>
+                      <option value="Instagram">Instagram</option>
+                      <option value="Twitter">Twitter</option>
+                      <option value="LinkedIn">LinkedIn</option>
+                      <option value="youtube">Youtube</option>
+                    </select>
+                  </label>
+
+                </div>
+
+
+
+                {/* industry dropdown with checkbox */}
+                <div>
+                  <div>
+                    Industry:
+                  </div>
+                  <div className='filter_chebox_parent_div'>
+                    {IndustryList.map((industry) => (
+                      <div key={industry.name} className='d-flex align-items-center'>
+                        <div className='w-25'>
+                          <input
+                            type="checkbox"
+                            id={industry.name}
+                            value={industry.name}
+                            checked={filterIndustry.split(',').includes(industry.name)}
+                            onChange={() => toggleIndustry(industry.name)}
+                            style={{ width: "20px", height: "20px", cursor: "pointer" }}
+                          />
+                        </div>
+                        <div className='w-100'>
+                          <label htmlFor={industry.name}>{industry.name}</label>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* language dropdown with checkbox */}
+                <div>
+                  <div>
+                    Language:
+                  </div>
+                  <div className='filter_chebox_parent_div'>
+                    {languageList.map((language) => (
+                      <div key={language.name} className='d-flex align-items-center'>
+                        <div className='w-25'>
+                          <input
+                            type="checkbox"
+                            id={language.name}
+                            value={language.name}
+                            checked={filterLanguage.split(',').includes(language.name)}
+                            onChange={() => toggleLanguage(language.name)}
+                            style={{ width: "20px", height: "20px", cursor: "pointer" }}
+                          />
+                        </div>
+                        <div className='w-100'>
+                          <label htmlFor={language.name}>{language.name}</label>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              {/* location dropdown with checkbox */}
+              <div>
+              </div>
+
+              <div className='d-flex gap-5' >
+
+                <button type="submit">Save</button>
+                <button type="button" onClick={() => setApplyFilterPopup(false)}>Cancel</button>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+
     </>
   );
 }

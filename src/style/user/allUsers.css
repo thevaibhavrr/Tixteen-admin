@@ -179,6 +179,7 @@ text-align: center;
   justify-content: center;
   align-items: center;
   z-index: 10000; /* Ensure it appears above other elements */
+  overflow-y: scroll;
 }
 
 .popup-inner_for_edit_user {
@@ -273,6 +274,21 @@ text-align: center;
   border: 1px solid var(--dark-yellow-color);
 }
 
+/* apply filter popup */
+.filter_chebox_parent_div{
+  max-height: 200px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+
 
 @media (max-width: 1024px) {
   .all-user-user-card {
@@ -317,3 +333,4 @@ text-align: center;
     width: calc(100% - 20px);
   }
 }
+
