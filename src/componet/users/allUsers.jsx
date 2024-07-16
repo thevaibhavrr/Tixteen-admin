@@ -10,7 +10,6 @@ function AllUser() {
   const [selectedVerification, setSelectedVerification] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(false);
-  const [page, setPage] = useState(1);
 
   const [totalPages, setTotalPages] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
@@ -89,6 +88,21 @@ function AllUser() {
   const startPage = Math.max(1, currentPage - 4);
   const endPage = Math.min(totalPages, startPage + 9);
 
+  const calculateAge = (dob) => {
+    const dobDate = new Date(dob);
+    const today = new Date();
+    let age = today.getFullYear() - dobDate.getFullYear();
+    const monthDifference = today.getMonth() - dobDate.getMonth();
+
+    // Adjust age if the birth month hasn't occurred yet this year
+    if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < dobDate.getDate())) {
+      age--;
+    }
+
+    return age;
+  };
+
+
   return (
     <>
       {loading && <div style={{ height: "100%", width: "100%", top: "0", display: "flex", justifyContent: "center", alignItems: "center", zIndex: "9999", position: "fixed", backgroundColor: "rgba(0,0,0,0.3)" }}> <PrimaryLoader /> </div>}
@@ -134,20 +148,30 @@ function AllUser() {
                 className="all-user-user-image"
               />
               <div className="all-user-user-info">
-                <h3>{user.user_name}</h3>
-                <p><strong>Level:</strong> {user.level}</p>
-                <p><strong>Verification:</strong> {user.verification}</p>
-                <div>
+                <div className='all-user-user-name' >{user.user_name}</div>
+                <div className='all-user-user-details-small' >
+                  <div>
+                    <p><strong>Level:</strong> {user.level}</p>
+                  </div>
+                  <div>
+                    <p><strong>{user.verification}</strong> </p>
+                  </div>
+                </div>
+                <div className='all-user-user-details-small'>
+                  <div>
+                  <p><strong>Age:</strong> {calculateAge(user.dob)}</p>
+                  </div>
+                  <div>
+                    <p><strong>Gender:</strong> {user.gender}</p>
+                  </div>
+                </div>
+                <div className='all-user-user-details-small'>
                   <p><strong>Primary Platform:</strong> {user.primary_platform}</p>
                 </div>
                 <div className="all-user-social-media">
-
-
-
-
                   <div className="all-user-social-media">
                     <p><strong>Followers:</strong> {user?.socialMedia?.follower ? user?.socialMedia?.follower : 'N/A'}</p>
-                    <div className='d-flex gap-4'>
+                    <div className='d-flex justify-content-between'>
                       <div><strong>Platform:</strong> {user?.socialMedia?.platform ? user?.socialMedia?.platform : 'N/A'}</div>
                       <div>
                         {user?.socialMedia?.platform === "Instagram" && (
