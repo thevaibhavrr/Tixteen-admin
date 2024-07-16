@@ -221,6 +221,38 @@
   background-color: var(--light-blue-color); /* Optional hover effect */
 }
 
+.all_user_pagination_main_div {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.all_user_pagination {
+  display: flex;
+  gap: 5px;
+}
+
+.all_user_pagination button {
+  padding: 8px 12px;
+  border: 1px solid var(--light-gray-color);
+  background-color: var(--white-color);
+  color: var(--dark-gray-color);
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s, color 0.3s;
+  font-family: var(--kumbh-font);
+}
+
+.all_user_pagination button:hover {
+  background-color: var(--light-blue-color);
+  color: var(--white-color);
+}
+
+.all_user_pagination button.active {
+  background-color: var(--dark-yellow-color);
+  color: var(--white-color);
+  border: 1px solid var(--dark-yellow-color);
+}
 
 
 @media (max-width: 1024px) {
