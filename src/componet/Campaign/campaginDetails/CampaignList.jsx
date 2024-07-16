@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import "../../../style/campaign/campaignList.css";
 import { Link } from 'react-router-dom';
 import { makeApi } from '../../../api/callApi.tsx';
+import PrimaryLoader from '../../../utils/PrimaryLoader.jsx';
 
 const CampaignList = () => {
     const [filter, setFilter] = useState('All');
@@ -44,7 +45,7 @@ const CampaignList = () => {
 
     return (
         <>
-            {loading ? <div>Loading...</div> : (
+            {loading ? <div style={{ height: "100%", width: "100%", top: "0", display: "flex", justifyContent: "center", alignItems: "center", zIndex: "9999", position: "fixed", backgroundColor: "rgba(0,0,0,0.3)" }}> <PrimaryLoader /> </div> : (
                 <div className="campaign-list-container">
                     <div className="campaign-list-topbar">
                         <input
@@ -64,11 +65,11 @@ const CampaignList = () => {
                     <div className="campaign-list-content">
                         {filteredCampaigns.map(campaign => (
                             <div key={campaign._id} className="campaign-item">
-                                {campaign.NewApplyRequest ? 
+                                {campaign.NewApplyRequest ?
                                     <div className='new_user_on_campaign_badge border  '>{campaign.NewApplyRequest}</div>
-                                    :null
-                                    
-                                } 
+                                    : null
+
+                                }
                                 {/* <img src={campaign.banner} alt={campaign.campaign_name} className="campaign-banner" /> */}
                                 <img src={banner} alt={campaign.campaign_name} className="campaign-banner" />
                                 <div className="campaign-details">
@@ -77,6 +78,23 @@ const CampaignList = () => {
                                     <p>Status: {campaign.status}</p>
                                     <p>Deadline: {formatDate(campaign.dead_line)}</p>
                                     {/* <p>Deadline: {campaign.dead_line}</p> */}
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
                                     <Link to={`/campaign/campaign-details/${campaign.campaign_no}`}>
                                         <button className="view-more-button">View More</button>
                                     </Link>

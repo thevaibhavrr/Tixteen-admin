@@ -4,6 +4,7 @@ import { Link, useParams } from 'react-router-dom';
 import BackIcon from '../../../utils/BackIcon';
 import EditIcon from '../../../utils/EditIcon';
 import { makeApi } from '../../../api/callApi.tsx';
+import PrimaryLoader from '../../../utils/PrimaryLoader.jsx';
 
 function CampaignDetails() {
   const { id } = useParams();
@@ -75,6 +76,7 @@ function CampaignDetails() {
 
   return (
     <>
+     {loading && <div style={{ height: "100%", width: "100%", top: "0", display: "flex", justifyContent: "center", alignItems: "center", zIndex: "9999", position: "fixed", backgroundColor: "rgba(0,0,0,0.3)" }}> <PrimaryLoader /> </div>}
       <div>
         <BackIcon path={"campaign/CampaignList"} />
       </div>
