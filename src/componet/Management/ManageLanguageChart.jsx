@@ -1,23 +1,35 @@
 
-import React, { useState } from 'react';
-import DeletePopup from '../../utils/DeletePopup';
 
-const initialLanguages = [
-    { id: 1, name: "English" },
-    { id: 2, name: "Spanish" },
-    { id: 3, name: "French" },
-];
+import React, { useState, useEffect } from 'react';
+import DeletePopup from '../../utils/DeletePopup';
+import { makeApi } from '../../api/callApi.tsx';
 
 const ManageLanguageChart = () => {
-    const [languages, setLanguages] = useState(initialLanguages);
+    const [languages, setLanguages] = useState([]);
     const [showEditPopup, setShowEditPopup] = useState(false);
     const [showDeletePopup, setShowDeletePopup] = useState(false);
+    const [showAddPopup, setShowAddPopup] = useState(false);
     const [currentLanguage, setCurrentLanguage] = useState(null);
     const [editedLanguageName, setEditedLanguageName] = useState('');
+    const [newLanguageName, setNewLanguageName] = useState('');
+
+    useEffect(() => {
+        fetchLanguages();
+    }, []);
+
+    const fetchLanguages = async () => {
+        try {
+            const res = await makeApi('/v1/get-all-languages', 'GET');
+
+            setLanguages(res.data.data);
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
     const handleEdit = (language) => {
         setCurrentLanguage(language);
-        setEditedLanguageName(language.name); // Initialize the edit popup with current language name
+        setEditedLanguageName(language.language);
         setShowEditPopup(true);
     };
 
@@ -26,22 +38,35 @@ const ManageLanguageChart = () => {
         setShowDeletePopup(true);
     };
 
-    const addNewLanguage = () => {
-        setLanguages([...languages, { id: languages.length + 1, name: "" }]);
+    const addNewLanguage = async () => {
+        try {
+            const res = await makeApi('/v1/create-language', 'POST', { language: newLanguageName });
+            setLanguages([...languages, res.data]);
+            setShowAddPopup(false);
+            setNewLanguageName('');
+        } catch (error) {
+            console.error(error);
+        }
     };
 
-    const deleteLanguage = () => {
-        setLanguages(languages.filter(language => language.id !== currentLanguage.id));
-        setShowDeletePopup(false);
+    const deleteLanguage = async () => {
+        try {
+            await makeApi(`/v1/delete-language/${currentLanguage._id}`, 'DELETE');
+            setLanguages(languages.filter(language => language._id !== currentLanguage._id));
+            setShowDeletePopup(false);
+        } catch (error) {
+            console.error(error);
+        }
     };
 
-    const saveEditedLanguage = () => {
-        // Update the language name in the languages state
-        const updatedLanguages = languages.map(language =>
-            language.id === currentLanguage.id ? { ...language, name: editedLanguageName } : language
-        );
-        setLanguages(updatedLanguages);
-        setShowEditPopup(false);
+    const saveEditedLanguage = async () => {
+        try {
+            const res = await makeApi(`/v1/update-language/${currentLanguage._id}`, 'PUT', { language: editedLanguageName });
+            setLanguages(languages.map(language => language._id === currentLanguage._id ? res.data.data : language));
+            setShowEditPopup(false);
+        } catch (error) {
+            console.error(error);
+        }
     };
 
     return (
@@ -57,14 +82,14 @@ const ManageLanguageChart = () => {
                 <tbody>
                     {languages.map((language, index) => (
                         <tr key={index}>
-                            <td>{language.id}</td>
+                            <td>{index + 1}</td>
                             <td>
                                 <input
                                     type="text"
-                                    value={language.name}
+                                    value={language.language}
                                     onChange={(e) => {
                                         const newLanguages = [...languages];
-                                        newLanguages[index].name = e.target.value;
+                                        newLanguages[index].language = e.target.value;
                                         setLanguages(newLanguages);
                                     }}
                                     className='form-control w-75'
@@ -74,7 +99,7 @@ const ManageLanguageChart = () => {
                                 <span onClick={() => handleEdit(language)}>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-pencil-square" viewBox="0 0 16 16">
                                         <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
-                                        <path fillRule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
+                                        <path fillRule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
                                     </svg>
                                 </span>
                                 <span onClick={() => handleDelete(language)}>
@@ -87,7 +112,7 @@ const ManageLanguageChart = () => {
                     ))}
                 </tbody>
             </table>
-            <button className="add-level-button" onClick={addNewLanguage}>Add More Language</button>
+            <button className="add-level-button" onClick={() => setShowAddPopup(true)}>Add More Language</button>
 
             <DeletePopup
                 isOpen={showDeletePopup}
@@ -95,6 +120,24 @@ const ManageLanguageChart = () => {
                 onDelete={deleteLanguage}
                 message="Are you sure you want to delete this language?"
             />
+
+            {showAddPopup && (
+                <div className="popup">
+                    <div className="popup-content">
+                        <h2>Add New Language</h2>
+                        <input
+                            type="text"
+                            value={newLanguageName}
+                            onChange={(e) => setNewLanguageName(e.target.value)}
+                            className='form-control'
+                        />
+                        <div className='px-3'>
+                            <div onClick={addNewLanguage} className='add-level-button text-center'>Save</div>
+                            <div onClick={() => setShowAddPopup(false)} className='add-level-button text-center'>Cancel</div>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             {showEditPopup && (
                 <div className="popup">

@@ -205,14 +205,21 @@ const ProformaInvoices = () => {
                 {isEditModalOpen && (
                     <div className="modal">
                         <div className="modal-content">
-                            <h3>Edit Invoice</h3>
-                            <label>invoice_status</label>
+                            <h3>Edit Invoice</h3> 
+                            {/* <label>invoice_status</label>
                             <input
                                 type="text"
                                 name="invoice_status"
                                 value={editInvoice.invoice_status}
                                 onChange={handleEditChange}
-                            />
+                            /> */}
+                            {/* add dropdown */}
+                             <select className='form-control' name="invoice_status" value={editInvoice.invoice_status} onChange={handleEditChange}>
+                                <option disabled defaultValue value="">Select Status  </option>
+                                
+                                <option value="">Performa</option>
+                                <option value="Tax">Tax</option>
+                            </select>
                             
                             <button onClick={saveEdit}>Save Changes</button>
                             <button onClick={closeModal}>Cancel</button>
