@@ -18,10 +18,15 @@ function AllUser() {
   const [ApplyFilterPopup, setApplyFilterPopup] = useState(false);
   const [filterGender, setFilterGender] = useState("");
   const [IndustryList, setIndustryList] = useState([]);
-  const [citiesList, setCitiesList] = useState([]);
+  const [cityList, setCitiesList] = useState([]);
   const [countryList, setCountryList] = useState([]);
+  const [ stateList,setStatesList] = useState([]);
+  const [filterState, setFilterState] = useState("");
   const [filterIndustry, setFilterIndustry] = useState("");
   const [filterPrimaryPlatform, setFilterPrimaryPlatform] = useState("");
+  const [filterCountry, setFilterCountry] = useState("");
+  const  [filterCity, setFilterCity] = useState("");
+
   const [languageList, setLanguageList] = useState([
     {
       id: 1,
@@ -86,7 +91,7 @@ function AllUser() {
   const fetchUsers = async () => {
     setLoading(true);
     try {
-      const response = await makeApi(`/V1/influencers?name=${searchQuery}&verification=${selectedVerification}&level=${selectedLevel}&gender=${filterGender}&industry=${filterIndustry}&language=${filterLanguage}&primary_platform=${filterPrimaryPlatform}&perPage=50&page=${currentPage}`, 'GET');
+      const response = await makeApi(`/V1/influencers?name=${searchQuery}&verification=${selectedVerification}&level=${selectedLevel}&gender=${filterGender}&industry=${filterIndustry}&language=${filterLanguage}&primary_platform=${filterPrimaryPlatform}&ship_country=${filterCountry}&ship_state=${filterState}&ship_city=${filterCity}&perPage=50&page=${currentPage}`, 'GET');
       const newUsers = response.data.data;
       const total = response.data.dataCount;
 
@@ -123,6 +128,18 @@ function AllUser() {
     }
   }
 
+  const FetchStateList = async () => {
+    setLoading(true);
+    try {
+      const res = await makeApi('/v1/get-all-states', 'GET');
+      setStatesList(res.data.data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
   const FetchCitiesList = async () => {
     setLoading(true);
     try {
@@ -145,7 +162,7 @@ function AllUser() {
 
   useEffect(() => {
     fetchUsers();
-  }, [searchQuery, filterGender, filterPrimaryPlatform,filterIndustry, filterLanguage, selectedVerification, selectedLevel, currentPage]);
+  }, [searchQuery, filterGender, filterPrimaryPlatform, filterIndustry, filterLanguage, selectedVerification, selectedLevel, currentPage]);
 
   const toggleIndustry = (industryName) => {
     let updatedFilterIndustry;
@@ -437,6 +454,13 @@ function AllUser() {
         <>
           <div className="popup_for_edit_user">
             <div className="popup-inner_for_edit_user">
+              <div className='text-end' >
+                <button type="" style={{ padding: '0px' }} onClick={() => setApplyFilterPopup(false)}>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                    <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" />
+                  </svg>
+                </button>
+              </div>
               <h3>Apply Filter </h3>
               <div>
                 {/* Gender */}
@@ -453,7 +477,7 @@ function AllUser() {
                     </select>
                   </label>
                 </div>
-                  {/* primary_platform dropdown */}
+                {/* primary_platform dropdown */}
                 <div>
                   <label>
                     Primary Platform:
@@ -526,15 +550,62 @@ function AllUser() {
                   </div>
                 </div>
               </div>
-              {/* location dropdown with checkbox */}
+              {/* country dropdown  */}
               <div>
+                <div>
+                  Country:
+                  <select
+                    value={filterCountry}
+                    onChange={(e) => setFilterCountry(e.target.value)}
+                  >
+                    <option value="">All</option>
+                    {countryList.map((country) => (
+                      <option key={country.name} value={country.name}>
+                        {country.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+              {/* state dropdown */}
+
+              <div>
+                <label> 
+                  State:
+                  <select
+                    value={filterState}
+                    onChange={(e) => setFilterState(e.target.value)}
+                  >
+                    <option value="">All</option>
+                    {stateList.map((state) => (
+                      <option key={state.name} value={state.name}>
+                        {state.name}
+                      </option>
+                    ))}
+                  </select>
+                </label>
               </div>
 
-              <div className='d-flex gap-5' >
-
-                <button type="submit">Save</button>
-                <button type="button" onClick={() => setApplyFilterPopup(false)}>Cancel</button>
+              {/* city dropdown  */}
+              <div>
+                <label>
+                  City:
+                  <select
+                    value={filterCity}
+                    onChange={(e) => setFilterCity(e.target.value)}
+                  >
+                    <option value="">All</option>
+                    {cityList.map((city) => (
+                      <option key={city.name} value={city.name}>
+                        {city.name}
+                      </option>
+                    ))}
+                  </select>
+                </label>
               </div>
+
+
+
             </div>
           </div>
         </>
