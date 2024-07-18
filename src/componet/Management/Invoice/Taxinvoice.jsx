@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import "../../../style/managment/invoice/ProformaInvoices.css";
 import { Link } from 'react-router-dom';
 import { makeApi } from '../../../api/callApi.tsx';
+import PrimaryLoader from '../../../utils/PrimaryLoader.jsx';
 
 const TaxInvoices = () => {
     const [invoices, setInvoices] = useState([]);
@@ -17,6 +18,8 @@ const TaxInvoices = () => {
         stateCode: '',
     });
     const [searchTerm, setSearchTerm] = useState('');
+    const [ loading, setLoading ] = useState(false);
+
 
     useEffect(() => {
         fetchInvoices();
@@ -24,6 +27,8 @@ const TaxInvoices = () => {
 
     const fetchInvoices = async () => {
         try {
+        setLoading (true);
+
             const response = await makeApi('/v1/admin/api/get-my-bill?invoice_status=Tax', 'GET');
 
             if (response.data.success) {
@@ -33,6 +38,8 @@ const TaxInvoices = () => {
             }
         } catch (error) {
             console.error('API request failed:', error);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -108,6 +115,8 @@ const TaxInvoices = () => {
 
     return (
         <>
+                     {loading && <div style={{ height: "100%", width: "100%", top: "0", display: "flex", justifyContent: "center", alignItems: "center", zIndex: "9999", position: "fixed", backgroundColor: "rgba(0,0,0,0.3)" }}> <PrimaryLoader /> </div>}
+
             <div>
                 <div className="">
                     <div className="campaign-list-filters">

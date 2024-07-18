@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import DeletePopup from '../../utils/DeletePopup';
 import { makeApi } from '../../api/callApi.tsx';
+import PrimaryLoader from '../../utils/PrimaryLoader.jsx';
 
 const ManageLanguageChart = () => {
     const [languages, setLanguages] = useState([]);
@@ -12,18 +13,22 @@ const ManageLanguageChart = () => {
     const [currentLanguage, setCurrentLanguage] = useState(null);
     const [editedLanguageName, setEditedLanguageName] = useState('');
     const [newLanguageName, setNewLanguageName] = useState('');
+    const [ loading, setLoading ] = useState(false);
 
     useEffect(() => {
         fetchLanguages();
     }, []);
 
     const fetchLanguages = async () => {
+        setLoading (true);
         try {
             const res = await makeApi('/v1/get-all-languages', 'GET');
 
             setLanguages(res.data.data);
         } catch (error) {
             console.error(error);
+        } finally {
+            setLoading (false);
         }
     };
 
@@ -70,6 +75,9 @@ const ManageLanguageChart = () => {
     };
 
     return (
+        <>
+             {loading && <div style={{ height: "100%", width: "100%", top: "0", display: "flex", justifyContent: "center", alignItems: "center", zIndex: "9999", position: "fixed", backgroundColor: "rgba(0,0,0,0.3)" }}> <PrimaryLoader /> </div>}
+
         <div className="manage-industry-chart">
             <table>
                 <thead>
@@ -157,6 +165,7 @@ const ManageLanguageChart = () => {
                 </div>
             )}
         </div>
+        </>
     );
 };
 

@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import "../../../style/managment/invoice/ProformaInvoices.css";
 import { Link } from 'react-router-dom';
 import { makeApi } from '../../../api/callApi.tsx';
+import PrimaryLoader from '../../../utils/PrimaryLoader.jsx';
 
 const ProformaInvoices = () => {
     const [invoices, setInvoices] = useState([]);
@@ -18,6 +19,8 @@ const ProformaInvoices = () => {
         invoice_status: '',
     });
     const [searchTerm, setSearchTerm] = useState('');
+    const [ loading, setLoading ] = useState(false);
+
 
     useEffect(() => {
         fetchInvoices();
@@ -25,8 +28,9 @@ const ProformaInvoices = () => {
 
     const fetchInvoices = async () => {
         try {
-            const response = await makeApi('/v1/admin/api/get-my-bill?invoice_status=', 'GET');
+        setLoading (true);
 
+            const response = await makeApi('/v1/admin/api/get-my-bill?invoice_status=', 'GET');
             if (response.data.success) {
                 setInvoices(response.data.mybill);
             } else {
@@ -34,11 +38,15 @@ const ProformaInvoices = () => {
             }
         } catch (error) {
             console.error('API request failed:', error);
+        } finally {
+            setLoading(false);
         }
     };
 
     const deleteInvoice = async () => {
+        
         try {
+            
             const response = await makeApi(`/v1/admin/api/delete-my-bill/${currentInvoiceId}`, 'DELETE');
 
             if (response.data.success) {
@@ -112,6 +120,8 @@ const ProformaInvoices = () => {
 
     return (
         <>
+                     {loading && <div style={{ height: "100%", width: "100%", top: "0", display: "flex", justifyContent: "center", alignItems: "center", zIndex: "9999", position: "fixed", backgroundColor: "rgba(0,0,0,0.3)" }}> <PrimaryLoader /> </div>}
+
             <div>
                 <div className="">
                     <div className="campaign-list-filters">

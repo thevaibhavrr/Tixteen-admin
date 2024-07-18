@@ -15,6 +15,7 @@ const ManageCheckList = () => {
     const [currentChecklistItem, setCurrentChecklistItem] = useState(null);
     const [editedChecklistName, setEditedChecklistName] = useState('');
     const [editedChecklistAction, setEditedChecklistAction] = useState('');
+    const [ loading, setLoading ] = useState(false);
 
     const handleEdit = (item) => {
         setCurrentChecklistItem(item);
