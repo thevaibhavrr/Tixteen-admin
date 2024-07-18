@@ -17,26 +17,49 @@ function CampaignDetails() {
   const [selectedTab, setSelectedTab] = useState('Accepted');
   const [showDenyInput, setShowDenyInput] = useState(false);
   const [remark, setRemark] = useState('');
+  const [followerrequired, setFollowerrequired] = useState([]);
+
+  const fetchCampaignDetailsWithAppliedUsers = async () => {
+    try {
+      setLoading(true);
+      const response = await makeApi(`/v1/apply-campaign-details/campaign/${id}`, 'GET');
+      
+      if (response && response.data) {
+        setCampaignDetails(response.data.campaign);
+        setAppliedUsersList(response.data.applyUsers);
+        setFilteredUsers(response.data.applyUsers.filter(user => user.influ_approval === 'Accepted'));
+      } else {
+        console.error('No data received from API');
+      }
+    } catch (error) {
+      console.error('Error fetching campaign details:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  const fetchFollowers = async () => {
+    try {
+      setLoading(true);
+      const response = await makeApi(`/v1/required-follower/campaign/${id}`, 'GET');
+      // const response = await makeApi(`/v1/required-follower/campaign/80202401274`, 'GET');
+      setFollowerrequired(response.data.data);
+      // if (response && response.data) {
+      //   setCampaignDetails(response.data.campaign);
+      //   setAppliedUsersList(response.data.applyUsers);
+      //   setFilteredUsers(response.data.applyUsers.filter(user => user.influ_approval === 'Accepted'));
+      // } else {
+      //   console.error('No data received from API');
+      // }
+    } catch (error) {
+      console.error('Error fetching campaign details:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchCampaignDetailsWithAppliedUsers = async () => {
-      try {
-        setLoading(true);
-        const response = await makeApi(`/v1/apply-campaign-details/campaign/${id}`, 'GET');
-        if (response && response.data) {
-          setCampaignDetails(response.data.campaign);
-          setAppliedUsersList(response.data.applyUsers);
-          setFilteredUsers(response.data.applyUsers.filter(user => user.influ_approval === 'Accepted'));
-        } else {
-          console.error('No data received from API');
-        }
-      } catch (error) {
-        console.error('Error fetching campaign details:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchCampaignDetailsWithAppliedUsers();
+    fetchFollowers()
   }, [id]);
 
   const handleTabChange = (tab) => {
@@ -65,7 +88,7 @@ function CampaignDetails() {
 
 
   const handleVerifieruserForcapaign = async (userId,value) => {
-    console.log(userId,value,"handleDeny")
+
     try {
       const response = await makeApi(`/v1/edit-apply-campaign/${userId}/${id}`,"PUT", { influ_approval: value });
       
@@ -96,11 +119,11 @@ function CampaignDetails() {
           <p className="campaign-deliverables-unique"><strong>Deliverables:</strong> {campaignDetails?.requiredDeliverables?.join(', ') || 'N/A'}</p>
           <div className="campaign-followers-unique">
             <h3><strong>Required Followers</strong></h3>
-            <p>Facebook: {campaignDetails?.requiredFollowers?.Facebook}</p>
-            <p>Instagram: {campaignDetails?.requiredFollowers?.Instagram}</p>
-            <p>Twitter: {campaignDetails?.requiredFollowers?.Twitter}</p>
-            <p>LinkedIn: {campaignDetails?.requiredFollowers?.LinkedIn}</p>
-            <p>Youtube: {campaignDetails?.requiredFollowers?.Youtube}</p>
+            {followerrequired.length > 0 ? followerrequired?.map((follower, index) => (
+              <div key={index}>
+              <p> <strong> {follower?.platforms[0]}:</strong> {follower?.followers}</p>
+              </div>
+            ) ) : <p>No followers required</p>}
           </div>
           <p className="campaign-hashtags-unique"><strong>Hashtags:</strong> {campaignDetails?.hash_tag}</p>
           <img src="https://images.pexels.com/photos/46710/pexels-photo-46710.jpeg?cs=srgb&dl=pexels-nitin-creative-46710.jpg&fm=jpg" alt="Product" className="campaign-product-image-unique" />

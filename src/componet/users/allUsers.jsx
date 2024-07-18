@@ -20,12 +20,12 @@ function AllUser() {
   const [IndustryList, setIndustryList] = useState([]);
   const [cityList, setCitiesList] = useState([]);
   const [countryList, setCountryList] = useState([]);
-  const [ stateList,setStatesList] = useState([]);
+  const [stateList, setStatesList] = useState([]);
   const [filterState, setFilterState] = useState("");
   const [filterIndustry, setFilterIndustry] = useState("");
   const [filterPrimaryPlatform, setFilterPrimaryPlatform] = useState("");
   const [filterCountry, setFilterCountry] = useState("");
-  const  [filterCity, setFilterCity] = useState("");
+  const [filterCity, setFilterCity] = useState("");
 
   const [languageList, setLanguageList] = useState([
     {
@@ -86,6 +86,9 @@ function AllUser() {
     },
   ]);
   const [filterLanguage, setFilterLanguage] = useState("");
+
+  const [showRejectionPopup, setShowRejectionPopup] = useState(false);
+
 
 
   const fetchUsers = async () => {
@@ -204,7 +207,17 @@ function AllUser() {
   const handleVerificationChange = (event) => {
     const value = event.target.value;
     setSelectedVerification(value === 'All' ? '' : value);
+
   };
+  const updateUserverificationStatus = (e) => {
+    console.log(e.target.value)
+    setEditUser({ ...editUser, verification: e.target.value });
+    if (e.target.value === 'Rejected') {
+      setShowRejectionPopup(true);
+    } else {
+      setShowRejectionPopup(false);
+    }
+  }
 
   const getVerificationClass = (verification) => {
     switch (verification) {
@@ -424,7 +437,8 @@ function AllUser() {
                 Verification Status:
                 <select
                   value={editUser.verification}
-                  onChange={(e) => setEditUser({ ...editUser, verification: e.target.value })}
+                  // onChange={(e) => setEditUser({ ...editUser, verification: e.target.value })}
+                  onChange={(e) => updateUserverificationStatus(e)}
                 >
                   <option value="Verified">Verified</option>
                   <option value="Rejected">Rejected</option>
@@ -570,7 +584,7 @@ function AllUser() {
               {/* state dropdown */}
 
               <div>
-                <label> 
+                <label>
                   State:
                   <select
                     value={filterState}
@@ -610,6 +624,52 @@ function AllUser() {
           </div>
         </>
       )}
+
+      {showRejectionPopup && (
+        <div className="popup_for_rejection">
+          <div className="popup-inner_for_rejection">
+            <div className='reject_head' >
+              <h3>Reason of Rejection</h3>
+            </div>
+            <div className='reject_body_for_rejection' >
+              <div>
+
+                Thank you for your application. We really appreciate your interest in joining our company and we want to thank you for the time and energy you invested.
+              </div>
+              <div>
+
+                We received a large number of application, and after carefully reviewing all of them, unfortunately, we have to inform you that this time we won’t be able to invite you to the next phase of our selection process.
+              </div>
+              <div>
+                We wish you every personal and professional success in your future endeavors.<br />
+              </div>
+              <div>
+
+                Once again, thank you for your interest in working with us.<br />
+              </div>
+              <div style={{ fontWeight: 'bold', fontSize: '16px' }} >
+                Thanks,
+                <br />
+                Team Tixteen.
+              </div>
+            </div>
+            {/* <form onSubmit={handleRejectionSubmit}> */}
+            <form onSubmit={handleFormSubmit}>
+              <label>
+                <textarea
+                  onChange={(e) => setEditUser({ ...editUser, reject_mark: e.target.value })}
+                  placeholder='Enter your rejection message'
+                />
+              </label>
+              <div className="d-flex justify-content-center w-100 gap-5">
+                <button type="submit" className='btn btn-danger' >Reject</button>
+                <button type="button" className='btn btn-secondary'  onClick={() => setShowRejectionPopup(false)}>Cancel</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
 
     </>
   );
