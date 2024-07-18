@@ -223,7 +223,8 @@ function Campaigncalender() {
                         allDay: true,
                         backgroundColor: 'lightgreen', // You can customize this based on your needs
                         textColor: 'black', // You can customize this based on your needs
-                        id: campaign.id
+                        id: campaign.id,
+                        campaign_no : campaign.campaign_no
                     }));
                     setEvents(campaigns);
                 }
@@ -262,9 +263,10 @@ function Campaigncalender() {
     };
 
     const handleEventClick = (event) => {
-        if (event.id) {
-            const url = `/campaign/campaign-details/${event.id}`;
-            window.open(url, '_blank'); // Open in new tab
+        console.log(event);
+        if (event.campaign_no) {
+            const url = `/campaign/campaign-details/${event.campaign_no}`;
+            window.open(url, '_blank'); 
         }
     };
 
@@ -315,6 +317,7 @@ function Campaigncalender() {
                     </select>
                 </div>
                 <div>
+
                     <Calendar
                         localizer={localizer}
                         events={events}

@@ -80,22 +80,7 @@ const CampaignList = () => {
                                     {/* <p>Deadline: {campaign.dead_line}</p> */}
 
 
-
-
-
-
-
-
-        
-
-
-
-
-
-
-
-
-                                    <Link to={`/campaign/campaign-details/${campaign.campaign_no}`}>
+<Link to={`/campaign/campaign-details/${campaign.campaign_no}`}>
                                         <button className="view-more-button">View More</button>
                                     </Link>
                                 </div>
