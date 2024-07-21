@@ -10,7 +10,6 @@ const Staff = () => {
        <Routes>
        <Route path="/all-staff" element={<SafeDetails />} />
        <Route path="/add-staff" element={<AddStaffPopup />} />
-
        </Routes>
       
     </div>

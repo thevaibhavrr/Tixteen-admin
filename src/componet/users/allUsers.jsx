@@ -26,68 +26,15 @@ function AllUser() {
   const [filterPrimaryPlatform, setFilterPrimaryPlatform] = useState("");
   const [filterCountry, setFilterCountry] = useState("");
   const [filterCity, setFilterCity] = useState("");
+  const [levels, setLevels] = useState([]);
 
-  const [languageList, setLanguageList] = useState([
-    {
-      id: 1,
-      name: "English"
-    },
-    {
-      id: 2,
-      name: "Hindi"
-    },
-    {
-      id: 3,
-      name: "Panjabi"
-    },
-    {
-      id: 4,
-      name: "Telugu"
-    },
-    {
-      id: 5,
-      name: "Tamil"
-    },
-    {
-      id: 6,
-      name: "Malayalam"
-    },
-    {
-      id: 7,
-      name: "Kannada"
-    },
-    {
-      id: 8,
-      name: "Odia"
-    },
-    {
-      id: 9,
-      name: "Bengali"
-    },
-    {
-      id: 10,
-      name: "Marathi"
-    },
-    {
-      id: 11,
-      name: "Gujarati"
-    },
-    {
-      id: 12,
-      name: "Assamese"
-    },
-    {
-      id: 13,
-      name: "Punjabi"
-    },
-    {
-      id: 14,
-      name: "Bhojpuri"
-    },
-  ]);
+
+  const [languageList, setLanguageList] = useState([]);
+
   const [filterLanguage, setFilterLanguage] = useState("");
 
   const [showRejectionPopup, setShowRejectionPopup] = useState(false);
+
 
 
 
@@ -106,7 +53,30 @@ function AllUser() {
       setLoading(false);
     }
   };
+  const fetchLanguages = async () => {
+    setLoading (true);
+    try {
+        const res = await makeApi('/v1/get-all-languages', 'GET');
+        setLanguageList(res.data.data);
+    } catch (error) {
+        console.error(error);
+    } finally {
+        setLoading (false);
+    }
+};
 
+    const fetchLevels = async () => {
+        try {
+            setLoading (true);
+            const response = await makeApi('/v1/get-all-levels',"GET");
+            setLevels(response.data.data);
+        } catch (error) {
+            console.error("Failed to fetch levels:", error);
+        } finally {
+            setLoading (false);
+        }
+    };
+    
   const FetchIndustryList = async () => {
     setLoading(true);
     try {
@@ -158,6 +128,8 @@ function AllUser() {
     FetchCitiesList();
     FetchIndustryList();
     FetchCountryList();
+    fetchLevels();
+    fetchLanguages();
   }, []);
 
 
@@ -210,7 +182,6 @@ function AllUser() {
 
   };
   const updateUserverificationStatus = (e) => {
-    console.log(e.target.value)
     setEditUser({ ...editUser, verification: e.target.value });
     if (e.target.value === 'Rejected') {
       setShowRejectionPopup(true);
@@ -312,8 +283,8 @@ function AllUser() {
             <label htmlFor="level" className='all-user-level-filter-text'>Filter by Level:</label>
             <select id="level" value={selectedLevel} onChange={handleLevelChange}>
               <option value="">All</option>
-              {[...Array(8)].map((_, index) => (
-                <option key={index} value={index}>{index}</option>
+              {levels.map((data, index) => (
+                <option key={index} value={data.level}>{data.level}</option>
               ))}
             </select>
           </div>
@@ -545,19 +516,19 @@ function AllUser() {
                   </div>
                   <div className='filter_chebox_parent_div'>
                     {languageList.map((language) => (
-                      <div key={language.name} className='d-flex align-items-center'>
+                      <div key={language.language} className='d-flex align-items-center'>
                         <div className='w-25'>
                           <input
                             type="checkbox"
-                            id={language.name}
-                            value={language.name}
-                            checked={filterLanguage.split(',').includes(language.name)}
-                            onChange={() => toggleLanguage(language.name)}
+                            id={language.language}
+                            value={language.language}
+                            checked={filterLanguage.split(',').includes(language.language)}
+                            onChange={() => toggleLanguage(language.language)}
                             style={{ width: "20px", height: "20px", cursor: "pointer" }}
                           />
                         </div>
                         <div className='w-100'>
-                          <label htmlFor={language.name}>{language.name}</label>
+                          <label htmlFor={language.language}>{language.language}</label>
                         </div>
                       </div>
                     ))}

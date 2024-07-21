@@ -113,7 +113,7 @@ const ManageLevelChart = () => {
             <h2>Manage Level Chart</h2>
             <table>
                 <thead>
-                    <tr>
+                    <tr> 
                         <th>Level</th>
                         <th>Followers</th>
                         <th>Avg Followers</th>
