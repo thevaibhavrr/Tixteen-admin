@@ -51,16 +51,20 @@ const ManageCheckList = () => {
 
     const deleteChecklistItem = async () => {
         try {
+            setLoading(true);
             await makeApi(`/v1/delete-platform/${currentChecklistItem._id}`, "DELETE");
             setChecklist(checklist.filter(item => item._id !== currentChecklistItem._id));
             setShowDeletePopup(false);
         } catch (error) {
             console.error("Failed to delete checklist item:", error);
+        }finally {
+            setLoading(false);
         }
     };
 
     const saveEditedChecklistItem = async () => {
         try {
+            setLoading(true);
             const updatedItem = { ...currentChecklistItem, name: editedChecklistName, btn_name: editedChecklistAction };
             await makeApi(`/v1/update-platform/${currentChecklistItem._id}`, "PUT", updatedItem);
             const updatedChecklist = checklist.map(item =>
@@ -70,17 +74,23 @@ const ManageCheckList = () => {
             setShowEditPopup(false);
         } catch (error) {
             console.error("Failed to update checklist item:", error);
+        }finally {
+            setLoading(false);
         }
     };
 
     const saveNewChecklistItem = async () => {
         try {
+            setLoading(true);
+
             const newItem = { name: newChecklistName, btn_name: newChecklistAction };
             const response = await makeApi('/v1/create-platform', "POST", newItem);
             setChecklist([...checklist, response.data]);
             setShowAddPopup(false);
         } catch (error) {
             console.error("Failed to add new checklist item:", error);
+        }finally {
+            setLoading(false);
         }
     };
 

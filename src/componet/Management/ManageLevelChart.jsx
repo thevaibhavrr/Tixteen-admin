@@ -55,27 +55,34 @@ const ManageLevelChart = () => {
     };
 
     const addNewLevel = () => {
-        setIsAddModalOpen(true);
+        setIsAddModalOpen(true); 
     };
 
     const saveNewLevel = async () => {
         try {
+            setLoading(true);
             const response = await makeApi('/v1/create-level',"POST", newLevel);
             setLevels([...levels, response.data.data]);
             setIsAddModalOpen(false);
         } catch (error) {
             console.error("Failed to add level:", error);
+        }finally {
+            setLoading(false);
         }
     };
 
     const deleteLevel = async () => {
         try {
+            setLoading(true);
+
             await makeApi(`/v1/delete-level/${levels[currentLevelIndex]._id}`,"DELETE");
             const newLevels = levels.filter((_, i) => i !== currentLevelIndex);
             setLevels(newLevels);
             setIsDeleteModalOpen(false);
         } catch (error) {
             console.error("Failed to delete level:", error);
+        }finally {
+            setLoading(false);
         }
     };
 
@@ -91,10 +98,13 @@ const ManageLevelChart = () => {
 
     const saveEditedLevel = async () => {
         try {
+            setLoading(true);
             await makeApi(`/v1/update-level/${levels[currentLevelIndex]._id}`, "PUT",levels[currentLevelIndex]);
             setIsEditModalOpen(false);
         } catch (error) {
             console.error("Failed to save level:", error);
+        }finally {
+            setLoading(false);
         }
     };
 

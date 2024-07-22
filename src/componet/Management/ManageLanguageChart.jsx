@@ -45,32 +45,43 @@ const ManageLanguageChart = () => {
 
     const addNewLanguage = async () => {
         try {
+            setLoading(true);
             const res = await makeApi('/v1/create-language', 'POST', { language: newLanguageName });
             setLanguages([...languages, res.data]);
             setShowAddPopup(false);
             setNewLanguageName('');
         } catch (error) {
             console.error(error);
+        }finally {
+            setLoading(false);
         }
     };
 
     const deleteLanguage = async () => {
         try {
+            setLoading(true);
+
             await makeApi(`/v1/delete-language/${currentLanguage._id}`, 'DELETE');
             setLanguages(languages.filter(language => language._id !== currentLanguage._id));
             setShowDeletePopup(false);
         } catch (error) {
             console.error(error);
+        }finally {
+            setLoading(false);
         }
     };
 
     const saveEditedLanguage = async () => {
         try {
+            setLoading(true);
+
             const res = await makeApi(`/v1/update-language/${currentLanguage._id}`, 'PUT', { language: editedLanguageName });
             setLanguages(languages.map(language => language._id === currentLanguage._id ? res.data.data : language));
             setShowEditPopup(false);
         } catch (error) {
             console.error(error);
+        }finally {
+            setLoading(false);
         }
     };
 

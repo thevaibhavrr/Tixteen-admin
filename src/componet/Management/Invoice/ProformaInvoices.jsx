@@ -46,6 +46,7 @@ const ProformaInvoices = () => {
     const deleteInvoice = async () => {
         
         try {
+            setLoading(true);
             
             const response = await makeApi(`/v1/admin/api/delete-my-bill/${currentInvoiceId}`, 'DELETE');
 
@@ -58,6 +59,8 @@ const ProformaInvoices = () => {
             }
         } catch (error) {
             console.error('API request failed:', error);
+        }finally {
+            setLoading(false);
         }
     };
 
@@ -69,6 +72,7 @@ const ProformaInvoices = () => {
     const openEditModal = async (id) => {
         setCurrentInvoiceId(id);
         try {
+
             const response = await makeApi(`/v1/admin/api/get-my-bill/${id}`);
             console.log("res ", response.data);
             if (response.data.success) {
@@ -95,6 +99,7 @@ const ProformaInvoices = () => {
 
     const saveEdit = async () => {
         try {
+            setLoading(true);
             const response = await makeApi(`/v1/admin/api/update-my-bill/${currentInvoiceId}`, 'PUT', editInvoice);
             if (response.data.success) {
                 const updatedInvoices = invoices.map((invoice) =>
@@ -107,7 +112,9 @@ const ProformaInvoices = () => {
             }
         } catch (error) {
             console.error('API request failed:', error);
-        }
+        }finally {
+                setLoading(false);
+            }
     };
 
     // Function to filter invoices based on search term

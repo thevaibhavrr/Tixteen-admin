@@ -46,32 +46,41 @@ const ManageIndustryChart = () => {
 
     const addNewIndustry = async () => {
         try {
+            setLoading(true);
             const res = await makeApi('/v1/create-industries', 'POST', newIndustry);
             setIndustries([...industries, res.data.data]);
             setShowAddPopup(false);
             setNewIndustry({ name: '' });
         } catch (error) {
             console.log(error);
+        }finally {
+            setLoading(false);
         }
     };
 
     const updateIndustry = async () => {
         try {
+            setLoading(true);
             const res = await makeApi(`/v1/update-industries/${currentIndustry._id}`, 'PUT', currentIndustry);
             setIndustries(industries.map(ind => ind._id === currentIndustry._id ? res.data.data : ind));
             setShowEditPopup(false);
         } catch (error) {
             console.log(error);
+        }finally {
+            setLoading(false);
         }
     };
 
     const deleteIndustry = async () => {
         try {
+            setLoading(true);
             await makeApi(`/v1/delete-industries/${currentIndustry._id}`, 'DELETE');
             setIndustries(industries.filter(industry => industry._id !== currentIndustry._id));
             setShowDeletePopup(false);
         } catch (error) {
             console.log(error);
+        }finally {
+            setLoading(false);
         }
     };
 

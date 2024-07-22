@@ -4,7 +4,7 @@ import '../../style/auth/login.css';
 import { makeApi } from '../../api/callApi.tsx';
 import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from 'react-router-dom';
-
+import PrimaryLoader from '../../utils/PrimaryLoader.jsx';
 
 function Login() {
   const navigate = useNavigate();
@@ -13,7 +13,7 @@ function Login() {
   const [user, setuser] = useState('');
   const [password, setPassword] = useState('');
   const [showsubmitbutton, setshowsubmitbutton] = useState(true);
-  console.log(showsubmitbutton);
+  const [loading, setLoading] = useState(false);
 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
@@ -37,6 +37,8 @@ function Login() {
     };
 
     try { 
+
+      setLoading(true);
       const response = await makeApi('/v1/admin/api/login-admin', 'POST', data);
       localStorage.setItem('token', response.data.token);
       setshowsubmitbutton(false);
@@ -52,7 +54,9 @@ function Login() {
       console.error('Error logging in:', error.response.data.message);
       toast(error.response.data.message);
 
-    }
+    }finally {
+      setLoading(false);
+  }
   };
 
   return (

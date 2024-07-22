@@ -45,6 +45,7 @@ const TaxInvoices = () => {
 
     const deleteInvoice = async () => {
         try {
+            setLoading(true);
             const response = await makeApi(`/v1/admin/api/delete-my-bill/${currentInvoiceId}`, 'DELETE');
 
             if (response.data.success) {
@@ -56,6 +57,8 @@ const TaxInvoices = () => {
             }
         } catch (error) {
             console.error('API request failed:', error);
+        }finally {
+            setLoading(false);
         }
     };
 
@@ -67,6 +70,7 @@ const TaxInvoices = () => {
     const openEditModal = async (id) => {
         setCurrentInvoiceId(id);
         try {
+            setLoading(true);
             const response = await makeApi(`/v1/admin/api/get-my-bill/${id}`);
             console.log("res ", response.data);
             if (response.data.success) {
@@ -77,6 +81,8 @@ const TaxInvoices = () => {
             }
         } catch (error) {
             console.error('API request failed:', error);
+        }finally {
+            setLoading(false);
         }
     };
 
@@ -93,6 +99,7 @@ const TaxInvoices = () => {
 
     const saveEdit = async () => {
         try {
+            setLoading(true);
             const response = await makeApi(`/v1/admin/api/update-my-bill/${currentInvoiceId}`, 'PUT', editInvoice);
             if (response.data.success) {
                 const updatedInvoices = invoices.map((invoice) =>
@@ -105,6 +112,8 @@ const TaxInvoices = () => {
             }
         } catch (error) {
             console.error('API request failed:', error);
+        }finally {
+            setLoading(false);
         }
     };
 
