@@ -30,6 +30,7 @@ function ManagementBar() {
                     <button onClick={() => handleFilterClick('Notice')} className={filter === 'Notice' ? 'active' : ''}>Notice</button>
                     <button onClick={() => handleFilterClick('Send-message')} className={filter === 'Send-Message' ? 'active' : ''}>Send Message</button>
                     <button onClick={() => handleFilterClick('Invoices')} className={filter === 'Invoices' ? 'active' : ''}>Invoices</button>
+                    <button onClick={() => handleFilterClick('Staff')} className={filter === 'Staff' ? 'active' : ''}>Staff</button>
                 </div>
             </div>
         </div>

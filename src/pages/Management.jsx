@@ -11,6 +11,8 @@ import ProformaInvoices from '../componet/Management/Invoice/ProformaInvoices';
 import AddProformaInvoice from '../componet/Management/Invoice/AddProformaInvoice';
 import Invoice from '../componet/Management/Invoice/profomInvoicedetails';
 import TaxInvoices from '../componet/Management/Invoice/Taxinvoice';
+import StaffDetails from '../componet/staff/StafDetails';
+import AddStaffPopup from '../componet/staff/AddStaff';
 
  
 function Management() {
@@ -27,8 +29,11 @@ function Management() {
         <Route path='/invoices-management' element={<ProformaInvoices />} />
         <Route path='/Add-invoices-management' element={<AddProformaInvoice />} />
         <Route path='/invoice/details/:id'element={<Invoice/>} />
-        {/* TaxInvoices */}
         <Route path='/tax-invoices-management' element={<TaxInvoices />} />
+       <Route path="/staff-management" element={<StaffDetails />} />
+       <Route path="/add-staff" element={<AddStaffPopup />} />
+       
+
 
 
         </Routes>

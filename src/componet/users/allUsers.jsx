@@ -27,6 +27,7 @@ function AllUser() {
   const [filterCountry, setFilterCountry] = useState("");
   const [filterCity, setFilterCity] = useState("");
   const [levels, setLevels] = useState([]);
+  const [serachQuery, setSerachQuery] = useState("name");
 
 
   const [languageList, setLanguageList] = useState([]);
@@ -41,7 +42,7 @@ function AllUser() {
   const fetchUsers = async () => {
     setLoading(true);
     try {
-      const response = await makeApi(`/V1/influencers?name=${searchQuery}&verification=${selectedVerification}&level=${selectedLevel}&gender=${filterGender}&industry=${filterIndustry}&language=${filterLanguage}&primary_platform=${filterPrimaryPlatform}&ship_country=${filterCountry}&ship_state=${filterState}&ship_city=${filterCity}&perPage=50&page=${currentPage}`, 'GET');
+      const response = await makeApi(`/V1/influencers?${serachQuery}=${searchQuery}&verification=${selectedVerification}&level=${selectedLevel}&gender=${filterGender}&industry=${filterIndustry}&language=${filterLanguage}&primary_platform=${filterPrimaryPlatform}&ship_country=${filterCountry}&ship_state=${filterState}&ship_city=${filterCity}&perPage=50&page=${currentPage}`, 'GET');
       const newUsers = response.data.data;
       const total = response.data.dataCount;
 
@@ -223,6 +224,8 @@ function AllUser() {
 
     } catch (error) {
       console.error('Error updating user:', error);
+    }finally{
+      fetchUsers();
     }
   };
 
@@ -269,19 +272,28 @@ function AllUser() {
               </svg>
             </button>
           </div>
-          <div>
+          <div className='d-flex gap-4' >
+            <div>
+              <select className="tab-button all-user-search" value={serachQuery} onChange={(e)=>{setSerachQuery(e.target.value)}}>
+                <option value="name">From Name</option>
+                <option value="id">From Id</option>
+                </select>
+            </div>
+            
+            <div>
             <input
               type="text"
-              placeholder="Search..."
+              placeholder={`Search by ${serachQuery}....`}
               className="tab-button all-user-search"
               style={{ cursor: 'text' }}
               value={searchQuery}
               onChange={handleSearchChange}
-            />
+              />
+              </div>
           </div>
           <div className="all-user-level-filter">
             <label htmlFor="level" className='all-user-level-filter-text'>Filter by Level:</label>
-            <select id="level" value={selectedLevel} onChange={handleLevelChange}>
+            <select className='tab-button all-user-search' id="level" value={selectedLevel} onChange={handleLevelChange}>
               <option value="">All</option>
               {levels.map((data, index) => (
                 <option key={index} value={data.level}>{data.level}</option>
@@ -292,6 +304,7 @@ function AllUser() {
         <div className="all-user-users-list">
           {users.map(user => (
             <div key={user._id} className={`all-user-user-card ${getVerificationClass(user.verification)}`}>
+              <strong className='pb-1 text-danger' >TXT-{user.id}</strong>
               <img
                 src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
                 alt={user.user_name}
@@ -318,6 +331,7 @@ function AllUser() {
                 <div className='all-user-user-details-small'>
                   <p><strong>Primary Platform:</strong> {user.primary_platform}</p>
                 </div>
+                  <p> <strong>Industry:</strong> {user.industry} </p>
                 <div className="all-user-social-media">
                   <div className="all-user-social-media">
                     <p><strong>Followers:</strong> {user?.socialMedia?.follower ? user?.socialMedia?.follower : 'N/A'}</p>

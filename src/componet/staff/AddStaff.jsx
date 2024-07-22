@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { makeApi } from '../../api/callApi.tsx';
+import BackIcon from '../../utils/BackIcon.jsx';
 
 const AddStaffPopup = () => {
     const [newStaff, setNewStaff] = useState({
@@ -24,10 +25,13 @@ const AddStaffPopup = () => {
 
     return (
         (
-            <div className=""  >
-                <div className="popup-content" style={{minWidth:"500px" , width:"100%" , }}>
+            <div className=" " style={{position:"relative"}}  >
+                <BackIcon path={`management/staff-management`} />
+
+                <div className="popup-content text-center " style={{minWidth:"500px" , width:"100%" , }}>
                     <h2>Add New Staff</h2>
-                    <div className='d-flex flex-column gap-4 w-75 mt-4' >
+                    <div className='  d-flex justify-content-center ' >
+                    <div className='d-flex flex-column  gap-4 w-75 mt-4' >
                     <input
                         type="text"
                         placeholder="Name"
@@ -71,11 +75,12 @@ const AddStaffPopup = () => {
                         className='form-control'
                     />
                     </div>
+                    </div>
                     <div className='w-75' style={{display:"flex" , justifyContent:"center" }} >
 
-                    <div className='text-center d-flex gap-5'>
-                        <div onClick={addNewStaff} className='add-level-button text-center'>Save</div>
+                    <div className='text-center d-flex  justify-content-center w-100 bg-black'>
                         <div  className='add-level-button text-center'>Cancel</div>
+                        <div onClick={addNewStaff} className='add-level-button text-center'>Save</div>
                     </div>
                     </div>
                 </div>

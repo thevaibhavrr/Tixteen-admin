@@ -1,33 +1,82 @@
-import React from 'react';
-import { Route, Routes } from "react-router-dom";
+
+
+// import React from 'react';
+// import { Route, Routes, useLocation } from 'react-router-dom';
+// import Navbar from './componet/Header/Navbar';
+// import Campaign from './pages/Campaign';
+// import User from './pages/User';
+// import Management from './pages/Management';
+// import MainDasboard from './componet/dashboard/MainDasboard';
+// import EditInvoiceDetails from './componet/Management/Invoice/editInvoicedetails';
+// import Staff from './pages/Staff';
+// import Login from './componet/Auth/login';
+
+// const App = () => {
+//   const location = useLocation();
+
+//   // Check if the current page is /login
+//   const showNavbar = location.pathname !== '/login';
+
+//   return (
+//     <div className="App">
+//       {showNavbar && <Navbar />}
+//       <Routes>
+//         <Route path="/campaign/*" element={<Campaign />} />
+//         <Route path='/user/*' element={<User />} />
+//         <Route path='/management/*' element={<Management />} />
+//         <Route path='/staff/*' element={<Staff />} />
+//         <Route path='/' element={<MainDasboard />} />
+//         <Route path='/z/:id' element={<EditInvoiceDetails />} />
+//         <Route path='/login' element={<Login />} />
+//       </Routes>
+//     </div>
+//   );
+// };
+
+// export default App;
+
+import React, { useEffect } from 'react';
+import { Route, Routes, useNavigate,useLocation } from "react-router-dom";
 import Navbar from './componet/Header/Navbar';
 import Campaign from './pages/Campaign';
 import User from './pages/User';
 import Management from './pages/Management';
 import MainDasboard from './componet/dashboard/MainDasboard';
-import AddProformaInvoice from './componet/Management/Invoice/AddProformaInvoice';
-import ProformaInvoices from './componet/Management/Invoice/ProformaInvoices';
-import Invoice from './componet/Management/Invoice/profomInvoicedetails';
 import EditInvoiceDetails from './componet/Management/Invoice/editInvoicedetails';
 import Staff from './pages/Staff';
 import Login from './componet/Auth/login';
 
-
 const App = () => {
+  const location = useLocation();
+  const history = useNavigate();
+
+  useEffect(() => {
+    // Check if the user is logged in
+    const token = localStorage.getItem('token');
+
+    // If token is not found, redirect to login page
+    if (!token && location.pathname !== '/login') {
+      history('/login');
+    }
+  }, [location.pathname, history]);
+
+  // Determine if the current location is '/login'
+  const isLoginPage = location.pathname === '/login';
+
   return (
     <div className="App">
-      <Navbar />
-       <Routes>
+      {/* Conditionally render Navbar */}
+      {!isLoginPage && <Navbar />}
+      
+      <Routes>
         <Route path="/campaign/*" element={<Campaign />} />
         <Route path='/user/*' element={<User />} />
         <Route path='/management/*' element={<Management />} />
         <Route path='/staff/*' element={<Staff />} />
-        <Route path='/'element={<MainDasboard/>} />
-        <Route path='/z/:id'element={<EditInvoiceDetails/>} />
-
-        <Route path='/y'element={<Login/>} />
-       </Routes>
-      
+        <Route path='/' element={<MainDasboard />} />
+        <Route path='/z/:id' element={<EditInvoiceDetails />} />
+        <Route path='/login' element={<Login />} />
+      </Routes>
     </div>
   );
 };

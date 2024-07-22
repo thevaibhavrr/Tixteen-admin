@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import DeletePopup from '../../utils/DeletePopup';
 import { makeApi } from '../../api/callApi.tsx';
+import { Link } from 'react-router-dom';
 
 const StaffDetails = () => {
     const [staff, setStaff] = useState([]);
@@ -104,6 +105,9 @@ const StaffDetails = () => {
                     ))}
                 </tbody>
             </table>
+            <Link to="/management/add-staff" className="create-campaign-button">
+                        Add New Staff 
+                    </Link>
 
             <DeletePopup
                 isOpen={showDeletePopup}

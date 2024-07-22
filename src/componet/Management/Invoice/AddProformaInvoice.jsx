@@ -86,7 +86,7 @@ const AddProformaInvoice = () => {
                 state_code: invoiceDetails.stateCode,
                 bill_date: new Date(),
                 status: 'Performa', // example status
-                invoice_status: 'Tax', // example status
+                invoice_status: '', // example status
                 invoice_no: 'INV-' + Math.floor(Math.random() * 10000), // example invoice number
                 tax_invoice_no: 'TX-' + Math.floor(Math.random() * 10000), // example tax invoice number
                 report: 'Active' // example report

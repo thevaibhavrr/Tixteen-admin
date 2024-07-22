@@ -3,12 +3,17 @@ import logo from '../../assets/header/tixteen_icon.png';
 import '../../style/auth/login.css';
 import { makeApi } from '../../api/callApi.tsx';
 import { ToastContainer, toast } from "react-toastify";
+import { useNavigate } from 'react-router-dom';
 
 
 function Login() {
+  const navigate = useNavigate();
+
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [user, setuser] = useState('');
   const [password, setPassword] = useState('');
+  const [showsubmitbutton, setshowsubmitbutton] = useState(true);
+  console.log(showsubmitbutton);
 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
@@ -31,11 +36,17 @@ function Login() {
       password: password,
     };
 
-    try {
+    try { 
       const response = await makeApi('/v1/admin/api/login-admin', 'POST', data);
-
       localStorage.setItem('token', response.data.token);
-      toast(response.data.message);
+      setshowsubmitbutton(false);
+      // toast(response.data.message);
+      toast.success(response.data.message, {
+        onClose: () => {
+          navigate("/");
+        }
+      })
+
     } catch (error) {
       // toast(error.message);
       console.error('Error logging in:', error.response.data.message);
@@ -94,7 +105,9 @@ function Login() {
               </button>
             </div>
           </div>
+          {showsubmitbutton &&
           <button type="submit" className="login_button">Login</button>
+          }
         </form>
         {/* <p className="login_forgotPassword"><Link to="/forgot-password">Forgot Password?</Link></p> */}
       </div>
