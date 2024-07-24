@@ -25,3 +25,49 @@
 .sunday-row td {
     font-weight: bold;
 }
+
+/* MonthlyAttendance.css */
+/* .full-day {
+    background-color: #dff0d8; 
+} */
+
+.half-day {
+    background-color: #fcf8e3; /* Light yellow */
+}
+
+.sunday-row {
+    background-color: #f9f9f9; /* Light gray */
+}
+
+
+
+
+
+
+/* salary summmary */
+.summary-table {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    padding: 20px;
+    margin-top: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.summary-table h4 {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.summary-table table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.summary-table td {
+    padding: 8px;
+    border-bottom: 1px solid #dee2e6;
+}
