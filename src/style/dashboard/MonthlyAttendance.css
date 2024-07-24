@@ -1,0 +1,27 @@
+
+
+
+.date-selection {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.date-selection label {
+    margin: 0 10px;
+}
+
+.date-selection select {
+    padding: 5px;
+    font-size: 1em;
+    margin: 0 10px;
+}
+
+
+
+.sunday-row {
+    background-color: #ffeb3b;
+}
+
+.sunday-row td {
+    font-weight: bold;
+}

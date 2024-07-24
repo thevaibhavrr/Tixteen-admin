@@ -28,10 +28,13 @@ export const makeApi = async (
 		const response = await axios(config)
 		return response
 	} catch (error: any) {
-		// if(error.response.data.error === "Unauthorized access"){
-		// 	console.log("------------------------------")
-		// 	window.location.href = "/Signup";
-		// }
+		
+		const message = error.response.data
+		if(message.error === "Invalid Token.") {
+			console.log("------------------------------", message.error)
+			localStorage.clear()
+			window.location.href = "/login";
+		}
 		console.error("API request failed:", error.response.data)
 		throw error
 	}

@@ -5,12 +5,18 @@ import LeadLifeSpan from './LeadLife'
 import ClosureMeter from './ClosureMeter'
 import FirstsectionDashboard from './FirstsectionDashboard'
 import SecondSectionDashboard from './SecondSectionDashboard'
+import AttendanceForm from './AttendanceForm'
 
 function MainDasboard() {
   return (
     <div className='d-flex flex-column gap-5 px-5 ' >
       <div>
+      </div>
+      <div className='d-flex flex-column align-items-end ' >
 
+        <div className='w-25 pb-3' style={{ backgroundColor: "white" }} >
+          <AttendanceForm />
+        </div>
         <DashbordSummaryHeading />
       </div>
       <div>

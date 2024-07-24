@@ -45,6 +45,8 @@ import MainDasboard from './componet/dashboard/MainDasboard';
 import EditInvoiceDetails from './componet/Management/Invoice/editInvoicedetails';
 import Staff from './pages/Staff';
 import Login from './componet/Auth/login';
+import MonthlyAttendance from './componet/staff/MonthlyAttendance';
+import Profile from './pages/Profile';
 
 const App = () => {
   const location = useLocation();
@@ -73,9 +75,11 @@ const App = () => {
         <Route path='/user/*' element={<User />} />
         <Route path='/management/*' element={<Management />} />
         <Route path='/staff/*' element={<Staff />} />
+        <Route path='/me/*' element={<Profile />} />
         <Route path='/' element={<MainDasboard />} />
         <Route path='/z/:id' element={<EditInvoiceDetails />} />
         <Route path='/login' element={<Login />} />
+        <Route path='/test' element={<MonthlyAttendance />} />
       </Routes>
     </div>
   );

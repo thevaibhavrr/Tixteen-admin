@@ -15,6 +15,7 @@ function Navbar() {
         <Link to="/user/all-users">All Users</Link>
         <Link to="/campaign/CampaignList">Campaign List</Link>
         <Link to="/management/level-management">Management</Link>
+        <Link to="/me/my-profile"> My Profile </Link>
       </div>
     </div>
   );

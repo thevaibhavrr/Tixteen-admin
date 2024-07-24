@@ -1,33 +1,37 @@
 .all-user-users-page {
   padding: 20px;
   font-family: var(--inter-font);
+  background-color: #f5f7fa; /* Adding a light background for contrast */
 }
 
+/* Top Bar */
 .all-user-top-bar {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
-  padding: 10px;
+  padding: 15px; /* Increased padding for better spacing */
   background-color: var(--light-blue-color);
   border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Slightly deeper shadow */
 }
 
+/* Tabs */
 .all-user-tabs {
   display: flex;
-  gap: 10px;
+  gap: 15px; /* Increased gap for better spacing */
 }
 
 .tab-button {
-  padding: 10px 10px;
+  padding: 12px 15px; /* More padding for better button size */
   border: none;
   border: 1px solid var(--light-gray-color);
   color: var(--dark-gray-color);
   cursor: pointer;
   border-radius: 5px;
   font-family: var(--kumbh-font);
-  font-size: 14px;
+  font-size: 15px; /* Slightly larger font size */
+  transition: background-color 0.3s, color 0.3s; /* Smooth transition */
 }
 
 .tab-button.active {
@@ -36,105 +40,133 @@
   border: 1px solid var(--dark-yellow-color);
 }
 
+/* Filters */
 .all-user-state-filter, .all-user-level-filter {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   color: var(--white-color);
 }
 
-.all-user-user-name{
-  font-size: 18px;
-  font-weight: bolder;
-text-align: center;
+/* User Name */
+.all-user-user-name {
+  font-size: 20px; /* Larger font size */
+  font-weight: bold; /* Bolder font weight */
+  text-align: center;
 }
-.all-user-user-details-small{
-  /* font-size: 12px; */
+
+/* User Details */
+.all-user-user-details-small {
   text-align: center;
   display: flex;
   justify-content: space-between;
+  font-size: 14px; /* Slightly larger font size */
+  color: var(--dark-gray-color);
 }
 
+/* Select Inputs */
 #state, #level {
-  padding: 6px;
+  padding: 8px;
   border-radius: 5px;
   border: 1px solid var(--light-gray-color);
   font-family: var(--kumbh-font);
 }
 
+/* User List */
 .all-user-users-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 20px;
-  justify-content: space-around;
+  gap: 25px; /* Increased gap for better spacing */
+  justify-content: center; /* Centered items */
 }
 
+/* User Card */
 .all-user-user-card {
   background: var(--light-blue-color);
-  padding: 20px 10px;
+  padding: 20px;
   border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1); /* Deeper shadow */
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: calc(18.333% - 20px);
+  width: calc(25% - 30px); /* Wider card width */
   font-size: 14px;
-  text-align: left;
+  text-align: center; /* Centered text */
+  transition: transform 0.3s, box-shadow 0.3s; /* Smooth hover effect */
 }
 
+.all-user-user-card:hover {
+  transform: translateY(-5px); /* Lifted on hover */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); /* Deeper shadow on hover */
+}
+
+/* User Card Status Colors */
 .all-user-user-card.rejected {
-  background-color: #ffcccc9c;
+  background-color: #ffcccc6c;
 }
 
 .all-user-user-card.verified {
-  background-color: #ccffccac;
+  background-color: #ccffcc80;
 }
 
 .all-user-user-card.pending {
   background-color: #ffffcc8c;
 }
 
+/* User Image */
 .all-user-user-image {
-  width: 150px;
-  height: 150px;
+  width: 100px; /* Reduced size for a cleaner look */
+  height: 100px; /* Ensured aspect ratio */
   border-radius: 50%;
   object-fit: cover;
   margin-bottom: 10px;
 }
 
+/* User Info */
 .all-user-user-info {
-  /* text-align: center; */
   width: 100%;
   display: flex;
   flex-direction: column;
-  /* gap: 5px; */
-  
+  gap: 10px;
+  font-size: 14px;
+  color: var(--dark-gray-color);
 }
 
+/* Social Media */
 .all-user-social-media {
   margin-top: 10px;
 }
 
-.all-user-view-social-media-button {
-  margin-top: 5px;
-  padding: 5px 10px;
-  background-color: var(--dark-blue-color);
-
+/* Buttons */
+.all-user-view-social-media-button, .all-user-view-more-button {
+  margin-top: 10px;
+  padding: 10px 15px; /* More padding for a better look */
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  font-family: var(--kumbh-font);
+  transition: background-color 0.3s, color 0.3s; /* Smooth transition */
+}
+
+.all-user-view-social-media-button {
+  background-color: var(--dark-blue-color);
+  color: var(--white-color);
+}
+
+.all-user-view-social-media-button:hover {
+  background-color: darken(var(--dark-blue-color), 10%); /* Darkened on hover */
 }
 
 .all-user-view-more-button {
-  margin-top: 10px;
-  padding: 10px 20px;
   background-color: var(--dark-yellow-color);
   color: var(--white-color);
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
 }
 
+.all-user-view-more-button:hover {
+  background-color: var(--dark-orange-color); /* Darkened on hover */
+}
+
+/* Pagination */
 .all_user_pagination_main_div {
   display: flex;
   justify-content: center;
@@ -143,7 +175,7 @@ text-align: center;
 
 .all_user_pagination {
   display: flex;
-  gap: 5px;
+  gap: 8px; /* Slightly larger gap */
 }
 
 .all_user_pagination button {
@@ -168,6 +200,7 @@ text-align: center;
   border: 1px solid var(--dark-yellow-color);
 }
 
+/* Popup for Editing User */
 .popup_for_edit_user {
   position: fixed;
   top: 0;
@@ -178,8 +211,7 @@ text-align: center;
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000; /* Ensure it appears above other elements */
- 
+  z-index: 1000;
 }
 
 .popup-inner_for_edit_user {
@@ -187,10 +219,10 @@ text-align: center;
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  width: 400px; 
+  width: 450px; /* Increased width */
   max-width: 90%;
   overflow-y: scroll;
-  max-height: 98vh;
+  max-height: 95vh; /* Slightly reduced height */
 }
 
 .popup_for_edit_user h3 {
@@ -208,7 +240,7 @@ text-align: center;
 .popup_for_edit_user input,
 .popup_for_edit_user select {
   width: 100%;
-  padding: 8px;
+  padding: 10px; /* Increased padding */
   margin-top: 5px;
   border: 1px solid var(--light-gray-color);
   border-radius: 5px;
@@ -243,41 +275,8 @@ text-align: center;
   background-color: var(--light-blue-color); /* Optional hover effect */
 }
 
-.all_user_pagination_main_div {
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
-}
-
-.all_user_pagination {
-  display: flex;
-  gap: 5px;
-}
-
-.all_user_pagination button {
-  padding: 8px 12px;
-  border: 1px solid var(--light-gray-color);
-  background-color: var(--white-color);
-  color: var(--dark-gray-color);
-  cursor: pointer;
-  border-radius: 5px;
-  transition: background-color 0.3s, color 0.3s;
-  font-family: var(--kumbh-font);
-}
-
-.all_user_pagination button:hover {
-  background-color: var(--light-blue-color);
-  color: var(--white-color);
-}
-
-.all_user_pagination button.active {
-  background-color: var(--dark-yellow-color);
-  color: var(--white-color);
-  border: 1px solid var(--dark-yellow-color);
-}
-
-/* apply filter popup */
-.filter_chebox_parent_div{
+/* Apply Filter Popup */
+.filter_chebox_parent_div {
   max-height: 200px;
   overflow-y: scroll;
   overflow-x: hidden;
@@ -290,54 +289,7 @@ text-align: center;
   width: 100%;
 }
 
-
-
-@media (max-width: 1024px) {
-  .all-user-user-card {
-    width: calc(25% - 20px);
-  }
-
-  .tab-button {
-    padding: 10px 10px;
-    font-size: 13px;
-  }
-}
-
-@media (max-width: 768px) {
-  .all-user-user-card {
-    width: calc(50% - 20px);
-  }
-  
-  .tab-button {
-    padding: 5px 10px;
-    font-size: 12px;
-  }
-  
-  .all-user-tabs {
-    flex-wrap: wrap;
-    gap: 5px;
-    margin-bottom: 10px;
-  }
-  
-  .all-user-top-bar {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-  }
-  
-  .all-user-search {
-    width: 100%;
-  }
-}
-
-@media (max-width: 480px) {
-  .all-user-user-card {
-    width: calc(100% - 20px);
-  }
-}
-
-
-
+/* Rejection Popup */
 .popup_for_rejection {
   position: fixed;
   top: 0;
@@ -348,53 +300,86 @@ text-align: center;
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1001;
-}
-.reject_head{
-  font-family: var(--inter-font) ;
-  text-align: center;
-  font-weight: bold;
-  font-size: 16px;
-}
-.reject_body_for_rejection{
-  font-family: var(--inter-font) ;
-  font-weight: 500;
-  font-size: 15px;
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  margin-bottom: 10px;
+  z-index: 1001
 }
 
+/* Rejection Popup Inner */
 .popup-inner_for_rejection {
   background: white;
-  padding: 20px;
+  padding: 25px; /* Increased padding for better spacing */
   border-radius: 20px;
-  max-width: 900px;
+  max-width: 800px; /* Adjusted width */
   width: 90%;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1); /* Slightly deeper shadow */
 }
 
 .popup-inner_for_rejection h3 {
-  margin-bottom: 15px;
+  margin-bottom: 20px; /* Increased margin for better spacing */
+  font-size: 18px; /* Larger font size */
+  font-family: var(--kumbh-font);
+  color: var(--dark-gray-color);
 }
 
 .popup-inner_for_rejection form {
   display: flex;
   flex-direction: column;
+  gap: 15px; /* Increased gap for better spacing */
 }
 
 .popup-inner_for_rejection textarea {
   resize: none;
   width: 100%;
-  height: 100px;
-  margin-bottom: 15px;
+  height: 120px; /* Increased height */
   padding: 10px;
   border: 1px solid #ccc;
-  border-radius: 4px;
+  border-radius: 5px;
+  font-family: var(--kumbh-font);
 }
 
 .popup-inner_for_rejection .d-flex {
   display: flex;
-  gap: 10px;
+  gap: 10px; /* Adjusted gap */
+}
+
+.reject_head {
+  font-family: var(--inter-font);
+  text-align: center;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.reject_body_for_rejection {
+  font-family: var(--inter-font);
+  font-weight: 500;
+  font-size: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* Adjusted gap */
+  margin-bottom: 10px;
+}
+
+/* General Elements */
+.bold_text {
+  font-weight: bold;
+}
+
+.little_bold_text {
+  font-weight: 600;
+}
+
+.main_all_page_default_padding {
+  padding: 20px;
+}
+
+.css_for_link_tag {
+  text-decoration: none;
+}
+
+.secondayHeader_parent_div {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 10;
+  height: 16vh;
 }

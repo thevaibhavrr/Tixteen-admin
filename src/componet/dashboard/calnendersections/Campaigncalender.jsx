@@ -214,7 +214,6 @@ function Campaigncalender() {
         const fetchCampaigns = async () => {
             try {
                 const response = await makeApi(`/v1/admin/api/filtered-campaign-summary?month=${selectedMonth + 1}&year=${selectedYear}`, "GET");
-                console.log("---", response.data.data);
                 if (response.data.success) {
                     const campaigns = response.data.data.map(campaign => ({
                         title: campaign.campaign_name,
