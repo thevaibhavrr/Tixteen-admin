@@ -5,10 +5,12 @@ import "../../style/user/allUsers.css";
 import PrimaryLoader from '../../utils/PrimaryLoader.jsx';
 
 function AllUser() {
+  const dummyimage="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
   const [users, setUsers] = useState([]);
   const [selectedLevel, setSelectedLevel] = useState('');
   const [selectedVerification, setSelectedVerification] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
+  
   const [loading, setLoading] = useState(false);
 
   const [totalPages, setTotalPages] = useState(1);
@@ -307,7 +309,8 @@ function AllUser() {
             <div key={user._id} className={`all-user-user-card ${getVerificationClass(user.verification)}`}>
               <strong className='pb-1 text-danger' >TXT-{user.id}</strong>
               <img
-                src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+                // src={user.profile_img !== "" ? user.profile_img:dummyimage }
+                src={dummyimage }
                 alt={user.user_name}
                 className="all-user-user-image"
               />

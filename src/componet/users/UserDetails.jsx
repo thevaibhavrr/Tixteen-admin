@@ -38,7 +38,8 @@ const UserDetails = () => {
                 <div className="user-card">
                     <EditIcon path={`user/update-user-details/${user._id}`} />
                     <div className="user-header">
-                        <img src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt={user.user_name} className="user-profile-img" />
+                        {/* <img src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt={user.user_name} className="user-profile-img" /> */}
+                        <img src={user.profile_img} alt={user.user_name} className="user-profile-img" />
                         <div className="user-info">
                             <h1>{user.user_name}</h1>
                             <p>{user.gender ? `${user.gender}, Age: ${user.age}` : 'Gender: Not Provided'}</p>
@@ -84,7 +85,7 @@ const UserDetails = () => {
                         <h2>Introduction Video</h2>
                         {!user.intro_video ? (
                             <video width="100%" controls>
-                                {/* <source src={user.intro_video} type="video/mp4" /> */}
+                                {/* <source src={user.intro_video_link} type="video/mp4" /> */}
                                 <source src="https://res.cloudinary.com/dyl3gzm7d/video/upload/v1715863302/exaqwk3k1lqa2xhklsha.mp4" type="video/mp4" />
                                 Your browser does not support the video tag.
                             </video>
