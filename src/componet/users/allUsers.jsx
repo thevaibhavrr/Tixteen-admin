@@ -180,6 +180,7 @@ function AllUser() {
   const handleVerificationChange = (event) => {
     const value = event.target.value;
     setSelectedVerification(value === 'All' ? '' : value);
+    setSelectedVerification(value === 'New' ? 'Social Media Verification Pending' : value);
 
   };
   const updateUserverificationStatus = (e) => {
