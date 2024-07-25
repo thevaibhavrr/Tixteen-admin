@@ -9,7 +9,6 @@ function CampaignRequirement({ totalSum }) {
 
     useEffect(() => {
         const totalSumValue = influencers.reduce((sum, numInfluencers, index) => sum + numInfluencers * prices[index], 0);
-        // console.log("Total Sum:", totalSumValue);
         if (typeof totalSum === 'function') {
             totalSum(totalSumValue);
         } else {

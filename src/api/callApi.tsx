@@ -31,7 +31,6 @@ export const makeApi = async (
 		
 		const message = error.response.data
 		if(message.error === "Invalid Token.") {
-			console.log("------------------------------", message.error)
 			localStorage.clear()
 			window.location.href = "/login";
 		}
