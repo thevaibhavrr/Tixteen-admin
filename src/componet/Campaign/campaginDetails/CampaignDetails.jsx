@@ -78,9 +78,6 @@ function CampaignDetails() {
     setShowMoreDetails(showMoreDetails === userId ? null : userId);
   };
 
-
-
-
   const handleVerifieruserForcapaign = async (userId, approvalStatus, changes = '') => {
     try {
       setLoading(true);
@@ -92,7 +89,24 @@ function CampaignDetails() {
       };
 
       const response = await makeApi(`/v1/influencer/edit-apply-campaign/${userId}/${id}`, "PUT", requestBody);
-      console.log(response.data);
+        // Update the local state after the API call
+        fetchCampaignDetailsWithAppliedUsers();
+   
+    } catch (error) {
+      console.error('Error updating user approval:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  const handleVerifieruserNameForcapaign = async (userId, approvalStatus, ) => {
+    try {
+      setLoading(true);
+      const requestBody = {
+        influ_approval: approvalStatus,
+        accept_date: new Date().toISOString(),
+      };
+
+      const response = await makeApi(`/v1/influencer/edit-apply-campaign/${userId}/${id}`, "PUT", requestBody);
         // Update the local state after the API call
         fetchCampaignDetailsWithAppliedUsers();
    
@@ -224,7 +238,7 @@ function CampaignDetails() {
                                             {/* <div className='btn btn-success'   >Accept</div>
                                             <div className='btn btn-danger' >Deny</div>
                                             <div className='btn btn-primary' onClick={() => setShowDenyInput(true)} > changes  </div> */}
-
+    
                                             <button className='btn btn-success' onClick={() => handleVerifieruserForcapaign(user.user.id, 'Accepted')}>Accept  </button>
                                             <button className='btn btn-danger' onClick={() => setShowDenyInput(user.user.id )}>Rejected</button>
                                             <button  className='btn btn-primary' onClick={() => handleVerifieruserForcapaign(user.user.id, 'Changes')}>Changes</button>
@@ -268,8 +282,8 @@ function CampaignDetails() {
                           }
                           {user.influ_approval === "Pending" ? (
                             <div className="user-actions-unique">
-                              <button className="accept-button-unique" onClick={() => handleVerifieruserForcapaign(user.influ_id, "Accepted")}>Accept</button>
-                              <button className="deny-button-unique" onClick={() => handleVerifieruserForcapaign(user.influ_id, "Rejected")} >Deny</button>
+                              <button className="accept-button-unique" onClick={() => handleVerifieruserNameForcapaign(user.influ_id, "Accepted")}>Acceptttt</button>
+                              <button className="deny-button-unique" onClick={() => handleVerifieruserNameForcapaign(user.influ_id, "Rejected")} >Deny</button>
                             </div>
                           ) :
                             null
