@@ -9,7 +9,7 @@ import PrimaryLoader from '../../../utils/PrimaryLoader.jsx';
 function CampaignDetails() {
   const { id } = useParams();
   const [showAppliedUsers, setShowAppliedUsers] = useState(false);
-  const [showMoreDetails, setShowMoreDetails] = useState(null); 
+  const [showMoreDetails, setShowMoreDetails] = useState(null);
   const [loading, setLoading] = useState(false);
   const [campaignDetails, setCampaignDetails] = useState(null);
   const [appliedUsersList, setAppliedUsersList] = useState([]);
@@ -23,7 +23,7 @@ function CampaignDetails() {
     try {
       setLoading(true);
       const response = await makeApi(`/v1/apply-campaign-details/campaign/${id}`, 'GET');
-      
+
       if (response && response.data) {
         setCampaignDetails(response.data.campaign);
         setAppliedUsersList(response.data.applyUsers);
@@ -41,21 +41,15 @@ function CampaignDetails() {
     try {
       setLoading(true);
       const response = await makeApi(`/v1/required-follower/campaign/${id}`, 'GET');
-      // const response = await makeApi(`/v1/required-follower/campaign/80202401274`, 'GET');
       setFollowerrequired(response.data.data);
-      // if (response && response.data) {
-      //   setCampaignDetails(response.data.campaign);
-      //   setAppliedUsersList(response.data.applyUsers);
-      //   setFilteredUsers(response.data.applyUsers.filter(user => user.influ_approval === 'Accepted'));
-      // } else {
-      //   console.error('No data received from API');
-      // }
     } catch (error) {
       console.error('Error fetching campaign details:', error);
     } finally {
       setLoading(false);
     }
   };
+
+
 
   useEffect(() => {
     fetchCampaignDetailsWithAppliedUsers();
@@ -87,19 +81,31 @@ function CampaignDetails() {
 
 
 
-  const handleVerifieruserForcapaign = async (userId,value) => {
-
+  const handleVerifieruserForcapaign = async (userId, approvalStatus, changes = '') => {
     try {
-      const response = await makeApi(`/v1/edit-apply-campaign/${userId}/${id}`,"PUT", { influ_approval: value });
-      
+      setLoading(true);
+      const requestBody = {
+        content_approved: approvalStatus,
+        approval: approvalStatus === 'Approved' ? '1' : '0',
+        content_approved_date: new Date().toISOString(),
+        change_reason: changes,
+      };
+
+      const response = await makeApi(`/v1/influencer/edit-apply-campaign/${userId}/${id}`, "PUT", requestBody);
+      console.log(response.data);
+        // Update the local state after the API call
+        fetchCampaignDetailsWithAppliedUsers();
+   
     } catch (error) {
       console.error('Error updating user approval:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <>
-     {loading && <div style={{ height: "100%", width: "100%", top: "0", display: "flex", justifyContent: "center", alignItems: "center", zIndex: "9999", position: "fixed", backgroundColor: "rgba(0,0,0,0.3)" }}> <PrimaryLoader /> </div>}
+      {loading && <div style={{ height: "100%", width: "100%", top: "0", display: "flex", justifyContent: "center", alignItems: "center", zIndex: "9999", position: "fixed", backgroundColor: "rgba(0,0,0,0.3)" }}> <PrimaryLoader /> </div>}
       <div>
         <BackIcon path={"campaign/CampaignList"} />
       </div>
@@ -121,9 +127,9 @@ function CampaignDetails() {
             <h3><strong>Required Followers</strong></h3>
             {followerrequired.length > 0 ? followerrequired?.map((follower, index) => (
               <div key={index}>
-              <p> <strong> {follower?.platforms[0]}:</strong> {follower?.followers}</p>
+                <p> <strong> {follower?.platforms[0]}:</strong> {follower?.followers}</p>
               </div>
-            ) ) : <p>No followers required</p>}
+            )) : <p>No followers required</p>}
           </div>
           <p className="campaign-hashtags-unique"><strong>Hashtags:</strong> {campaignDetails?.hash_tag}</p>
           <img src="https://images.pexels.com/photos/46710/pexels-photo-46710.jpeg?cs=srgb&dl=pexels-nitin-creative-46710.jpg&fm=jpg" alt="Product" className="campaign-product-image-unique" />
@@ -134,7 +140,7 @@ function CampaignDetails() {
           <p className="campaign-dont-unique"> <strong> Don't: </strong> {campaignDetails?.not_todo ? campaignDetails?.not_todo : "N/A"}</p>
           <p className="campaign-price-unique"> <strong> Price: </strong> {campaignDetails?.price ? campaignDetails?.price : "N/A"}</p>
           <p className="campaign-deadline-unique"> <strong> Deadline:</strong> {campaignDetails?.dead_line}</p>
-           <p className="campaign-deadline-unique" ><strong> Created Date: </strong> {campaignDetails?.created_date}</p>
+          <p className="campaign-deadline-unique" ><strong> Created Date: </strong> {campaignDetails?.created_date}</p>
 
           <p className="campaign-screenshots-unique"><strong>Screenshots Required:</strong> {campaignDetails?.is_screen_shots_required ? "Yes" : "No"}</p>
 
@@ -200,24 +206,39 @@ function CampaignDetails() {
                             <div>
                               <p className='text-success' > This user has been Accepted </p>
                               <div>
-                                {user.post_link ? (
+                                {user.content ? (
                                   <>
                                     <div className='d-flex gap-5' >
-                                      <div className='bg-warning w-25' >
+                                      <div className=' w-25' >
 
-                                        <img src={user.content} alt="providedContet" className="w-100" style={{ height: "200px" }} />
+                                        <img src={user.content} alt="providedContet" className="w-100" style={{ maxWidth: "300px" }} />
+                                        <div className='text-danger' > Status : <span> {user.content_approved}</span></div>
                                       </div>
-                                      <Link to={user.post_link} target="_blank" >View</Link>
-                                      <div className='d-flex flex-column justify-content-center gap-3' >
-                                        {/* option for accept or deny */}
-                                        <div className='btn btn-success' >Accept</div>
-                                        <div className='btn btn-danger' >Deny</div>
-                                        <div className='btn btn-primary' onClick={() => setShowDenyInput(true)} > changes  </div>
+                                      {user.post_link &&
+                                        <Link to={user.post_link} target="_blank" >View</Link>
+                                      }
+                                      {user.approval === "Pending" && user.content_approved === "" && user.content ? (
+                                        <>
+                                          <div className='d-flex flex-column justify-content-center gap-3' >
+                                            {/* option for accept or deny */}
+                                            {/* <div className='btn btn-success'   >Accept</div>
+                                            <div className='btn btn-danger' >Deny</div>
+                                            <div className='btn btn-primary' onClick={() => setShowDenyInput(true)} > changes  </div> */}
 
-                                      </div>
+                                            <button className='btn btn-success' onClick={() => handleVerifieruserForcapaign(user.user.id, 'Accepted')}>Accept  </button>
+                                            <button className='btn btn-danger' onClick={() => setShowDenyInput(user.user.id )}>Rejected</button>
+                                            <button  className='btn btn-primary' onClick={() => handleVerifieruserForcapaign(user.user.id, 'Changes')}>Changes</button>
+
+                                          </div>
+
+                                        </>
+                                      ) : (
+                                        <p className='text-danger' >{user.approval}</p>
+                                      )
+                                      }
                                     </div>
 
-                                    {showDenyInput &&
+                                    {/* {showDenyInput &&
                                       <div className='py-4 d-flex flex-column gap-3' >
                                         <div>
                                           <label htmlFor="reason">Changes : </label>
@@ -226,7 +247,17 @@ function CampaignDetails() {
                                         <div className='btn btn-success' style={{ width: "80px" }} > send  </div>
                                       </div>
 
-                                    }
+                                    } */}
+                                    {showDenyInput === user.id && (
+                                      <div className="deny-reason-input">
+                                        <textarea
+                                          value={remark}
+                                          onChange={(e) => setRemark(e.target.value)}
+                                          placeholder="Enter reason for denial..."
+                                        />
+                                        <button onClick={() => handleVerifieruserForcapaign(user.id, 'Rejected', remark)}>Submit</button>
+                                      </div>
+                                    )}
                                   </>
                                 ) : (
                                   <p className='text-danger' >No Content Provided</p>
@@ -237,8 +268,8 @@ function CampaignDetails() {
                           }
                           {user.influ_approval === "Pending" ? (
                             <div className="user-actions-unique">
-                              <button className="accept-button-unique" onClick={() => handleVerifieruserForcapaign(user.influ_id,"Accepted")}>Accept</button>
-                              <button className="deny-button-unique" onClick={() => handleVerifieruserForcapaign(user.influ_id,"Rejected")} >Deny</button>
+                              <button className="accept-button-unique" onClick={() => handleVerifieruserForcapaign(user.influ_id, "Accepted")}>Accept</button>
+                              <button className="deny-button-unique" onClick={() => handleVerifieruserForcapaign(user.influ_id, "Rejected")} >Deny</button>
                             </div>
                           ) :
                             null
