@@ -15,7 +15,7 @@ function CampaignDetails() {
   const [appliedUsersList, setAppliedUsersList] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [selectedTab, setSelectedTab] = useState('Accepted');
-  const [showDenyInput, setShowDenyInput] = useState(false);
+  const [showDenyInput, setShowDenyInput] = useState("");
   const [remark, setRemark] = useState('');
   const [followerrequired, setFollowerrequired] = useState([]);
 
@@ -89,16 +89,16 @@ function CampaignDetails() {
       };
 
       const response = await makeApi(`/v1/influencer/edit-apply-campaign/${userId}/${id}`, "PUT", requestBody);
-        // Update the local state after the API call
-        fetchCampaignDetailsWithAppliedUsers();
-   
+      // Update the local state after the API call
+      fetchCampaignDetailsWithAppliedUsers();
+
     } catch (error) {
       console.error('Error updating user approval:', error);
     } finally {
       setLoading(false);
     }
   };
-  const handleVerifieruserNameForcapaign = async (userId, approvalStatus, ) => {
+  const handleVerifieruserNameForcapaign = async (userId, approvalStatus,) => {
     try {
       setLoading(true);
       const requestBody = {
@@ -107,9 +107,9 @@ function CampaignDetails() {
       };
 
       const response = await makeApi(`/v1/influencer/edit-apply-campaign/${userId}/${id}`, "PUT", requestBody);
-        // Update the local state after the API call
-        fetchCampaignDetailsWithAppliedUsers();
-   
+      // Update the local state after the API call
+      fetchCampaignDetailsWithAppliedUsers();
+
     } catch (error) {
       console.error('Error updating user approval:', error);
     } finally {
@@ -225,7 +225,17 @@ function CampaignDetails() {
                                     <div className='d-flex gap-5' >
                                       <div className=' w-25' >
 
-                                        <img src={user.content} alt="providedContet" className="w-100" style={{ maxWidth: "300px" }} />
+                                        {user.content.match(/\.(jpeg|jpg|gif|png)$/i) ? (
+                                          <img src={user.content} alt="providedContent" className="w-100" style={{ maxWidth: "300px" }} />
+                                        ) : user.content.match(/\.(mp4|webm|ogg)$/i) ? (
+                                          <video controls className="w-100" style={{ maxWidth: "300px" }}>
+                                            <source src={user.content} type="video/mp4" />
+                                            Your browser does not support the video tag.
+                                          </video>
+                                        ) : (
+                                          <p className='text-danger'>Unsupported content format</p>
+                                        )}
+                                        {/* <img src={user.content} alt="providedContet" className="w-100" style={{ maxWidth: "300px" }} /> */}
                                         <div className='text-danger' > Status : <span> {user.content_approved}</span></div>
                                       </div>
                                       {user.post_link &&
@@ -238,10 +248,10 @@ function CampaignDetails() {
                                             {/* <div className='btn btn-success'   >Accept</div>
                                             <div className='btn btn-danger' >Deny</div>
                                             <div className='btn btn-primary' onClick={() => setShowDenyInput(true)} > changes  </div> */}
-    
+
                                             <button className='btn btn-success' onClick={() => handleVerifieruserForcapaign(user.user.id, 'Accepted')}>Accept  </button>
-                                            <button className='btn btn-danger' onClick={() => setShowDenyInput(user.user.id )}>Rejected</button>
-                                            <button  className='btn btn-primary' onClick={() => handleVerifieruserForcapaign(user.user.id, 'Changes')}>Changes</button>
+                                            <button className='btn btn-danger' onClick={() => setShowDenyInput(user.user.id)}>Correction</button>
+                                            <button className='btn btn-primary' onClick={() => handleVerifieruserForcapaign(user.user.id, 'Rejected')}>Rejected</button>
 
                                           </div>
 
@@ -262,14 +272,14 @@ function CampaignDetails() {
                                       </div>
 
                                     } */}
-                                    {showDenyInput === user.id && (
+                                    {showDenyInput === user.user.id && (
                                       <div className="deny-reason-input">
                                         <textarea
                                           value={remark}
                                           onChange={(e) => setRemark(e.target.value)}
                                           placeholder="Enter reason for denial..."
                                         />
-                                        <button onClick={() => handleVerifieruserForcapaign(user.id, 'Rejected', remark)}>Submit</button>
+                                        <button onClick={() => handleVerifieruserForcapaign(user.user.id, 'correction', remark)}>Submit</button>
                                       </div>
                                     )}
                                   </>
