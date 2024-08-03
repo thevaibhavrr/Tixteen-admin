@@ -241,17 +241,28 @@ function CampaignDetails() {
                                       {user.post_link &&
                                         <Link to={user.post_link} target="_blank" >View</Link>
                                       }
-                                      {user.approval === "Pending" && user.content_approved === "" && user.content ? (
+                                      {user.approval === "Pending" && (user.content_approved === "" || user.content_approved === " " ) && user.content ? (
                                         <>
                                           <div className='d-flex flex-column justify-content-center gap-3' >
                                             {/* option for accept or deny */}
                                             {/* <div className='btn btn-success'   >Accept</div>
                                             <div className='btn btn-danger' >Deny</div>
                                             <div className='btn btn-primary' onClick={() => setShowDenyInput(true)} > changes  </div> */}
-
+                                          {user.content_approved === "" &&
+                                          <>
                                             <button className='btn btn-success' onClick={() => handleVerifieruserForcapaign(user.user.id, 'Accepted')}>Accept  </button>
                                             <button className='btn btn-danger' onClick={() => setShowDenyInput(user.user.id)}>Correction</button>
+                                          </>
+
+                                          }
+                                          {user.content_approved === " " &&
+                                          <>
+                                            <button className='btn btn-success' onClick={() => handleVerifieruserForcapaign(user.user.id, 'Accepted')}> Re-Accept  </button>
+                                            <button className='btn btn-danger' onClick={() => setShowDenyInput(user.user.id)}>Re-Correction</button>
+                                          </>
+                                          }
                                             <button className='btn btn-primary' onClick={() => handleVerifieruserForcapaign(user.user.id, 'Rejected')}>Rejected</button>
+                                        
 
                                           </div>
 
