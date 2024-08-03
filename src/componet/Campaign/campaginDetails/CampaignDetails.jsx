@@ -283,14 +283,15 @@ function CampaignDetails() {
                                       </div>
 
                                     } */}
-                                    {showDenyInput === user.user.id && (
-                                      <div className="deny-reason-input">
+                                    {showDenyInput === user?.user?.id && (
+                                      <div className="deny-reason-input mt-5">
+                                        <small>{user.user.id}</small>
                                         <textarea
                                           value={remark}
                                           onChange={(e) => setRemark(e.target.value)}
                                           placeholder="Enter reason for denial..."
                                         />
-                                        <button onClick={() => handleVerifieruserForcapaign(user.user.id, 'correction', remark)}>Submit</button>
+                                        <button className='btn btn-success' onClick={() => handleVerifieruserForcapaign(user.user.id, 'correction', remark)}>Submit</button>
                                       </div>
                                     )}
                                   </>
