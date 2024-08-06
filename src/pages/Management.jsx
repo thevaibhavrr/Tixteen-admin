@@ -13,6 +13,7 @@ import Invoice from '../componet/Management/Invoice/profomInvoicedetails';
 import TaxInvoices from '../componet/Management/Invoice/Taxinvoice';
 import StaffDetails from '../componet/staff/StafDetails';
 import AddStaffPopup from '../componet/staff/AddStaff';
+import MonthlyAttendance from '../componet/staff/MonthlyAttendance';
 
  
 function Management() {
@@ -32,6 +33,8 @@ function Management() {
         <Route path='/tax-invoices-management' element={<TaxInvoices />} />
        <Route path="/staff-management" element={<StaffDetails />} />
        <Route path="/add-staff" element={<AddStaffPopup />} />
+       {/* attendance */}
+        <Route path="/attendance-management" element={<MonthlyAttendance />} />
        
 
 
