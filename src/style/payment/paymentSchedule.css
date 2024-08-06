@@ -1,0 +1,53 @@
+.payment-schedule {
+    padding: 20px;
+}
+
+.header {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+}
+
+.download-button {
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.download-button:hover {
+    background-color: #218838;
+}
+
+.payment-schedule table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.payment-schedule th, .payment-schedule td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.payment-schedule th {
+    background-color: #f2f2f2;
+}
+
+.payment-schedule .form-control {
+    width: 100%;
+}
+
+.update-button {
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.update-button:hover {
+    background-color: #0056b3;
+}

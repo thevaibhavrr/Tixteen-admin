@@ -47,6 +47,8 @@ import Staff from './pages/Staff';
 import Login from './componet/Auth/login';
 import MonthlyAttendance from './componet/staff/MonthlyAttendance';
 import Profile from './pages/Profile';
+import PaymentSchedule from './componet/Payment/PaymentSchedule';
+import Payment from './pages/Payment';
 
 const App = () => {
   const location = useLocation();
@@ -79,7 +81,7 @@ const App = () => {
         <Route path='/' element={<MainDasboard />} />
         <Route path='/z/:id' element={<EditInvoiceDetails />} />
         <Route path='/login' element={<Login />} />
-        <Route path='/test' element={<MonthlyAttendance />} />
+        <Route path='/payment/*' element={<Payment />} />
       </Routes>
     </div>
   );
