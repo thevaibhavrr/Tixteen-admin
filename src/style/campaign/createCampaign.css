@@ -1,97 +1,90 @@
-
-
 .create_campaign_form_title {
-    font-size: 1.5em;
-    font-weight: bold;
-    margin-bottom: 20px;
-    text-align: center;
+  font-size: 1.5em;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center;
 }
 
 .create_campaign_form {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 .form_group {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }
 
 .form_label {
-    font-weight: bold;
+  font-weight: bold;
 }
 .form_location_group {
-    display: flex;
-    gap: 20px;
-    align-items: center;
-
+  display: flex;
+  gap: 20px;
+  align-items: center;
 }
 
 .form_location_item {
-    width: 30%;
-    /* flex: 1;
-    display: flex;
-    flex-direction: column; */
+  width: 30%;
 }
-
 
 .form_input,
 .form_select,
 .form_textarea,
 .form_file_input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 1em;
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1em;
 }
 
 .form_textarea {
-    height: 100px;
-    resize: vertical;
+  height: 100px;
+  resize: vertical;
 }
 
 .form_radio_group,
 .form_checkbox_group {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
 .form_radio_input,
 .form_checkbox_input {
-    margin-right: 5px;
+  margin-right: 5px;
 }
 
 .form_radio_label,
 .form_checkbox_label {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 .form_followers_group,
 .form_age_group {
-    display: flex;
-    gap: 10px;
+  display: flex;
+  gap: 10px;
 }
 
 .form_age_input {
-    flex: 1;
+  flex: 1;
 }
 
 .form_button {
-    background-color: var(--primary-color);
-    color: var(--white-color);
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    font-size: 1em;
-    cursor: pointer;
-    transition: background-color 0.3s;
+  background-color: var(--primary-color);
+  color: var(--white-color);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
 .form_button:hover {
-    background-color: var(--primary-dark-color);
+  background-color: var(--primary-dark-color);
 }
