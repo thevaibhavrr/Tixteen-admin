@@ -31,8 +31,8 @@ function ManagementBar() {
                     <button onClick={() => handleFilterClick('Send-message')} className={filter === 'Send-Message' ? 'active' : ''}>Send Message</button>
                     <button onClick={() => handleFilterClick('Invoices')} className={filter === 'Invoices' ? 'active' : ''}>Invoices</button>
                     <button onClick={() => handleFilterClick('Staff')} className={filter === 'Staff' ? 'active' : ''}>Staff</button>
-                    {/* attendance */}
                     <button onClick={() => handleFilterClick('Attendance')} className={filter === 'Attendance' ? 'active' : ''}>Attendance</button>
+                    <button onClick={() => handleFilterClick('Client')} className={filter === 'Client' ? 'active' : ''}>Client</button>
                 </div>
             </div>
         </div>

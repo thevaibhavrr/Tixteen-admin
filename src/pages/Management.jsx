@@ -14,6 +14,8 @@ import TaxInvoices from '../componet/Management/Invoice/Taxinvoice';
 import StaffDetails from '../componet/staff/StafDetails';
 import AddStaffPopup from '../componet/staff/AddStaff';
 import MonthlyAttendance from '../componet/staff/MonthlyAttendance';
+import Createregister from '../componet/client/Clinetregister';
+import ManageClients from '../componet/client/ManageClients';
 
  
 function Management() {
@@ -33,9 +35,11 @@ function Management() {
         <Route path='/tax-invoices-management' element={<TaxInvoices />} />
        <Route path="/staff-management" element={<StaffDetails />} />
        <Route path="/add-staff" element={<AddStaffPopup />} />
-       {/* attendance */}
+
         <Route path="/attendance-management" element={<MonthlyAttendance />} />
-       
+       {/* Createregister */}
+       <Route path="/client-management" element={<ManageClients />} />
+       <Route path="/add-client" element={<Createregister />} />
 
 
 

@@ -16,6 +16,7 @@ const ManageIndustryChart = () => {
 
     const fetchIndustryList = async () => {
         setLoading(true);
+        
         try {
             const res = await makeApi('/v1/get-all-industries', 'GET');
             setIndustries(res.data.data);
