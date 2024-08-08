@@ -127,7 +127,7 @@ const TaxInvoices = () => {
                      {loading && <div style={{ height: "100%", width: "100%", top: "0", display: "flex", justifyContent: "center", alignItems: "center", zIndex: "9999", position: "fixed", backgroundColor: "rgba(0,0,0,0.3)" }}> <PrimaryLoader /> </div>}
 
             <div>
-                <div className="">
+                <div className="ms-4">
                     <div className="campaign-list-filters">
                         <Link to={"/management/invoices-management"}>
                         <button className='Level' >Proforma</button>

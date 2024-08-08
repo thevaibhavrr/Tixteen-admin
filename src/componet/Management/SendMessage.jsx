@@ -264,6 +264,8 @@ const App = () => {
 
   const handleApplyFilters = () => {
     fetchUsers(filters);
+    const allUserIds = filteredUserList.map(user => user.id);
+    setSelectedUsers(allUserIds);
   };
 
 
@@ -548,28 +550,28 @@ const App = () => {
                 </tr>
               </thead>
               <tbody>
-                {filteredUserList.map(user => (
-                  <tr key={user.id}>
-                    <td>
-                      <input
-                        type="checkbox"
-                        value={user.id}
-                        onChange={handleCheckboxChange}
-                        checked={selectedUsers.includes(user.id)}
+  {filteredUserList.map(user => (
+    <tr key={user.id}>
+      <td>
+        <input
+          type="checkbox"
+          value={user.id}
+          onChange={handleCheckboxChange}
+          checked={selectedUsers.includes(user.id)} // Checkbox will be checked if user is in selectedUsers
+        />
+      </td>
+      <td>{user.name}</td>
+      <td>{user.mobile}</td>
+      <td>{user.level}</td>
+      <td>{user.industry}</td>
+      <td>{user.gender}</td>
+      <td>{user.country}</td>
+      <td>{user.state}</td>
+      <td>{user.city}</td>
+    </tr>
+  ))}
+</tbody>
 
-                      />
-                    </td>
-                    <td>{user.name}</td>
-                    <td>{user.mobile}</td>
-                    <td>{user.level}</td>
-                    <td>{user.industry}</td>
-                    <td>{user.gender}</td>
-                    <td>{user.country}</td>
-                    <td>{user.state}</td>
-                    <td>{user.city}</td>
-                  </tr>
-                ))}
-              </tbody>
             </table>
           )}
         </div>

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import '../../style/managment/client/Createregister.css'
 import { makeApi } from '../../api/callApi.tsx';
+import BackIcon from '../../utils/BackIcon.jsx';
 const Createregister = () => {
     const [clientData, setClientData] = useState({
         client_id: '',
@@ -46,7 +47,11 @@ const Createregister = () => {
     };
 
     return (
-        <div className="client_container">
+        <div className="client_container" style={{ position: "relative" }} >
+            <div style={{ position: "absolute", top: "-30px", left: "10px" }} >
+
+                <BackIcon path={`management/client-management`} />
+            </div>
             <form className="client_form" onSubmit={handleSubmit}>
 
                 <div className="client_form_group">

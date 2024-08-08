@@ -4,6 +4,7 @@ import CampaignRequirement from './campaginrequiemnt';
 import { makeApi } from '../../../api/callApi.tsx';
 import PrimaryLoader from '../../../utils/PrimaryLoader.jsx';
 import uploadToCloudinary from '../../../utils/cloudinaryUpload.jsx';
+import BackIcon from '../../../utils/BackIcon.jsx';
 
 const CampaignLanguage = [
   { _id: 1, name: 'English' },
@@ -18,6 +19,7 @@ const stateList = [
 ];
 
 function CreateCampaign() {
+  const [clients, setClients] = useState([]);
   const [totalCampaignPrice, setTotalCampaignPrice] = useState(0);
   const [loading, setLoading] = useState(false);
   const [industryList, setIndustryList] = useState([]);
@@ -26,6 +28,7 @@ function CreateCampaign() {
   const [deliverables, setDeliverables] = useState(['Story', 'Paid Partnership']);
   const [followers, setFollowers] = useState([{ platform: 'Facebook', followers: 0 }]);
   const [formData, setFormData] = useState({
+    client_id: '',
     campaign_no: '',
     campaign_name: '',
     attachment: '',
@@ -105,6 +108,7 @@ function CreateCampaign() {
     fetchCountryList();
     fetchCitiesList();
     generateCampaignNo();
+    fetchClients();
   }, []);
 
   const generateCampaignNo = () => {
@@ -147,6 +151,17 @@ function CreateCampaign() {
       } finally {
         setLoading(false);
       }
+    }
+  };
+  const fetchClients = async () => {
+    setLoading(true);
+    try {
+      const res = await makeApi('/v1/admin/api/get-all-clients', 'GET');
+      setClients(res.data.clientData);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -205,9 +220,13 @@ function CreateCampaign() {
       {loading && (
         <div style={{ height: "100vh", width: "100%", top: "0", position: "fixed" }}>
           <PrimaryLoader />
-        </div>
+        </div> 
       )}
+       <div>
+        <BackIcon path={"campaign/CampaignList"} />
+      </div>
       <CampaignRequirement totalSum={handleTotal} setFormData={setFormData} />
+
       <div className='main_create_campaign_requirement'>
         <h1 className='create_campaign_select_category_header'>MAKE CAMPAIGN</h1>
         <div className='create_campaign_select_category_section'>
@@ -218,6 +237,19 @@ function CreateCampaign() {
               <label htmlFor="campaign_name" className='form_label'>Campaign Name:</label>
               <input type="text" id="campaign_name" name="campaign_name" className='form_input' onChange={handleChange} />
             </div>
+            {/* client dropdown */}
+            <div className='form_group'>
+              <label htmlFor="client" className='form_label'>Client:</label>
+              <select id="client" name="client_id" className='form_input' onChange={handleChange}>
+                <option value="">Select Client</option>
+                {clients.map((client) => (
+                  <option key={client.client_id} value={client.client_id}>
+                    {client.client_name} {client.client_id}
+                  </option>
+                ))}
+              </select>
+            </div>
+
             {/* Campaign Banner */}
             <div className='form_group'>
               <label htmlFor="attachment" className='form_label'>Campaign Banner:</label>
