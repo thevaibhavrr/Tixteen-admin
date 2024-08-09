@@ -84,4 +84,39 @@
   .user-footer p {
     margin: 5px 0;
   }
+
+  .application-item{
+    /* background: var(--dark-yellow-color); */
+    background: var(--light-yellow-color);;
+    padding: 20px;
+    margin: 30px 0;
+    font-family: var(--inter-font) ;
+  }
   
+  .user-tabs {
+    display: flex;
+    justify-content: space-around;
+    padding: 10px;
+    gap: 10px;
+    margin-top: 20px;
+    border-radius: 5px;
+  }
+  
+  .user-tab {
+    flex: 1;
+    background-color: var(--dark-yellow-color); /* Add a background color for better visibility */
+    text-align: center;
+    padding: 10px;
+    cursor: pointer;
+    color: var(--black-color); /* Ensure correct variable name */
+    font-weight: bold;
+    border-radius: 5px;
+    transition: background-color 0.3s, box-shadow 0.3s; /* Add transition for smooth color change */
+}
+
+.user-tab.active {
+    background-color: var(--light-blue-color); /* Ensure correct variable name */
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    color: var(--black-color); /* Ensure text color changes as needed */
+}

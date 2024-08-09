@@ -239,31 +239,34 @@ function CampaignDetails() {
                                         <div className='text-danger' > Status : <span> {user.content_approved}</span></div>
                                       </div>
                                       {user.post_link &&
-                                        <Link to={user.post_link} target="_blank" >View</Link>
+                                        <Link to={user.post_link} target="_blank" className='btn btn-success' >View
+                                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-up-right" viewBox="0 0 16 16">
+                                            <path fill-rule="evenodd" d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5" />
+                                            <path fill-rule="evenodd" d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0z" />
+                                          </svg>
+                                        </Link>
                                       }
-                                      {user.approval === "Pending" && (user.content_approved === "" || user.content_approved === " " ) && user.content ? (
+                                      {user.approval === "Pending" && (user.content_approved === "" || user.content_approved === " ") && user.content ? (
                                         <>
                                           <div className='d-flex flex-column justify-content-center gap-3' >
                                             {/* option for accept or deny */}
                                             {/* <div className='btn btn-success'   >Accept</div>
                                             <div className='btn btn-danger' >Deny</div>
                                             <div className='btn btn-primary' onClick={() => setShowDenyInput(true)} > changes  </div> */}
-                                          {user.content_approved === "" &&
-                                          <>
-                                            <button className='btn btn-success' onClick={() => handleVerifieruserForcapaign(user.user.id, 'Accepted')}>Accept  </button>
-                                            <button className='btn btn-danger' onClick={() => setShowDenyInput(user.user.id)}>Correction</button>
-                                          </>
+                                            {user.content_approved === "" &&
+                                              <>
+                                                <button className='btn btn-success' onClick={() => handleVerifieruserForcapaign(user.user.id, 'Accepted')}>Accept  </button>
+                                                <button className='btn btn-danger' onClick={() => setShowDenyInput(user.user.id)}>Correction</button>
+                                              </>
 
-                                          }
-                                          {user.content_approved === " " &&
-                                          <>
-                                            <button className='btn btn-success' onClick={() => handleVerifieruserForcapaign(user.user.id, 'Accepted')}> Re-Accept  </button>
-                                            <button className='btn btn-danger' onClick={() => setShowDenyInput(user.user.id)}>Re-Correction</button>
-                                          </>
-                                          }
+                                            }
+                                            {user.content_approved === " " &&
+                                              <>
+                                                <button className='btn btn-success' onClick={() => handleVerifieruserForcapaign(user.user.id, 'Accepted')}> Re-Accept  </button>
+                                                <button className='btn btn-danger' onClick={() => setShowDenyInput(user.user.id)}>Re-Correction</button>
+                                              </>
+                                            }
                                             <button className='btn btn-primary' onClick={() => handleVerifieruserForcapaign(user.user.id, 'Rejected')}>Rejected</button>
-                                        
-
                                           </div>
 
                                         </>
@@ -304,8 +307,8 @@ function CampaignDetails() {
                           }
                           {user.influ_approval === "Pending" ? (
                             <div className="user-actions-unique">
-                              <button className="accept-button-unique" onClick={() => handleVerifieruserNameForcapaign(user.influ_id, "Accepted")}>Acceptttt</button>
-                              <button className="deny-button-unique" onClick={() => handleVerifieruserNameForcapaign(user.influ_id, "Rejected")} >Deny</button>
+                              <button className="accept-button-unique" onClick={() => handleVerifieruserNameForcapaign(user.influ_id, "Accepted")}>Accept</button>
+                              <button className="deny-button-unique" onClick={() => handleVerifieruserNameForcapaign(user.influ_id, "Rejected")} >Reject</button>
                             </div>
                           ) :
                             null

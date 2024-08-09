@@ -18,7 +18,7 @@ const TaxInvoices = () => {
         stateCode: '',
     });
     const [searchTerm, setSearchTerm] = useState('');
-    const [ loading, setLoading ] = useState(false);
+    const [loading, setLoading] = useState(false);
 
 
     useEffect(() => {
@@ -27,7 +27,7 @@ const TaxInvoices = () => {
 
     const fetchInvoices = async () => {
         try {
-        setLoading (true);
+            setLoading(true);
 
             const response = await makeApi('/v1/admin/api/get-my-bill?invoice_status=Tax', 'GET');
 
@@ -57,7 +57,7 @@ const TaxInvoices = () => {
             }
         } catch (error) {
             console.error('API request failed:', error);
-        }finally {
+        } finally {
             setLoading(false);
         }
     };
@@ -81,7 +81,7 @@ const TaxInvoices = () => {
             }
         } catch (error) {
             console.error('API request failed:', error);
-        }finally {
+        } finally {
             setLoading(false);
         }
     };
@@ -112,7 +112,7 @@ const TaxInvoices = () => {
             }
         } catch (error) {
             console.error('API request failed:', error);
-        }finally {
+        } finally {
             setLoading(false);
         }
     };
@@ -124,13 +124,13 @@ const TaxInvoices = () => {
 
     return (
         <>
-                     {loading && <div style={{ height: "100%", width: "100%", top: "0", display: "flex", justifyContent: "center", alignItems: "center", zIndex: "9999", position: "fixed", backgroundColor: "rgba(0,0,0,0.3)" }}> <PrimaryLoader /> </div>}
+            {loading && <div style={{ height: "100%", width: "100%", top: "0", display: "flex", justifyContent: "center", alignItems: "center", zIndex: "9999", position: "fixed", backgroundColor: "rgba(0,0,0,0.3)" }}> <PrimaryLoader /> </div>}
 
             <div>
                 <div className="ms-4">
                     <div className="campaign-list-filters">
                         <Link to={"/management/invoices-management"}>
-                        <button className='Level' >Proforma</button>
+                            <button className='Level' >Proposal</button>
                         </Link>
                         <button className='active' >Tax</button>
                     </div>
@@ -179,7 +179,7 @@ const TaxInvoices = () => {
                                     <td>{invoice.gst}</td>
                                 </Link>
                                 <td>{invoice.state_code}</td>
-                                
+
                             </tr>
                         ))}
                     </tbody>
