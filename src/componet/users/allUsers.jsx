@@ -9,8 +9,7 @@ function AllUser() {
   const [users, setUsers] = useState([]);
   const [selectedLevel, setSelectedLevel] = useState('');
   const [selectedVerification, setSelectedVerification] = useState('Social Media Verification Pending');
-  console.log(`selectedVerification${selectedVerification}--`)
-  const [searchQuery, setSearchQuery] = useState('');
+    const [searchQuery, setSearchQuery] = useState('');
 
   const [loading, setLoading] = useState(false);
 

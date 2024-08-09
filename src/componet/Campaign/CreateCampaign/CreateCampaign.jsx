@@ -6,19 +6,15 @@ import PrimaryLoader from '../../../utils/PrimaryLoader.jsx';
 import uploadToCloudinary from '../../../utils/cloudinaryUpload.jsx';
 import BackIcon from '../../../utils/BackIcon.jsx';
 
-const CampaignLanguage = [
-  { _id: 1, name: 'English' },
-  { _id: 2, name: 'Spanish' },
-  // Add more languages as needed
-];
+
 
 const stateList = [
   { _id: 1, name: 'California' },
   { _id: 2, name: 'New York' },
-  // Add more states as needed
 ];
 
 function CreateCampaign() {
+  const [CampaignLanguage, setCampaignLanguage] = useState([]);
   const [clients, setClients] = useState([]);
   const [totalCampaignPrice, setTotalCampaignPrice] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -27,6 +23,8 @@ function CreateCampaign() {
   const [countryList, setCountryList] = useState([]);
   const [deliverables, setDeliverables] = useState(['Story', 'Paid Partnership']);
   const [followers, setFollowers] = useState([{ platform: 'Facebook', followers: 0 }]);
+  const [selectedcountry, setSelectedCountry] = useState('')
+  const [selectedstate, setSelectedState] = useState('')
   const [formData, setFormData] = useState({
     client_id: '',
     campaign_no: '',
@@ -102,6 +100,18 @@ function CreateCampaign() {
       setLoading(false);
     }
   };
+  const fetchLanguages = async () => {
+    setLoading(true);
+    try {
+      const res = await makeApi('/v1/get-all-languages', 'GET');
+
+      setCampaignLanguage(res.data.data);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     fetchIndustryList();
@@ -109,6 +119,7 @@ function CreateCampaign() {
     fetchCitiesList();
     generateCampaignNo();
     fetchClients();
+    fetchLanguages()
   }, []);
 
   const generateCampaignNo = () => {
@@ -122,6 +133,8 @@ function CreateCampaign() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+
+
     setFormData({
       ...formData,
       [name]: value,
@@ -220,9 +233,9 @@ function CreateCampaign() {
       {loading && (
         <div style={{ height: "100vh", width: "100%", top: "0", position: "fixed" }}>
           <PrimaryLoader />
-        </div> 
+        </div>
       )}
-       <div>
+      <div>
         <BackIcon path={"campaign/CampaignList"} />
       </div>
       <CampaignRequirement totalSum={handleTotal} setFormData={setFormData} />
@@ -311,8 +324,8 @@ function CreateCampaign() {
               <label htmlFor="language" className='form_label'>Campaign Language:</label>
               <select id="language" name="language" className='form_select' onChange={handleChange}>
                 {CampaignLanguage.map((language) => (
-                  <option key={language.name} value={language.name}>
-                    {language.name}
+                  <option key={language.language} value={language.language}>
+                    {language.language}
                   </option>
                 ))}
               </select>
@@ -382,7 +395,7 @@ function CreateCampaign() {
               <label htmlFor="country" className='form_label'>Country:</label>
               <select id="country" name="country" className='form_select' onChange={handleChange}>
                 {countryList.map((country) => (
-                  <option key={country._id} value={country.name}>
+                  <option key={country._id} value={country.name} >
                     {country.name}
                   </option>
                 ))}
