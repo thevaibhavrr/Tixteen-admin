@@ -4,8 +4,10 @@ import React, { useState, useEffect } from 'react';
 import '../../style/dashboard/AttendanceForm.css';
 import { makeApi } from '../../api/callApi.tsx';
 import PrimaryLoader from '../../utils/PrimaryLoader.jsx';
+import { useNavigate } from 'react-router-dom';
 
 const AttendanceForm = () => {
+    const navigate = useNavigate();
     const [message, setMessage] = useState('');
     const [isAttendanceMarked, setIsAttendanceMarked] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -93,28 +95,46 @@ const AttendanceForm = () => {
         }
     };
 
+    const handleLogout = async () => {
+        localStorage.clear();
+        navigate('/login');
+    };
+
+
     return (
-        <div className="attendance-container">
-            {loading && <PrimaryLoader />}
-            <div className=''>
-                <div>
-                    {isAttendanceMarked ? (
-                        isOnShortLeave ? (
-                            <button onClick={stopShortLeave} className="short-leave-btn">
-                                Stop Short Leave
-                            </button>
-                        ) : (
-                            <button onClick={startShortLeave} className="short-leave-btn">
-                                Start Short Leave
-                            </button>
-                        )
-                    ) : (
-                        <button onClick={handleAttendance} className="mark-attendance-btn btn-danger">
-                            Mark Attendance
+        <>
+                {loading && <PrimaryLoader />}
+        <div className='d-flex justify-content-between w-100'>
+            <div className="attendance-container w-100 ">
+                <div className='w-25'>
+                    <div>
+                        <button onClick={handleLogout} className="mark-attendance-btn btn-danger">
+                            Log out
                         </button>
-                    )}
+                    </div>
+
                 </div>
-                {/* <div >
+            </div>
+            <div className="attendance-container">
+                <div className=''>
+                    <div>
+                        {isAttendanceMarked ? (
+                            isOnShortLeave ? (
+                                <button onClick={stopShortLeave} className="short-leave-btn">
+                                    Stop Short Leave
+                                </button>
+                            ) : (
+                                <button onClick={startShortLeave} className="short-leave-btn">
+                                    Start Short Leave
+                                </button>
+                            )
+                        ) : (
+                            <button onClick={handleAttendance} className="mark-attendance-btn btn-danger">
+                                Mark Attendance
+                            </button>
+                        )}
+                    </div>
+                    {/* <div >
                     <div>
 
                         {message && <p>{message}</p>}
@@ -129,8 +149,10 @@ const AttendanceForm = () => {
                     </div>
                     {activeHours && <p>Total Active Hours: {activeHours}</p>}
                 </div> */}
+                </div>
             </div>
         </div>
+        </>
     );
 };
 

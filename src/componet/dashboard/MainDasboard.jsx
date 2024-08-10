@@ -14,7 +14,7 @@ function MainDasboard() {
       </div>
       <div className='d-flex flex-column align-items-end ' >
 
-        <div className='w-25 pb-3' style={{ backgroundColor: "white" }} >
+        <div className='w-100 pb-3' style={{ backgroundColor: "white" }} >
           <AttendanceForm />
         </div>
         <DashbordSummaryHeading />
