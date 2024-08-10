@@ -99,7 +99,7 @@ const Influencercalender = () => {
                         localizer={localizer}
                         events={events}
                         date={currentDate}
-                        view="month"
+                        defaultView="month"
                         onNavigate={(date) => setCurrentDate(date)}
                         style={{ height: "100%", width: "100%", minHeight: "500px" }}
                         eventPropGetter={eventPropGetter}

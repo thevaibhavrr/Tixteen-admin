@@ -321,7 +321,7 @@ function Campaigncalender() {
                         localizer={localizer}
                         events={events}
                         date={currentDate}
-                        view="month"
+                        defaultView="month"
                         onNavigate={(date) => setCurrentDate(date)}
                         style={{ height: 500, width: "600px" }}
                         eventPropGetter={eventPropGetter}

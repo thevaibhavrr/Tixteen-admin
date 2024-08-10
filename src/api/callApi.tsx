@@ -12,7 +12,7 @@ export const makeApi = async (
 			throw new Error("Please login to access this resource.")
 		}
 
-		const headers = {
+		const headers = {  
 			"Content-Type": "application/json",
 			Authorization: token ? `Bearer ${token}` : "",
 		}

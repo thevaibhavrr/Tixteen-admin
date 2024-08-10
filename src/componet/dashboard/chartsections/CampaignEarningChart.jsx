@@ -20,7 +20,7 @@ const CampaignEarningChart = () => {
     useEffect(() => {
         const fetchData = async () => {
             setIsLoading(true);
-            setError(null); 
+            setError(null);
 
             try {
                 const response = await makeApi(`/v1/admin/api/get-monthly-campaign-counts?year=${selectedYear}`, 'GET');
@@ -37,15 +37,12 @@ const CampaignEarningChart = () => {
     }, [selectedYear]);
 
     const handleYearChange = (e) => {
-        const selectedYear = Number(e.target.value);
-        setSelectedYear(selectedYear);
+        setSelectedYear(Number(e.target.value));
     };
 
     const renderChart = () => {
         if (isLoading) {
-            return <p>
-                <PrimaryLoader/>
-            </p>;
+            return <div><PrimaryLoader /></div>;
         }
 
         if (error) {
@@ -66,16 +63,14 @@ const CampaignEarningChart = () => {
         return (
             <ResponsiveContainer width="100%" height={400}>
                 <BarChart
-                    height={300}
                     data={chartData}
                     margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
-                    borderRadius={5}
                 >
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="name" />
-                    <YAxis />
+                    <YAxis   />
                     <Tooltip />
-                    <Bar dataKey="value" className="bar_chart_first" barSize={24} fill="#90EE90" />
+                    <Bar dataKey="value" barSize={24} fill="#90EE90" />
                 </BarChart>
             </ResponsiveContainer>
         );
@@ -83,28 +78,19 @@ const CampaignEarningChart = () => {
 
     return (
         <div>
-            <div>
-                <h3>Campaign</h3>
+            <h3>Campaign</h3>
+            <div className="my-2 d-flex justify-content-center align-items-center gap-5">
+                <select className='p-2' value={selectedYear} onChange={handleYearChange}>
+                    {Array.from({ length: 10 }, (_, i) => i + 2020).map((year) => (
+                        <option key={year} value={year}>
+                            {year}
+                        </option>
+                    ))}
+                </select>
             </div>
-            <div>
-                <div className="my-2 d-flex justify-content-center align-items-center gap-5">
-                    <div className="my-2">
-                        <select className='p-2' value={selectedYear} onChange={handleYearChange}>
-                            {Array.from({ length: 10 }, (_, i) => i + 2020).map((year) => (
-                                <option key={year} value={year}>
-                                    {year}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <div>
-                <div className="main_earning_chart_div">
-                    {/* chart */}
-                    <div className="main_data_chart_div_earning">{renderChart()}</div>
-                    <div className='text-center bg-warning ' > Total: {apiData?.total}</div>
-                </div>
+            <div className="main_earning_chart_div">
+                <div className="main_data_chart_div_earning">{renderChart()}</div>
+                <div className='text-center bg-warning'> Total: {apiData?.total}</div>
             </div>
         </div>
     );

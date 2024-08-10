@@ -23,6 +23,7 @@ function CreateCampaign() {
   const [countryList, setCountryList] = useState([]);
   const [deliverables, setDeliverables] = useState(['Story', 'Paid Partnership']);
   const [followers, setFollowers] = useState([{ platform: 'Facebook', followers: 0 }]);
+  const [influencerData, setInfluencerData] = useState([]);
   const [selectedcountry, setSelectedCountry] = useState('')
   const [selectedstate, setSelectedState] = useState('')
   const [formData, setFormData] = useState({
@@ -63,7 +64,7 @@ function CreateCampaign() {
     area: '',
   });
 
-  console.log(formData);
+  console.log(influencerData);
 
   const fetchIndustryList = async () => {
     setLoading(true);
@@ -212,13 +213,14 @@ function CreateCampaign() {
     e.preventDefault();
 
     try {
-      console.log('Form Data:', { ...formData, totalCampaignPrice, deliverables, followers });
+      console.log('Form Data:', { ...formData, totalCampaignPrice, deliverables, followers,influencerData });
       setLoading(true);
       const response = await makeApi('/v1/create-campaign', 'POST', {
         ...formData,
         totalCampaignPrice,
         deliverables,
         followers,
+        influencerData
       });
       console.log('API Response:', response.data);
     } catch (error) {
@@ -238,7 +240,13 @@ function CreateCampaign() {
       <div>
         <BackIcon path={"campaign/CampaignList"} />
       </div>
-      <CampaignRequirement totalSum={handleTotal} setFormData={setFormData} />
+      {/* <CampaignRequirement totalSum={handleTotal} setFormData={setFormData} /> */}
+      <CampaignRequirement
+        totalSum={(value) => setTotalCampaignPrice(value)}
+        setFormData={setFormData}
+        setInfluencerData={setInfluencerData}
+      />
+
 
       <div className='main_create_campaign_requirement'>
         <h1 className='create_campaign_select_category_header'>MAKE CAMPAIGN</h1>
@@ -255,8 +263,8 @@ function CreateCampaign() {
               <label htmlFor="client" className='form_label'>Client:</label>
               <select id="client" name="client_id" className='form_input' onChange={handleChange}>
                 <option value="">Select Client</option>
-                {clients.map((client) => (
-                  <option key={client.client_id} value={client.client_id}>
+                {clients.map((client, index) => (
+                  <option key={index} value={client.client_id}>
                     {client.client_name} {client.client_id}
                   </option>
                 ))}
@@ -312,8 +320,8 @@ function CreateCampaign() {
             <div className='form_group'>
               <label htmlFor="industry" className='form_label'>Target Industry:</label>
               <select id="industry" name="industry" className='form_select' onChange={handleChange}>
-                {industryList.map((industry) => (
-                  <option key={industry._id} value={industry.name}>
+                {industryList.map((industry,index) => (
+                  <option key={index} value={industry.name}>
                     {industry.name}
                   </option>
                 ))}
@@ -323,8 +331,8 @@ function CreateCampaign() {
             <div className='form_group'>
               <label htmlFor="language" className='form_label'>Campaign Language:</label>
               <select id="language" name="language" className='form_select' onChange={handleChange}>
-                {CampaignLanguage.map((language) => (
-                  <option key={language.language} value={language.language}>
+                {CampaignLanguage.map((language,index) => (
+                  <option key={index} value={language.language}>
                     {language.language}
                   </option>
                 ))}
@@ -394,8 +402,8 @@ function CreateCampaign() {
             <div className='form_group'>
               <label htmlFor="country" className='form_label'>Country:</label>
               <select id="country" name="country" className='form_select' onChange={handleChange}>
-                {countryList.map((country) => (
-                  <option key={country._id} value={country.name} >
+                {countryList.map((country,index) => (
+                  <option key={index} value={country.name} >
                     {country.name}
                   </option>
                 ))}
@@ -405,8 +413,8 @@ function CreateCampaign() {
             <div className='form_group'>
               <label htmlFor="state" className='form_label'>State:</label>
               <select id="state" name="state" className='form_select' onChange={handleChange}>
-                {stateList.map((state) => (
-                  <option key={state._id} value={state.name}>
+                {stateList.map((state,index) => (
+                  <option key={index} value={state.name}>
                     {state.name}
                   </option>
                 ))}
@@ -416,8 +424,8 @@ function CreateCampaign() {
             <div className='form_group'>
               <label htmlFor="city" className='form_label'>City:</label>
               <select id="city" name="city" className='form_select' onChange={handleChange}>
-                {citiesList.map((city) => (
-                  <option key={city._id} value={city.name}>
+                {citiesList.map((city,index) => (
+                  <option key={index} value={city.name}>
                     {city.name}
                   </option>
                 ))}
