@@ -19,7 +19,7 @@
 
 
 .sunday-row {
-    background-color: #ffeb3b;
+    background-color: #f9e533;
 }
 
 .sunday-row td {
@@ -32,11 +32,11 @@
 } */
 
 .half-day {
-    background-color: #fcf8e3; /* Light yellow */
+    background-color: #c4bfa8; /* Light yellow */
 }
 
 .sunday-row {
-    background-color: #f9f9f9; /* Light gray */
+    background-color: #979797; /* Light gray */
 }
 
 
