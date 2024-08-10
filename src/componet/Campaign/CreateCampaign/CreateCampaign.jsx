@@ -32,7 +32,7 @@ function CreateCampaign() {
     campaign_name: '',
     attachment: '',
     campaign_type: '',
-    product: '',
+    product: '', 
     industry: '',
     language: 'English',
     age: '',
@@ -50,7 +50,7 @@ function CreateCampaign() {
     state: '',
     city: '',
     is_screen_shots_required: "",
-    created_date: new Date().toLocaleString('en-GB', { timeZone: 'UTC' }),
+    created_date: formatDate(new Date()),
     dead_line: "",
     client_id: '',
     created_by: '',
@@ -63,6 +63,10 @@ function CreateCampaign() {
     banner: '',
     area: '',
   });
+  function formatDate(date) {
+    const options = { day: '2-digit', month: 'short', year: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false, timeZone: 'UTC' };
+    return new Intl.DateTimeFormat('en-GB', options).format(date).replace(',', '');
+  }
 
   console.log(influencerData);
 
