@@ -260,12 +260,12 @@ function CampaignDetails() {
                                               </>
 
                                             }
-                                            {/* {user.content_approved === " " &&
+                                            {user.content_approved === " " &&
                                               <>
-                                                <button className='btn btn-success' onClick={() => handleVerifieruserForcapaign(user.user.id, 'Accepted')}> Re-Accept  </button>
-                                                <button className='btn btn-danger' onClick={() => setShowDenyInput(user.user.id)}>Re-Correction</button>
+                                                <button className='btn btn-success' onClick={() => handleVerifieruserForcapaign(user.user.id, 'Accepted')}> Accept  </button>
+                                                <button className='btn btn-danger' onClick={() => setShowDenyInput(user.user.id)}>Correction</button>
                                               </>
-                                            } */}
+                                            }
                                             <button className='btn btn-primary' onClick={() => handleVerifieruserForcapaign(user.user.id, 'Rejected')}>Rejected</button>
                                           </div>
 
