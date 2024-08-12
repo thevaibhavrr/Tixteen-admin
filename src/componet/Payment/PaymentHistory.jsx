@@ -45,7 +45,7 @@ const PaymentHistory = () => {
                             productRs: campaignDetails.product_price || 'N/A',
                             infAmount: payment.amount,
                             reward: payment.rewards || 0,
-                            total: (parseFloat(campaignDetails.product_price || 0) + parseFloat(payment.amount) + parseFloat(payment.rewards || 0)).toFixed(2),
+                            total: ( parseFloat(payment.amount) + parseFloat(payment.rewards || 0)).toFixed(2),
                             transactionID: payment.transaction_id,
                             paymentDate: parseDate(payment.pay_scedule_date),
                         };
