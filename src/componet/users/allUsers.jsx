@@ -231,7 +231,8 @@ const handleEditClick = (user) => {
 const handleFormSubmit = async (e) => {
   e.preventDefault();
   try {
-    const response = await makeApi(`/V1/influencers/${editUser._id}`, 'PUT', editUser);
+    // const response = await makeApi(`/V1/influencers/${editUser._id}`, 'PUT', editUser);
+    const response = await makeApi(`/api/update-user/${editUser._id}`, 'PUT', editUser);
     setUsers((prevUsers) =>
       prevUsers.map((user) => (user._id === editUser._id ? response.data : user))
     );

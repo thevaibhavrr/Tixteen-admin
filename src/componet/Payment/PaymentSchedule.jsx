@@ -13,7 +13,6 @@ const PaymentSchedule = () => {
         setLoading(true);
         try {
             const res = await makeApi('/v1/admin/api/get-all-pending-payments?all=yes', 'GET');
-            console.log(res.data.apply)
             // if (res.success && res.apply.length > 0) {
                 const mappedPayments = res.data.apply.map(payment => ({
                     submitted: new Date(payment.content_upload_date).toISOString().split('T')[0],
