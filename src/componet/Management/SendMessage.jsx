@@ -6,6 +6,7 @@ import PrimaryLoader from '../../utils/PrimaryLoader.jsx';
 
 const App = () => {
   const [selectedCampaign, setSelectedCampaign] = useState('');
+  console.log("[][][][][",selectedCampaign)
   const [filters, setFilters] = useState({
     levels: [],
     industry: [],
@@ -121,8 +122,8 @@ const App = () => {
   const fetchUsers = async (filters) => {
     setIsLoading(true);
     try {
-    
-      const response = await makeApi(`/V1/influencers?MultiLevels=${filterLevel}&industry=${filterIndustry}&language=${filterLanguage}&gender=${filterGender}&perPage=50&page=${currentPage}`, 'GET');
+
+      const response = await makeApi(`/V1/influencers?MultiLevels=${filterLevel}&industry=${filterIndustry}&language=${filterLanguage}&gender=${filterGender}&perPage=50000000&page=${currentPage}`, 'GET');
       console.log(response.data.data);
       setUserList(response.data.data);
       setFilteredUserList(response.data.data);
@@ -236,17 +237,27 @@ const App = () => {
     );
   };
 
-  const handleSendMessages = () => {
+  const handleSendMessages = async() => {
     const selectedUserDetails = selectedUsers.map(userId => {
       const user = filteredUserList.find(user => user.id === userId);
       return {
         id: user.id,
-        name: user.name,
-        mobile: user.mobile
+        name: user.user_name,
+        // mobile: user.mobile
+        // mobile: 9131947294
+        mobile: 9926503468
       };
-    });
 
-    window.alert(`Sending messages to:\n${selectedUserDetails.map(user => `${user.name} (${user.mobile})`).join('\n')}`);
+    });
+    try {
+      console.log("----=-=-==-=-=-=-=-=-",selectedUserDetails)
+      const response = await makeApi("/v1/admin/api/send-message", "POST", { users: selectedUserDetails , campaignData: campaignDetails});
+      console.log("Messages sent successfully:", response.data);
+    } catch (error) {
+      console.error("Error sending messages:", error);
+    }
+
+    console.log(`Sending messages to:\n${selectedUserDetails.map(user => `${user.name} (${user.mobile})`).join('\n')}`);
     console.log('Sending messages to:', selectedUserDetails);
   };
 
@@ -266,7 +277,16 @@ const App = () => {
     fetchUsers(filters);
     const allUserIds = filteredUserList.map(user => user.id);
     setSelectedUsers(allUserIds);
+
   };
+
+  // all checked
+  const handleSelectAllFilteredUsers = () => {
+    // Extract user IDs from filteredUserList
+    const allUserIds = filteredUserList.map(user => user.id);
+    setSelectedUsers(allUserIds);
+  };
+
 
 
   function GenderRadio() {
@@ -278,16 +298,16 @@ const App = () => {
             type="radio"
             name="gender"
             value="Male"
-            onChange={()=>setFilterGender("Male")}
+            onChange={() => setFilterGender("Male")}
             className="app__filter-radio"
             checked={filterGender === 'Male'}
-            
+
           /> Male
           <input
             type="radio"
             name="gender"
             value="Female"
-            onChange={()=>setFilterGender("Female")}
+            onChange={() => setFilterGender("Female")}
             className="app__filter-radio"
             checked={filterGender === 'Female'}
           /> Female
@@ -295,7 +315,7 @@ const App = () => {
             type="radio"
             name="gender"
             value=""
-            onChange={()=>setFilterGender("")}
+            onChange={() => setFilterGender("")}
             className="app__filter-radio"
             checked={filterGender === ''}
           /> Both
@@ -307,7 +327,7 @@ const App = () => {
   function IndustryCheckbox() {
     return <>
 
-      <div style={{maxWidth: "280px"}} >
+      <div style={{ maxWidth: "280px" }} >
         <label className="app__filter-label">Industry:</label>
         <div className='filter_chebox_parent_div'>
           {IndustryList.map((industry) => (
@@ -334,7 +354,7 @@ const App = () => {
 
   function LanguageCheckbox() {
     return <>
-      <div style={{maxWidth: "280px" , minWidth: "250px" }}>
+      <div style={{ maxWidth: "280px", minWidth: "250px" }}>
         <label className="app__filter-label">Language:</label>
         <div className='filter_chebox_parent_div'>
           {languages.map((industry) => (
@@ -385,8 +405,8 @@ const App = () => {
     </>
   }
   function LevelsCheckBox() {
-    return  <>
-      <div className="app__filter-item" style={{maxWidth: "220px"}}>
+    return <>
+      <div className="app__filter-item" style={{ maxWidth: "220px" }}>
         <label className="app__filter-label">Levels:</label>
         <div className="">
           <div>
@@ -467,7 +487,7 @@ const App = () => {
       </div>
     </>
   }
- 
+
 
   return (
     <>
@@ -514,7 +534,7 @@ const App = () => {
           {selectedCampaign && (
             <div className="app__filters">
               <IndustryCheckbox />
-              <LevelsCheckBox/>
+              <LevelsCheckBox />
               {/* <CountryCheckBox/> */}
               {/* <StateCheckBox/> */}
               {/* <CityCheckBox /> */}
@@ -524,14 +544,18 @@ const App = () => {
             </div>
           )}
         </div>
+
         <button onClick={handleApplyFilters} className="app__apply-filters-button btn btn-warning">
           Apply Filters
         </button>
         <div className="app__user-list">
+
           <h2>Users {filteredUserList.length}</h2>
+          <button onClick={handleSelectAllFilteredUsers} className="btn btn-primary">
+            select all
+          </button>
           {isLoading ? (
             <div>Loading...
-
               <PrimaryLoader />
             </div>
           ) : (
@@ -550,27 +574,27 @@ const App = () => {
                 </tr>
               </thead>
               <tbody>
-  {filteredUserList.map(user => (
-    <tr key={user.id}>
-      <td>
-        <input
-          type="checkbox"
-          value={user.id}
-          onChange={handleCheckboxChange}
-          checked={selectedUsers.includes(user.id)} // Checkbox will be checked if user is in selectedUsers
-        />
-      </td>
-      <td>{user.name}</td>
-      <td>{user.mobile}</td>
-      <td>{user.level}</td>
-      <td>{user.industry}</td>
-      <td>{user.gender}</td>
-      <td>{user.country}</td>
-      <td>{user.state}</td>
-      <td>{user.city}</td>
-    </tr>
-  ))}
-</tbody>
+                {filteredUserList.map(user => (
+                  <tr key={user.id}>
+                    <td>
+                      <input
+                        type="checkbox"
+                        value={user.id}
+                        onChange={handleCheckboxChange}
+                        checked={selectedUsers.includes(user.id)} // Checkbox will be checked if user is in selectedUsers
+                      />
+                    </td>
+                    <td>{user.user_name}</td>
+                    <td>{user.mobile}</td>
+                    <td>{user.level}</td>
+                    <td>{user.industry}</td>
+                    <td>{user.gender}</td>
+                    <td>{user.country}</td>
+                    <td>{user.state}</td>
+                    <td>{user.city}</td>
+                  </tr>
+                ))}
+              </tbody>
 
             </table>
           )}
@@ -587,3 +611,231 @@ const App = () => {
 export default App;
 
 
+// import React, { useState, useEffect } from 'react';
+// import "../../style/managment/SendMessage.css";
+// import { makeApi } from "../../api/callApi.tsx";
+// import PrimaryLoader from '../../utils/PrimaryLoader.jsx';
+
+// const SendMessageApp = () => {
+//     const [selectedCampaign, setSelectedCampaign] = useState('');
+//     const [filters, setFilters] = useState({
+//         levels: [],
+//         industry: [],
+//         gender: '',
+//         country: [],
+//         state: [],
+//         city: [],
+//         language: []
+//     });
+//     const [userList, setUserList] = useState([]);
+//     const [filteredUserList, setFilteredUserList] = useState([]);
+//     const [selectedUsers, setSelectedUsers] = useState([]);
+//     const [campaigns, setCampaigns] = useState([]);
+//     const [isLoading, setIsLoading] = useState(false);
+//     const [IndustryList, setIndustryList] = useState([]);
+//     const [cityList, setCityList] = useState([]);
+//     const [countryList, setCountryList] = useState([]);
+//     const [levels, setLevels] = useState([]);
+//     const [languages, setLanguages] = useState([]);
+
+//     // Fetch Industry, Levels, Country, City, Languages
+//     const fetchFilters = async () => {
+//         setIsLoading(true);
+//         try {
+//             const industryResponse = await makeApi("/v1/get-all-industries", "GET");
+//             const levelsResponse = await makeApi('/v1/get-all-levels', "GET");
+//             const countryResponse = await makeApi("/v1/get-all-countries", "GET");
+//             const cityResponse = await makeApi("/v1/get-all-cities", "GET");
+//             const languageResponse = await makeApi('/v1/get-all-languages', 'GET');
+//             setIndustryList(industryResponse.data.data);
+//             setLevels(levelsResponse.data.data);
+//             setCountryList(countryResponse.data.data);
+//             setCityList(cityResponse.data.data);
+//             setLanguages(languageResponse.data.data);
+//         } catch (error) {
+//             console.error('Error fetching filters:', error);
+//         } finally {
+//             setIsLoading(false);
+//         }
+//     };
+
+//     useEffect(() => {
+//         fetchFilters();
+//     }, []);
+
+//     const fetchUsers = async () => {
+//         setIsLoading(true);
+//         try {
+//             const response = await makeApi(`/V1/influencers?MultiLevels=${filters.levels}&industry=${filters.industry}&language=${filters.language}&gender=${filters.gender}&country=${filters.country}&state=${filters.state}&city=${filters.city}`, 'GET');
+//             setUserList(response.data.data);
+//             setFilteredUserList(response.data.data);
+//         } catch (error) {
+//             console.error('Error fetching users:', error);
+//         } finally {
+//             setIsLoading(false);
+//         }
+//     };
+
+//     const handleCampaignChange = (e) => {
+//         const selectedCampaignName = e.target.value;
+//         setSelectedCampaign(selectedCampaignName);
+//         const selectedCampaignObj = campaigns.find(campaign => campaign.campaign_name === selectedCampaignName);
+//         fetchCampaignDetails(selectedCampaignObj._id);
+//     };
+
+//     const handleFilterChange = (e) => {
+//         const { name, value, checked } = e.target;
+//         if (name === 'gender') {
+//             setFilters({ ...filters, gender: value });
+//         } else {
+//             setFilters({
+//                 ...filters,
+//                 [name]: checked
+//                     ? [...filters[name], value]
+//                     : filters[name].filter(item => item !== value)
+//             });
+//         }
+//     };
+
+//     const handleCheckboxChange = (e) => {
+//         const userId = e.target.value;
+//         setSelectedUsers(prevSelectedUsers =>
+//             e.target.checked
+//                 ? [...prevSelectedUsers, userId]
+//                 : prevSelectedUsers.filter(id => id !== userId)
+//         );
+//     };
+
+//     const handleSendMessages = async () => {
+//         const selectedUserDetails = selectedUsers.map(userId => {
+//             const user = filteredUserList.find(user => user.id === userId);
+//             return {
+//                 name: user.name,
+//                 mobile: user.mobile
+//             };
+//         });
+
+//         try {
+//             const response = await makeApi("/admin/send-message", "POST", { users: selectedUserDetails });
+//             console.log("Messages sent successfully:", response.data);
+//         } catch (error) {
+//             console.error("Error sending messages:", error);
+//         }
+//     };
+//     return (
+//       <>
+//       {campignLoading &&
+//         <div style={{ position: "fixed", top: "0", height: "100vh", width: "100%" }} >
+//           <PrimaryLoader />
+//         </div>
+//       }
+//       <div className="app">
+//         <h1 className="app__title">Send Campaign Messages</h1>
+//         <div className="app__filter-section">
+//           <div className="app__campaign-selection">
+//             <div className="app__search-container">
+//               <input
+//                 type="text"
+//                 placeholder="Search Campaigns"
+//                 value={searchTerm}
+//                 onChange={handleSearchChange}
+//                 className="app__search-input"
+//               />
+//               {suggestions.length > 0 && (
+//                 <ul className="app__suggestions">
+//                   {suggestions.map((suggestion, index) => (
+//                     <li key={index} onClick={() => handleSuggestionClick(suggestion)} className="app__suggestion-item">
+//                       {suggestion.campaign_name}
+//                     </li>
+//                   ))}
+//                 </ul>
+//               )}
+//             </div>
+//             <select
+//               value={selectedCampaign}
+//               onChange={handleCampaignChange}
+//               className="app__campaign-dropdown"
+//             >
+//               <option value="">Select Campaign</option>
+//               {campaigns.map((campaign, index) => (
+//                 <option key={index} value={campaign.campaign_name}>
+//                   {campaign.campaign_name}
+//                 </option>
+//               ))}
+//             </select>
+//           </div>
+//           {selectedCampaign && (
+//             <div className="app__filters">
+//               <IndustryCheckbox />
+//               <LevelsCheckBox />
+//               {/* <CountryCheckBox/> */}
+//               {/* <StateCheckBox/> */}
+//               {/* <CityCheckBox /> */}
+//               <LanguageCheckbox />
+//               <GenderRadio />
+
+//             </div>
+//           )}
+//         </div>
+
+//         <button onClick={handleApplyFilters} className="app__apply-filters-button btn btn-warning">
+//           Apply Filters
+//         </button>
+//         <div className="app__user-list">
+
+//           <h2>Users {filteredUserList.length}</h2>
+//           <button onClick={handleSelectAllFilteredUsers} className="btn btn-primary">
+//             select all
+//           </button>
+//           {isLoading ? (
+//             <div>Loading...
+//               <PrimaryLoader />
+//             </div>
+//           ) : (
+//             <table className="app__user-table">
+//               <thead>
+//                 <tr>
+//                   <th>Select</th>
+//                   <th>Name</th>
+//                   <th>Mobile</th>
+//                   <th>Level</th>
+//                   <th>Industry</th>
+//                   <th>Gender</th>
+//                   <th>Country</th>
+//                   <th>State</th>
+//                   <th>City</th>
+//                 </tr>
+//               </thead>
+//               <tbody>
+//                 {filteredUserList.map(user => (
+//                   <tr key={user.id}>
+//                     <td>
+//                       <input
+//                         type="checkbox"
+//                         value={user.id}
+//                         onChange={handleCheckboxChange}
+//                         checked={selectedUsers.includes(user.id)} // Checkbox will be checked if user is in selectedUsers
+//                       />
+//                     </td>
+//                     <td>{user.name}</td>
+//                     <td>{user.mobile}</td>
+//                     <td>{user.level}</td>
+//                     <td>{user.industry}</td>
+//                     <td>{user.gender}</td>
+//                     <td>{user.country}</td>
+//                     <td>{user.state}</td>
+//                     <td>{user.city}</td>
+//                   </tr>
+//                 ))}
+//               </tbody>
+
+//             </table>
+//           )}
+//         </div>
+//         <button onClick={handleSendMessages} className="app__send-button">
+//           Send Messages
+//         </button>
+//       </div>
+//     </>
+//     )}
+// export default App;

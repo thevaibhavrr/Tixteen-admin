@@ -138,12 +138,8 @@ function UpdateUserDetails() {
                         <input type="text" id="ship_pin_code" name="ship_pin_code" value={userData.ship_pin_code} onChange={handleInputChange} />
                     </div>
                     <div className="update-user-details-field">
-                        <label htmlFor="working_area">Working Area</label>
-                        <input type="text" id="working_area" name="working_area" value={userData.working_area} onChange={handleInputChange} />
-                    </div>
-                    <div className="update-user-details-field">
                         <label htmlFor="reject_mark">Reject Mark</label>
-                        <input type="text" id="reject_mark" name="reject_mark" value={userData.reject_mark} onChange={handleInputChange} />
+                        <input type="text" id="reject_mark"  name="reject_mark" value={userData.reject_mark} onChange={handleInputChange} />
                     </div>
                     <div className="update-user-details-field">
                         <label htmlFor="verification">Verification</label>
@@ -155,36 +151,12 @@ function UpdateUserDetails() {
                     </div>
                     <div className="update-user-details-field">
                         <label htmlFor="action_date">Action Date</label>
-                        <input type="text" id="action_date" name="action_date" value={userData.action_date} onChange={handleInputChange} />
+                        <input type="text" id="action_date" disabled name="action_date" value={userData.action_date} onChange={handleInputChange} />
                     </div>
-                    <div className="update-user-details-field">
-                        <label htmlFor="refrence">Reference</label>
-                        <input type="text" id="refrence" name="refrence" value={userData.refrence} onChange={handleInputChange} />
-                    </div>
-                    <div className="update-user-details-field">
-                        <label htmlFor="prime_content">Prime Content</label>
-                        <input type="text" id="prime_content" name="prime_content" value={userData.prime_content} onChange={handleInputChange} />
-                    </div>
-                    <div className="update-user-details-field">
-                        <label htmlFor="whatsapp_connect">WhatsApp Connect</label>
-                        <input type="text" id="whatsapp_connect" name="whatsapp_connect" value={userData.whatsapp_connect} onChange={handleInputChange} />
-                    </div>
-                    <div className="update-user-details-field">
-                        <label htmlFor="featured">Featured</label>
-                        <input type="text" id="featured" name="featured" value={userData.featured} onChange={handleInputChange} />
-                    </div>
-                    <div className="update-user-details-field">
-                        <label htmlFor="rating">Rating</label>
-                        <input type="text" id="rating" name="rating" value={userData.rating} onChange={handleInputChange} />
-                    </div>
-                    <div className="update-user-details-field">
-                        <label htmlFor="sleep_mode">Sleep Mode</label>
-                        <input type="text" id="sleep_mode" name="sleep_mode" value={userData.sleep_mode} onChange={handleInputChange} />
-                    </div>
-                    <div className="update-user-details-field">
-                        <label htmlFor="suspend">Suspend</label>
-                        <input type="text" id="suspend" name="suspend" value={userData.suspend} onChange={handleInputChange} />
-                    </div>
+                    
+                    
+                    
+                    
                     <div className="update-user-details-field">
                         <label htmlFor="status">Status</label>
                         <input type="text" id="status" name="status" value={userData.status} onChange={handleInputChange} />

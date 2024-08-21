@@ -319,6 +319,11 @@ function CreateCampaign() {
               <label htmlFor="product_price" className='form_label'>Product Price:</label>
               <input type="number" id="product_price" name="product_price" className='form_input' onChange={handleChange} />
             </div>
+            {/* price */}
+            <div className='form_group'>
+              <label htmlFor="price" className='form_label'>Price:</label>
+              <input type="number" id="price" name="price" className='form_input' onChange={handleChange} />
+            </div>
 
             {/* Target Industry */}
             <div className='form_group'>
@@ -492,3 +497,416 @@ function CreateCampaign() {
 
 export default CreateCampaign;
 
+// import React, { useState, useEffect } from "react";
+// import axios from "axios";
+// import { ToastContainer, toast } from "react-toastify";
+// import "react-toastify/dist/ReactToastify.css";
+// import "../../../style/campaign/createCampaign.css";
+// import CampaignRequirement from './campaginrequiemnt';
+// import { makeApi } from '../../../api/callApi.tsx';
+// import PrimaryLoader from '../../../utils/PrimaryLoader.jsx';
+// import uploadToCloudinary from '../../../utils/cloudinaryUpload.jsx';
+// import BackIcon from '../../../utils/BackIcon.jsx';
+
+
+
+// const CreateCampaign = () => {
+//     const [countries, setCountries] = useState([]);
+//     const [states, setStates] = useState([]);
+//     const [cities, setCities] = useState([]);
+//     const [selectedCountry, setSelectedCountry] = useState("");
+//     const [selectedState, setSelectedState] = useState("");
+//     const [selectedCity, setSelectedCity] = useState("");
+//     const [campaignData, setCampaignData] = useState({
+//         campaign_name: "",
+//         product: "",
+//         attachment: "",
+//         industry: "",
+//         hash_tag: "",
+//         age: "",
+//         till_age: "",
+//         gender: "",
+//         remark: "",
+//         platforms: "",
+//         platform_link: "",
+//         language: "",
+//         profile_tag: "",
+//         to_do: "",
+//         not_todo: "",
+//         client_id: "",
+//         content_type: "",
+//         dead_line: "",
+//         price: "",
+//         job_type: "",
+//         campaign_type: "",
+//         product_price: "",
+//         is_screen_shots_required: false,
+//         area: "",
+//         banner: ""
+//     });
+
+//     useEffect(() => {
+//         fetchCountries();
+//     }, []);
+
+//     const fetchCountries = async () => {
+//         try {
+//             const response = await makeApi("/v1/get-all-countries","GET");
+//             setCountries(response.data.data);
+//         } catch (error) {
+//             toast.error("Failed to fetch countries");
+//         }
+//     };
+    
+//     const fetchStates = async (countryId) => {
+//       try {
+//           console.log(countryId)
+//             const response = await makeApi(`/v1/states?country_id=${countryId}`,"GET");
+//             setStates(response.data.data);
+//         } catch (error) {
+//             toast.error("Failed to fetch states");
+//         }
+//     };
+
+//     const fetchCities = async (stateId) => {
+//         try {
+//             const response = await makeApi(`/v1/cities?state_id=${stateId}`,"GET");
+//             setCities(response.data.data);
+//         } catch (error) {
+//             toast.error("Failed to fetch cities");
+//         }
+//     };
+
+//     const handleCountryChange = (e) => {
+//         const countryId = e.target.value;
+//         setSelectedCountry(countryId);
+//         setSelectedState("");
+//         setSelectedCity("");
+//         setStates([]);
+//         setCities([]);
+//         if (countryId) {
+//             fetchStates(countryId);
+//         }
+//     };
+
+//     const handleStateChange = (e) => {
+//         const stateId = e.target.value;
+//         if (!selectedCountry) {
+//             toast.error("Please select a country first.");
+//             return;
+//         }
+//         setSelectedState(stateId);
+//         setSelectedCity("");
+//         setCities([]);
+//         if (stateId) {
+//             fetchCities(stateId);
+//         }
+//     };
+
+//     const handleCityChange = (e) => {
+//         if (!selectedState) {
+//             toast.error("Please select a state first.");
+//             return;
+//         }
+//         setSelectedCity(e.target.value);
+//     };
+
+//     const handleChange = (e) => {
+//         setCampaignData({
+//             ...campaignData,
+//             [e.target.name]: e.target.value,
+//         });
+//     };
+
+//     const handleSubmit = async (e) => {
+//         e.preventDefault();
+//         try {
+//             const response = await axios.post("/api/campaigns", {
+//                 ...campaignData,
+//                 country: selectedCountry,
+//                 state: selectedState,
+//                 city: selectedCity,
+//             });
+//             toast.success("Campaign created successfully");
+//             setCampaignData({
+//                 campaign_name: "",
+//                 product: "",
+//                 attachment: "",
+//                 industry: "",
+//                 hash_tag: "",
+//                 age: "",
+//                 till_age: "",
+//                 gender: "",
+//                 remark: "",
+//                 platforms: "",
+//                 platform_link: "",
+//                 language: "",
+//                 profile_tag: "",
+//                 to_do: "",
+//                 not_todo: "",
+//                 client_id: "",
+//                 content_type: "",
+//                 dead_line: "",
+//                 price: "",
+//                 job_type: "",
+//                 campaign_type: "",
+//                 product_price: "",
+//                 is_screen_shots_required: false,
+//                 area: "",
+//                 banner: ""
+//             });
+//             setSelectedCountry("");
+//             setSelectedState("");
+//             setSelectedCity("");
+//             setStates([]);
+//             setCities([]);
+//         } catch (error) {
+//             toast.error("Failed to create campaign");
+//         }
+//     };
+
+//     return (
+//         <div>
+//             <form onSubmit={handleSubmit}>
+//                 <select value={selectedCountry} onChange={handleCountryChange}>
+//                     <option value="">Select Country</option>
+//                     {countries.map((country) => (
+//                         <option key={country._id} value={country._id}>
+//                             {country.name}
+//                         </option>
+//                     ))}
+//                 </select>
+
+//                 <select value={selectedState} onChange={handleStateChange}>
+//                     <option value="">Select State</option>
+//                     {states.map((state) => (
+//                         <option key={state._id} value={state._id}>
+//                             {state.name}
+//                         </option>
+//                     ))}
+//                 </select>
+
+//                 <select value={selectedCity} onChange={handleCityChange}>
+//                     <option value="">Select City</option>
+//                     {cities.map((city) => (
+//                         <option key={city._id} value={city._id}>
+//                             {city.name}
+//                         </option>
+//                     ))}
+//                 </select>
+
+//                 <input
+//                     type="text"
+//                     name="campaign_name"
+//                     value={campaignData.campaign_name}
+//                     onChange={handleChange}
+//                     placeholder="Campaign Name"
+//                 />
+
+//                 <input
+//                     type="text"
+//                     name="product"
+//                     value={campaignData.product}
+//                     onChange={handleChange}
+//                     placeholder="Product"
+//                 />
+
+//                 <input
+//                     type="text"
+//                     name="attachment"
+//                     value={campaignData.attachment}
+//                     onChange={handleChange}
+//                     placeholder="Attachment"
+//                 />
+
+//                 <input
+//                     type="text"
+//                     name="industry"
+//                     value={campaignData.industry}
+//                     onChange={handleChange}
+//                     placeholder="Industry"
+//                 />
+
+//                 <input
+//                     type="text"
+//                     name="hash_tag"
+//                     value={campaignData.hash_tag}
+//                     onChange={handleChange}
+//                     placeholder="Hash Tag"
+//                 />
+
+//                 <input
+//                     type="number"
+//                     name="age"
+//                     value={campaignData.age}
+//                     onChange={handleChange}
+//                     placeholder="Age"
+//                 />
+
+//                 <input
+//                     type="number"
+//                     name="till_age"
+//                     value={campaignData.till_age}
+//                     onChange={handleChange}
+//                     placeholder="Till Age"
+//                 />
+
+//                 <input
+//                     type="text"
+//                     name="gender"
+//                     value={campaignData.gender}
+//                     onChange={handleChange}
+//                     placeholder="Gender"
+//                 />
+
+//                 <input
+//                     type="text"
+//                     name="remark"
+//                     value={campaignData.remark}
+//                     onChange={handleChange}
+//                     placeholder="Remark"
+//                 />
+
+//                 <input
+//                     type="text"
+//                     name="platforms"
+//                     value={campaignData.platforms}
+//                     onChange={handleChange}
+//                     placeholder="Platforms"
+//                 />
+
+//                 <input
+//                     type="text"
+//                     name="platform_link"
+//                     value={campaignData.platform_link}
+//                     onChange={handleChange}
+//                     placeholder="Platform Link"
+//                 />
+
+//                 <input
+//                     type="text"
+//                     name="language"
+//                     value={campaignData.language}
+//                     onChange={handleChange}
+//                     placeholder="Language"
+//                 />
+
+//                 <input
+//                     type="text"
+//                     name="profile_tag"
+//                     value={campaignData.profile_tag}
+//                     onChange={handleChange}
+//                     placeholder="Profile Tag"
+//                 />
+
+//                 <input
+//                     type="text"
+//                     name="to_do"
+//                     value={campaignData.to_do}
+//                     onChange={handleChange}
+//                     placeholder="To Do"
+//                 />
+
+//                 <input
+//                     type="text"
+//                     name="not_todo"
+//                     value={campaignData.not_todo}
+//                     onChange={handleChange}
+//                     placeholder="Not To Do"
+//                 />
+
+//                 <input
+//                     type="text"
+//                     name="client_id"
+//                     value={campaignData.client_id}
+//                     onChange={handleChange}
+//                     placeholder="Client ID"
+//                 />
+
+//                 <input
+//                     type="text"
+//                     name="content_type"
+//                     value={campaignData.content_type}
+//                     onChange={handleChange}
+//                     placeholder="Content Type"
+//                 />
+
+//                 <input
+//                     type="date"
+//                     name="dead_line"
+//                     value={campaignData.dead_line}
+//                     onChange={handleChange}
+//                     placeholder="Deadline"
+//                 />
+
+//                 <input
+//                     type="number"
+//                     name="price"
+//                     value={campaignData.price}
+//                     onChange={handleChange}
+//                     placeholder="Price"
+//                 />
+
+//                 <input
+//                     type="text"
+//                     name="job_type"
+//                     value={campaignData.job_type}
+//                     onChange={handleChange}
+//                     placeholder="Job Type"
+//                 />
+
+//                 <input
+//                     type="text"
+//                     name="campaign_type"
+//                     value={campaignData.campaign_type}
+//                     onChange={handleChange}
+//                     placeholder="Campaign Type"
+//                 />
+
+//                 <input
+//                     type="number"
+//                     name="product_price"
+//                     value={campaignData.product_price}
+//                     onChange={handleChange}
+//                     placeholder="Product Price"
+//                 />
+
+//                 <label>
+//                     Is Screenshots Required
+//                     <input
+//                         type="checkbox"
+//                         name="is_screen_shots_required"
+//                         checked={campaignData.is_screen_shots_required}
+//                         onChange={(e) =>
+//                             setCampaignData({
+//                                 ...campaignData,
+//                                 is_screen_shots_required: e.target.checked,
+//                             })
+//                         }
+//                     />
+//                 </label>
+
+//                 <input
+//                     type="text"
+//                     name="area"
+//                     value={campaignData.area}
+//                     onChange={handleChange}
+//                     placeholder="Area"
+//                 />
+
+//                 <input
+//                     type="text"
+//                     name="banner"
+//                     value={campaignData.banner}
+//                     onChange={handleChange}
+//                     placeholder="Banner"
+//                 />
+
+//                 <button type="submit">Create Campaign</button>
+//             </form>
+//             <ToastContainer />
+//         </div>
+//     );
+// };
+
+// export default CreateCampaign;
