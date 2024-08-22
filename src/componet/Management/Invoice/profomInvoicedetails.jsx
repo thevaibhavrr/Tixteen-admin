@@ -7,6 +7,7 @@ import { makeApi } from "../../../api/callApi.tsx";
 import Sign from "../../../assets/Sign/Stamp and Sign.png"
 import html2pdf from "html2pdf.js";
 import PrimaryLoader from '../../../utils/PrimaryLoader.jsx';
+import numberToWords from 'number-to-words';
 
 
 const Invoice = () => {
@@ -14,6 +15,17 @@ const Invoice = () => {
     const [invoiceData, setInvoiceData] = useState(null);
     const invoiceRef = useRef();
     const [loading, setLoading] = useState(false);
+    const [grandtotall, setGrandTotal] = useState(0);
+const [totalInWords, setTotalInWords] = useState('');
+console.log("totalInWords: ", totalInWords);
+
+useEffect(() => {
+    if (invoiceData) {
+        const { totalTaxable, totalCGST, totalSGST, totalIGST, grandTotal } = calculateTotal();
+        setGrandTotal(grandTotal);
+        setTotalInWords(numberToWords.toWords(grandTotal));
+    }
+}, [invoiceData]);
 
 
     useEffect(() => {
@@ -63,6 +75,8 @@ const Invoice = () => {
             grandTotal += taxable + cgst_Amount + sgst_Amount + igst_Amount;
         });
 
+
+
         return {
             totalTaxable,
             totalCGST,
@@ -73,7 +87,7 @@ const Invoice = () => {
     };
 
     const { totalTaxable, totalCGST, totalSGST, totalIGST, grandTotal } = calculateTotal();
-
+   
     // print and download invoice
     const handlePrint = () => {
         window.print();
@@ -83,21 +97,23 @@ const Invoice = () => {
         try {
             setLoading(true);
 
-        const element = invoiceRef.current;
-        const opt = {
-            margin: 0.2,
-            filename: `invoice_${mybill.invoice_no}.pdf`,
-            image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale: 2 },
-            jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
-        };
-        html2pdf().from(element).set(opt).save();
+            const element = invoiceRef.current;
+            const opt = {
+                margin: 0.2,
+                filename: `invoice_${mybill.invoice_no}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+            };
+            html2pdf().from(element).set(opt).save();
         } catch (error) {
-        console.log(error);
+            console.log(error);
         } finally {
             setLoading(false);
         }
     };
+
+    
 
     return (
         <>
@@ -121,11 +137,8 @@ const Invoice = () => {
                                     <div>Invoice Number:</div>
                                     <div><strong>{mybill.invoice_no}</strong></div>
                                 </div>
-                                <div className="d-flex justify-content-around w-100">
-                                    <div className="d-flex gap-5">
-                                        {/* <div>|</div> */}
-                                        Invoice Date:
-                                    </div>
+                                <div className="d-flex justify-content-around w-75">
+                                    <div className="">Invoice Date:</div>
                                     <div><strong>{new Date(mybill.bill_date).toLocaleDateString()}</strong></div>
                                 </div>
                             </div>
@@ -159,7 +172,7 @@ const Invoice = () => {
                                 <h6 className="invoice_page_border">Details Of Sender</h6>
                                 <div className="table_data_invoice">
                                     <div>Name</div>
-                                    <div>Txtteen Pvt.Ltd.</div>
+                                    <div>Tixteen Pvt.Ltd.</div>
                                 </div>
                                 <div className="table_data_invoice">
                                     <div>Address</div>
@@ -230,8 +243,11 @@ const Invoice = () => {
                         </div>
 
                         <div className="invoice-summary invoice_page_border p-1">
-                            <div className="total-amount invoice_page_border">
-                                <p>Total Invoice Amount in Words: <strong>{/* Add logic to convert numbers to words */}</strong></p>
+                            <div className="total-amount invoice_page_border text-center">
+                                <p className="pt-2" >Total Invoice Amount in Words: <strong>{/* Add logic to convert numbers to words */}</strong></p>
+                                {/* <p style={{ fontSize: '20px'  }} className="uppercase" >{totalInWords}</p> */}
+                                <p style={{ fontSize: '17px' , textTransform: 'uppercase', fontWeight: 'bold' }} >{totalInWords}</p>
+
                             </div>
                             <div className="amount-summary invoice_page_border">
                                 <div className="table_data_invoice">
