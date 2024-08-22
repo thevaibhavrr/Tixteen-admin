@@ -243,22 +243,17 @@ const App = () => {
       return {
         id: user.id,
         name: user.user_name,
-        // mobile: user.mobile
-        // mobile: 9131947294
-        mobile: 9926503468
+        mobile: user.mobile
       };
 
     });
     try {
-      console.log("----=-=-==-=-=-=-=-=-",selectedUserDetails)
       const response = await makeApi("/v1/admin/api/send-message", "POST", { users: selectedUserDetails , campaignData: campaignDetails});
       console.log("Messages sent successfully:", response.data);
     } catch (error) {
       console.error("Error sending messages:", error);
     }
 
-    console.log(`Sending messages to:\n${selectedUserDetails.map(user => `${user.name} (${user.mobile})`).join('\n')}`);
-    console.log('Sending messages to:', selectedUserDetails);
   };
 
   const handleSearchChange = (e) => {
@@ -267,9 +262,12 @@ const App = () => {
     setSuggestions(value ? campaigns.filter(campaign => campaign.campaign_name.toLowerCase().includes(value.toLowerCase())) : []);
   };
 
+  // suggestion button
   const handleSuggestionClick = (suggestion) => {
     setSelectedCampaign(suggestion.campaign_name);
     setSearchTerm('');
+    const selectedCampaignObj = campaigns.find(campaign => campaign.campaign_name === selectedCampaign);
+    fetchCampaignDetails(selectedCampaignObj._id);
     setSuggestions([]);
   };
 

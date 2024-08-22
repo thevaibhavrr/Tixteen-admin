@@ -17,7 +17,7 @@ const PaymentHistory = () => {
         const currentYearMonth = new Date().toISOString().slice(0, 7);
         setPaymentYearMonth(currentYearMonth);
     }, []);
-
+ 
     // Fetch all data when the component mounts
     useEffect(() => {
         const fetchData = async () => {
@@ -95,7 +95,7 @@ const PaymentHistory = () => {
     return (
         <>
             {loading &&
-                <div style={{ height: "100vh", width: "100%", top: "0", position: "fixed" }}>
+                <div style={{ height: "100%", width: "100%", top: "0", display: "flex", justifyContent: "center", alignItems: "center", zIndex: "9999", position: "fixed", backgroundColor: "rgba(0,0,0,0.3)" }}>
                     <PrimaryLoader />
                 </div>
             }

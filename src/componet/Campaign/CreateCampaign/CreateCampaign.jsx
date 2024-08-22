@@ -269,7 +269,7 @@ function CreateCampaign() {
                 <option value="">Select Client</option>
                 {clients.map((client, index) => (
                   <option key={index} value={client.client_id}>
-                    {client.client_name} {client.client_id}
+                    {client.client_name} 
                   </option>
                 ))}
               </select>
