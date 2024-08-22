@@ -29,6 +29,7 @@ function AllUser() {
   const [filterCountry, setFilterCountry] = useState("");
   const [filterCity, setFilterCity] = useState("");
   const [levels, setLevels] = useState([]);
+  const [selectedinfulencerLevel, setSelectedinfulencerLevel] = useState('')
   const [serachQuery, setSerachQuery] = useState("name");
 
 
@@ -142,6 +143,10 @@ function AllUser() {
     fetchUsers();
   }, [searchQuery, filterGender, filterPrimaryPlatform, filterIndustry, filterLanguage, selectedVerification, selectedLevel, currentPage]);
 
+  const handleChangeLevel = (event) => {
+    setSelectedinfulencerLevel(event.target.value);
+  };
+
   const toggleIndustry = (industryName) => {
     let updatedFilterIndustry;
     if (filterIndustry.includes(industryName)) {
@@ -182,15 +187,12 @@ function AllUser() {
   const handleVerificationChange = (event) => {
     const value = event.target.value;
     if (value === 'All') {
-      console.log('-----------------All--------');
       setSelectedVerification('');
     }
     else if (value === 'New') {
-      console.log('-----------------New-----------------');
       setSelectedVerification('Social Media Verification Pending');
     }
     else {
-      console.log('-----------------else-----------------');
       setSelectedVerification(value);
 
     }
@@ -198,7 +200,7 @@ function AllUser() {
 
   };
   const updateUserverificationStatus = (e) => {
-    setEditUser({ ...editUser, verification: e.target.value });
+    setEditUser({ ...editUser, verification: e.target.value  });
     if (e.target.value === 'Rejected') {
       setShowRejectionPopup(true);
     } else {
@@ -225,6 +227,7 @@ function AllUser() {
 
   const handleEditClick = (user) => {
     setEditUser(user);
+    setSelectedinfulencerLevel(user.level)
     setShowPopup(true);
   };
 
@@ -232,7 +235,11 @@ function AllUser() {
     e.preventDefault();
     try {
       // const response = await makeApi(`/V1/influencers/${editUser._id}`, 'PUT', editUser);
-      const response = await makeApi(`/api/update-user/${editUser._id}`, 'PUT', editUser);
+      const data = {
+        ...editUser,
+        level: selectedinfulencerLevel
+      }
+      const response = await makeApi(`/api/update-user/${editUser._id}`, 'PUT', {editUser : data});
       setUsers((prevUsers) =>
         prevUsers.map((user) => (user._id === editUser._id ? response.data : user))
       );
@@ -272,6 +279,22 @@ function AllUser() {
     // {name : "Prime Content", value:"Prime Content"},
 
   ]
+
+  const getFullLink = (platform, link) => {
+    if (!link.startsWith("www.") && !link.startsWith("https://")) {
+      switch (platform) {
+        case "Instagram":
+          return `https://www.instagram.com/${link}`;
+        case "Facebook":
+          return `https://www.facebook.com/${link}`;
+        case "YouTube":
+          return `https://www.youtube.com/${link}`;
+        default:
+          return link;
+      }
+    }
+    return link;
+  };
 
   return (
     <>
@@ -341,7 +364,7 @@ function AllUser() {
           {users.map(user => (
             <div key={user._id} className={`all-user-user-card ${getVerificationClass(user.verification)}`}>
               {/* <strong className='pb-1 text-danger' >TXT-{user.id}</strong> */}
-              <strong>{`TX${user.user_name.charAt(0).toUpperCase()}-${user.id}`}</strong>
+              <strong>{`TX${user?.user_name?.charAt(0).toUpperCase()}-${user.id}`}</strong>
               <img
                 // src={user.profile_img !== "" ? user.profile_img:dummyimage }
                 src={dummyimage}
@@ -367,9 +390,9 @@ function AllUser() {
                   </div>
                 </div>
                 <div className='all-user-user-details-small'>
-                  <p><strong>Primary Platform:</strong> {user.primary_platform}</p>
+                  {/* <p><strong>Primary Platform:</strong> {user.primary_platform}</p> */}
                 </div>
-                <p> <strong>Industry:</strong> {user.industry} </p>
+                <p className='all-user-industry'> <strong>Industry:</strong> {user.industry} </p>
                 <div className="all-user-social-media">
                   <div className="all-user-social-media">
                     <p><strong>Followers:</strong> {user?.socialMedia?.follower ? user?.socialMedia?.follower : 'N/A'}</p>
@@ -377,7 +400,8 @@ function AllUser() {
                       <div><strong>Platform:</strong> {user?.socialMedia?.platform ? user?.socialMedia?.platform : 'N/A'}</div>
                       <div>
                         {user?.socialMedia?.platform === "Instagram" && (
-                          <Link to={user?.socialMedia?.link} target="_blank" className='text-black' style={{ textDecoration: 'none', color: 'black' }} rel="noopener noreferrer" >
+                          // <Link to={user?.socialMedia?.link} target="_blank" className='text-black' style={{ textDecoration: 'none', color: 'black' }} rel="noopener noreferrer" >
+                          <Link to={getFullLink("Instagram", user?.socialMedia?.link)} target="_blank" className='text-black' style={{ textDecoration: 'none', color: 'black' }} rel="noopener noreferrer" >
                             <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" className="bi bi-instagram" viewBox="0 0 16 16">
                               <path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.9 3.9 0 0 0-1.417.923A3.9 3.9 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.372 1.942.372.853.038 1.125.048 3.297.048 2.173 0 2.444-.01 3.297-.048.851-.04 1.432-.174 1.941-.372a3.9 3.9 0 0 0 1.417-.923 3.9 3.9 0 0 0 .923-1.417c.198-.51.372-1.09.372-1.942.038-.853.048-1.125.048-3.297 0-2.174-.01-2.445-.048-3.297-.04-.852-.174-1.433-.372-1.942a3.9 3.9 0 0 0-.923-1.417 3.9 3.9 0 0 0-1.417-.923c-.51-.198-1.09-.372-1.942-.372C10.445.01 10.173 0 8 0ZM8 1.46c2.13 0 2.384.01 3.226.047.78.035 1.204.166 1.485.276.374.145.64.318.92.598.28.28.453.546.598.92.11.281.24.705.276 1.485.037.842.046 1.096.046 3.227 0 2.13-.01 2.384-.046 3.226-.035.78-.166 1.204-.276 1.485a2.45 2.45 0 0 1-.598.92 2.45 2.45 0 0 1-.92.598c-.281.11-.705.24-1.485.276-.842.037-1.096.047-3.226.047-2.131 0-2.385-.01-3.227-.047-.78-.035-1.204-.166-1.485-.276a2.45 2.45 0 0 1-.92-.598 2.45 2.45 0 0 1-.598-.92c-.11-.281-.24-.705-.276-1.485-.037-.842-.047-1.096-.047-3.226 0-2.131.01-2.385.047-3.227.035-.78.166-1.204.276-1.485a2.45 2.45 0 0 1 .598-.92 2.45 2.45 0 0 1 .92-.598c.281-.11.705-.24 1.485-.276.842-.037 1.096-.046 3.227-.046ZM8 3.892A4.108 4.108 0 1 0 8 12.108 4.108 4.108 0 0 0 8 3.892Zm0 1.455a2.653 2.653 0 1 1 0 5.306 2.653 2.653 0 0 1 0-5.306ZM12.733 3.534a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92Z" />
                             </svg>
@@ -469,6 +493,19 @@ function AllUser() {
                   <option value="Suspended">Suspended</option>
                 </select>
               </label>
+
+              <label>
+              Level:
+              <select value={selectedinfulencerLevel} onChange={handleChangeLevel}>
+                <option value="">Select a level</option>
+                {levels.map((level) => (
+                  <option key={level.id} value={level.level}>
+                    Level {level.level}
+                  </option>
+                ))}
+              </select>
+              </label>
+
               <label>
                 User Details:
                 <input
@@ -692,8 +729,6 @@ function AllUser() {
           </div>
         </div>
       )}
-
-
     </>
   );
 }

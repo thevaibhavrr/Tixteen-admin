@@ -111,7 +111,7 @@ const AddProformaInvoice = () => {
         if (!invoiceDetails.clientName) missingFields.push('Client Name');
         if (!invoiceDetails.address) missingFields.push('Address');
         if (!invoiceDetails.contact) missingFields.push('Contact');
-        if (!invoiceDetails.gst) missingFields.push('GST');
+        // if (!invoiceDetails.gst) missingFields.push('GST');
         if (!invoiceDetails.stateCode) missingFields.push('State Code');
 
         invoiceDetails.products.forEach((product, index) => {
