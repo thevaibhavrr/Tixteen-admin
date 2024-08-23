@@ -39,13 +39,16 @@ function AllUser() {
 
   const [showRejectionPopup, setShowRejectionPopup] = useState(false);
 
-
+const [countuser , setCountuser] = useState()
 
 
   const fetchUsers = async () => {
     setLoading(true);
     try {
       const response = await makeApi(`/V1/influencers?${serachQuery}=${searchQuery}&verification=${selectedVerification}&level=${selectedLevel}&gender=${filterGender}&industry=${filterIndustry}&language=${filterLanguage}&primary_platform=${filterPrimaryPlatform}&ship_country=${filterCountry}&ship_state=${filterState}&ship_city=${filterCity}&perPage=50&page=${currentPage}`, 'GET');
+      const Count = await makeApi('/V1/influencers/influencers-count', 'GET');
+      console.log(Count.data.data)
+      setCountuser(Count.data.data)
       const newUsers = response.data.data;
       const total = response.data.dataCount;
 
@@ -269,16 +272,16 @@ function AllUser() {
     return age;
   };
 
-  const filterName = [
-    { name: "All", value: "" },
-    { name: "New", value: "Social Media Verification Pending" },
-    { name: "Verified", value: "Verified" },
-    { name: "Rejected", value: "Rejected" },
+ const filterName = [
+    { name: `All\n${countuser?.countAlluser}`, value: "" },
+    { name: `New\n${countuser?.countPaninguser}`, value: "Social Media Verification Pending" },
+    { name: `Verified\n${countuser?.countVerifieduser}`, value: "Verified" },
+    { name: `Rejected\n${countuser?.countRejecteduser}`, value: "Rejected" },
     { name: "Suspended", value: "Suspended" },
-    { name: "Sleep mode", value: "Sleep mode" },
-    // {name : "Prime Content", value:"Prime Content"},
+    // { name: "Sleep mode", value: "Sleep mode" },
+    // { name: "Prime Content", value: "Prime Content" },
+];
 
-  ]
 
   const getFullLink = (platform, link) => {
     if (!link.startsWith("www.") && !link.startsWith("https://")) {
@@ -303,24 +306,17 @@ function AllUser() {
         <div className="all-user-top-bar">
           <div className="all-user-tabs">
 
-            {filterName.map((tab) => (
-              <button
-                key={tab.name}
-                className={`tab-button ${selectedVerification === tab.value ? 'active' : ''}`}
-                onClick={() => handleVerificationChange({ target: { value: tab.value } })}
-              >
-                {tab.name}
-              </button>
-            ))}
-            {/* {['All', 'New', 'Rejected', 'Verified', 'Suspended', 'Sleep mode', 'Prime Content'].map(tab => (
-            <button
-              key={tab}
-              className={`tab-button ${selectedVerification === tab ? 'active' : ''}`}
-              onClick={() => handleVerificationChange({ target: { value: tab } })}
-            >
-              {tab}
-            </button>
-          ))} */}
+          {filterName.map((tab) => (
+  <button
+    key={tab.name}
+    className={`tab-button ${selectedVerification === tab.value ? 'active' : ''}`}
+    onClick={() => handleVerificationChange({ target: { value: tab.value } })}
+  >
+    <span  dangerouslySetInnerHTML={{ __html: tab.name.replace(/\n/g, '<br />') }} />
+  </button>
+))}
+
+        
             <button
               className={`tab-button `}
               onClick={() => setApplyFilterPopup(true)}
