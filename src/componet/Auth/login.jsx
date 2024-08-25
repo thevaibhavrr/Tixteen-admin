@@ -61,7 +61,7 @@ function Login() {
 
   return (
     <>
-    <ToastContainer position="top-center" autoClose={3000}  newestOnTop  closeOnClick rtl={false}  draggable pauseOnHover theme="dark" />
+    <ToastContainer position="top-center" autoClose={1000}  newestOnTop  closeOnClick rtl={false}  draggable pauseOnHover theme="dark" />
     <div className="login_container">
       <div className="login_formContainer">
         <img src={logo} alt="Logo" className="login_logo" />

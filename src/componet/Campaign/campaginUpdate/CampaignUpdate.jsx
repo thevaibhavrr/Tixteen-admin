@@ -1,46 +1,79 @@
-import React, { useState } from 'react';
+
+import React, { useEffect, useState } from 'react';
 import '../../../style/campaign/campaignUpdate.css';
 import BackIcon from '../../../utils/BackIcon';
-
+import { useParams, useNavigate } from 'react-router-dom';
+import { makeApi } from '../../../api/callApi.tsx';
+import PrimaryLoader from '../../../utils/PrimaryLoader.jsx';
 
 function CampaignUpdate() {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const [campaign, setCampaign] = useState({
-    id: '3',
-    company: 'Company A',
-    campaignName: 'New Product Launch',
-    campaignBanner: 'https://via.placeholder.com/1200x400',
-    campaignType: 'Paid',
-    brandProduct: 'Super Gadget',
-    targetIndustry: 'Technology',
-    campaignLanguage: 'English',
-    influencerAgeFrom: '18',
-    influencerAgeTo: '35',
-    influencerGender: 'All',
-    describeProduct: 'This is a revolutionary new gadget that simplifies your life.',
-    requiredDeliverables: ['Post', 'Story', 'Reel'],
-    requiredFollowers: {
-      Facebook: 5000,
-      Instagram: 10000,
-      Twitter: 3000,
-      LinkedIn: 2000,
-      Youtube: 8000,
-    },
-    hashtags: '#SuperGadget #TechRevolution',
-    productImage: 'https://via.placeholder.com/400',
-    platformPreference: 'Instagram',
-    platformLink: 'https://instagram.com/supergadget',
-    profilesToTag: '@techinfluencer, @gadgetlover',
-    do: 'Showcase the unique features of the product',
-    dont: 'Do not make false claims',
-    productPrice: '₹299',
-    deadline: '2024-12-31',
-    screenshotsRequired: 'Yes',
-    location: {
-      country: 'Country A',
-      state: 'State A',
-      city: 'City A',
-    },
+    id: '',
+    campaign_name: '',
+    campaign_type: '',
+    product: '',
+    industry: '',
+    language: '',
+    age: '',
+    till_age: '',
+    gender: '',
+    remark: '',
+    platforms: '',
+    platform_link: '',
+    profile_tag: '',
+    to_do: '',
+    not_todo: '',
+    product_price: '',
+    dead_line: '',
+    is_screen_shots_required: '',
+    country: '',
+    state: '',
+    city: ''
   });
+
+  const fetchCampaignDetails = async () => {
+    try {
+      setLoading(true);
+      const response = await makeApi(`/v1/campaign/details/${id}`, 'GET');
+      const campaignData = response.data.data;
+
+      setCampaign({
+        id: campaignData.id || '',
+        campaign_name: campaignData.campaign_name || '',
+        campaign_type: campaignData.campaign_type || '',
+        product: campaignData.product || '',
+        industry: campaignData.industry || '',
+        language: campaignData.language || '',
+        age: campaignData.age || '',
+        till_age: campaignData.till_age || '',
+        gender: campaignData.gender || '',
+        remark: campaignData.remark || '',
+        platforms: campaignData.platforms || '',
+        platform_link: campaignData.platform_link || '',
+        profile_tag: campaignData.profile_tag || '',
+        to_do: campaignData.to_do || '',
+        not_todo: campaignData.not_todo || '',
+        product_price: campaignData.product_price || '',
+        dead_line: campaignData.dead_line ? campaignData.dead_line.substring(0, 10) : '',
+        is_screen_shots_required: campaignData.is_screen_shots_required || 'No',
+        country: campaignData.country || '',
+        state: campaignData.state || '',
+        city: campaignData.city || ''
+      });
+
+    } catch (error) {
+      console.error('Error fetching campaign details:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchCampaignDetails();
+  }, [id]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -61,15 +94,27 @@ function CampaignUpdate() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Updated Campaign:', campaign);
-    // Implement the logic to update the campaign details
+    try {
+      const response = await makeApi(`/v1/campaign/update/${id}`, 'PUT', campaign);
+      if (response.success) {
+        console.log('Campaign updated successfully:', response.data);
+        navigate(`/campaign/campaign-details/${id}`);
+      } else {
+        console.error('Failed to update campaign:', response.message);
+      }
+    } catch (error) {
+      console.error('Error updating campaign:', error);
+    }
   };
 
   return (
+    <>
+      {loading && <div style={{ height: "100%", width: "100%", top: "0", display: "flex", justifyContent: "center", alignItems: "center", zIndex: "9999", position: "fixed", backgroundColor: "rgba(0,0,0,0.3)" }}> <PrimaryLoader /> </div>}
+    
     <div className=''>
-      <BackIcon path={`campaign/campaign-details/${campaign.id}`} />
+      <BackIcon path={`campaign/campaign-details/${id}`} />
       <div className="campaign-update">
         <h1 className="update-title">Update Campaign Details</h1>
         <form onSubmit={handleSubmit} className="campaign-form">
@@ -77,18 +122,8 @@ function CampaignUpdate() {
             Campaign Name:
             <input
               type="text"
-              name="campaignName"
-              value={campaign.campaignName}
-              onChange={handleChange}
-              className="form-input"
-            />
-          </label>
-          <label>
-            Company:
-            <input
-              type="text"
-              name="company"
-              value={campaign.company}
+              name="campaign_name"
+              value={campaign.campaign_name}
               onChange={handleChange}
               className="form-input"
             />
@@ -97,97 +132,87 @@ function CampaignUpdate() {
             Campaign Type:
             <input
               type="text"
-              name="campaignType"
-              value={campaign.campaignType}
+              name="campaign_type"
+              value={campaign.campaign_type}
               onChange={handleChange}
               className="form-input"
             />
           </label>
           <label>
-            Brand Product:
+            Product:
             <input
               type="text"
-              name="brandProduct"
-              value={campaign.brandProduct}
+              name="product"
+              value={campaign.product}
               onChange={handleChange}
               className="form-input"
             />
           </label>
           <label>
-            Target Industry:
+            Industry:
             <input
               type="text"
-              name="targetIndustry"
-              value={campaign.targetIndustry}
+              name="industry"
+              value={campaign.industry}
               onChange={handleChange}
               className="form-input"
             />
           </label>
           <label>
-            Campaign Language:
+            Language:
             <input
               type="text"
-              name="campaignLanguage"
-              value={campaign.campaignLanguage}
+              name="language"
+              value={campaign.language}
               onChange={handleChange}
               className="form-input"
             />
           </label>
           <label>
-            Influencer Age From:
+            Age From:
             <input
               type="number"
-              name="influencerAgeFrom"
-              value={campaign.influencerAgeFrom}
+              name="age"
+              value={campaign.age}
               onChange={handleChange}
               className="form-input"
             />
           </label>
           <label>
-            Influencer Age To:
+            Age To:
             <input
               type="number"
-              name="influencerAgeTo"
-              value={campaign.influencerAgeTo}
+              name="till_age"
+              value={campaign.till_age}
               onChange={handleChange}
               className="form-input"
             />
           </label>
           <label>
-            Influencer Gender:
+            Gender:
             <input
               type="text"
-              name="influencerGender"
-              value={campaign.influencerGender}
+              name="gender"
+              value={campaign.gender}
               onChange={handleChange}
               className="form-input"
             />
           </label>
           <label>
-            Describe Product:
+            Remark:
             <textarea
-              name="describeProduct"
-              value={campaign.describeProduct}
+              name="remark"
+              value={campaign.remark}
               onChange={handleChange}
               className="form-input"
             />
           </label>
           <label>
-            Hashtags:
+            Platforms:
             <input
               type="text"
-              name="hashtags"
-              value={campaign.hashtags}
-              onChange={handleChange}
-              className="form-input"
-            />
-          </label>
-          <label>
-            Platform Preference:
-            <input
-              type="text"
-              name="platformPreference"
-              value={campaign.platformPreference}
+              name="platforms"
+              value={campaign.platforms}
               onChange={handleChange}
               className="form-input"
             />
@@ -196,38 +221,38 @@ function CampaignUpdate() {
             Platform Link:
             <input
               type="text"
-              name="platformLink"
-              value={campaign.platformLink}
+              name="platform_link"
+              value={campaign.platform_link}
               onChange={handleChange}
               className="form-input"
             />
           </label>
           <label>
-            Profiles to Tag:
+            Profile Tag:
             <input
               type="text"
-              name="profilesToTag"
-              value={campaign.profilesToTag}
+              name="profile_tag"
+              value={campaign.profile_tag}
               onChange={handleChange}
               className="form-input"
             />
           </label>
           <label>
-            Do:
+            To Do:
             <input
               type="text"
-              name="do"
-              value={campaign.do}
+              name="to_do"
+              value={campaign.to_do}
               onChange={handleChange}
               className="form-input"
             />
           </label>
           <label>
-            Don't:
+            Not To Do:
             <input
               type="text"
-              name="dont"
-              value={campaign.dont}
+              name="not_todo"
+              value={campaign.not_todo}
               onChange={handleChange}
               className="form-input"
             />
@@ -236,8 +261,8 @@ function CampaignUpdate() {
             Product Price:
             <input
               type="text"
-              name="productPrice"
-              value={campaign.productPrice}
+              name="product_price"
+              value={campaign.product_price}
               onChange={handleChange}
               className="form-input"
             />
@@ -246,8 +271,8 @@ function CampaignUpdate() {
             Deadline:
             <input
               type="date"
-              name="deadline"
-              value={campaign.deadline}
+              name="dead_line"
+              value={campaign.dead_line}
               onChange={handleChange}
               className="form-input"
             />
@@ -255,8 +280,8 @@ function CampaignUpdate() {
           <label>
             Screenshots Required:
             <select
-              name="screenshotsRequired"
-              value={campaign.screenshotsRequired}
+              name="is_screen_shots_required"
+              value={campaign.is_screen_shots_required}
               onChange={handleChange}
               className="form-input"
             >
@@ -269,7 +294,7 @@ function CampaignUpdate() {
             <input
               type="text"
               name="country"
-              value={campaign.location.country}
+              value={campaign.country}
               onChange={(e) => handleNestedChange(e, 'location')}
               className="form-input"
             />
@@ -279,7 +304,7 @@ function CampaignUpdate() {
             <input
               type="text"
               name="state"
-              value={campaign.location.state}
+              value={campaign.state}
               onChange={(e) => handleNestedChange(e, 'location')}
               className="form-input"
             />
@@ -289,7 +314,7 @@ function CampaignUpdate() {
             <input
               type="text"
               name="city"
-              value={campaign.location.city}
+              value={campaign.city}
               onChange={(e) => handleNestedChange(e, 'location')}
               className="form-input"
             />
@@ -298,6 +323,7 @@ function CampaignUpdate() {
         </form>
       </div>
     </div>
+    </>
 
   );
 }
