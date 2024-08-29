@@ -31,7 +31,8 @@ function CampaignUpdate() {
     is_screen_shots_required: '',
     country: '',
     state: '',
-    city: ''
+    city: '',
+    approval: '',
   });
 
   const fetchCampaignDetails = async () => {
@@ -61,7 +62,8 @@ function CampaignUpdate() {
         is_screen_shots_required: campaignData.is_screen_shots_required || 'No',
         country: campaignData.country || '',
         state: campaignData.state || '',
-        city: campaignData.city || ''
+        city: campaignData.city || '',
+        approval : campaignData.approval 
       });
 
     } catch (error) {
@@ -77,6 +79,7 @@ function CampaignUpdate() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    console.log(name, value);
     setCampaign((prevCampaign) => ({
       ...prevCampaign,
       [name]: value,
@@ -128,6 +131,19 @@ function CampaignUpdate() {
               className="form-input"
             />
           </label>
+          <label>
+              Approval:
+              <select
+                name="approval"
+                value={campaign.approval}
+                onChange={handleChange}
+                className="form-input"
+              >
+                <option value="0">Inactive</option>
+                <option value="1">Active</option>
+              </select>
+            </label>
+
           <label>
             Campaign Type:
             <input

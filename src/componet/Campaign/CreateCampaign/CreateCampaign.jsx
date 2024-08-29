@@ -274,6 +274,13 @@ function CreateCampaign() {
                 ))}
               </select>
             </div>
+            <div className='form_group'>
+              <label htmlFor="approval" className='form_label'>Approval</label>
+              <select id="approval" name="approval" className='form_select' onChange={handleChange}>
+                <option value="0"> Deactive  </option>
+                <option value="1"> Active </option>
+              </select>
+            </div>
 
             {/* Campaign Banner */}
             <div className='form_group'>
@@ -363,6 +370,7 @@ function CreateCampaign() {
                 <option value="Female">Female</option>
               </select>
             </div>
+           
             {/* Remarks */}
             <div className='form_group'>
               <label htmlFor="remark" className='form_label'>Remarks:</label>

@@ -15,7 +15,7 @@ const initialInvoiceDetails = {
     products: [
         {
             productName: '',
-            hsn: '',
+            hsn: '998314',
             qty: '',
             rate: '',
             taxableAmount: '',
@@ -37,6 +37,7 @@ const AddProformaInvoice = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [filteredClients, setFilteredClients] = useState([]);
     const [selectedClientId, setSelectedClientId] = useState('');
+    const [GSTCode,  setGSTCode] = useState('');
 
     useEffect(() => {
         const fetchClients = async () => {
@@ -66,20 +67,60 @@ const AddProformaInvoice = () => {
     }, [searchTerm, clients]);
 
     const handleInputChange = (field, value) => {
-        setInvoiceDetails({
-            ...invoiceDetails,
-            [field]: value
-        });
+        if (field === 'gst') {
+            // Extract the state code from the first 2 digits of the GST number
+            const stateCode = value.substring(0, 2);
+            setGSTCode(stateCode);
+            setInvoiceDetails({
+                ...invoiceDetails,
+                gst: value,
+                stateCode: stateCode
+            });
+            if (field === 'stateCode') {
+                const newProducts = invoiceDetails.products.map(product => 
+                    calculateTax(product, value)
+                );
+                setInvoiceDetails({
+                    ...invoiceDetails,
+                    products: newProducts
+                });
+            }
+        } else {
+            setInvoiceDetails({
+                ...invoiceDetails,
+                [field]: value
+            });
+        }
     };
+    
+    // const handleInputChange = (field, value) => {
+    //     setInvoiceDetails({
+    //         ...invoiceDetails,
+    //         [field]: value
+    //     });
+    // };
 
+    // const handleProductChange = (index, field, value) => {
+    //     const newProducts = [...invoiceDetails.products];
+    //     newProducts[index][field] = value;
+    //     setInvoiceDetails({
+    //         ...invoiceDetails,
+    //         products: newProducts
+    //     });
+    // };
     const handleProductChange = (index, field, value) => {
         const newProducts = [...invoiceDetails.products];
         newProducts[index][field] = value;
+    
+        const updatedProduct = calculateTax(newProducts[index], invoiceDetails.stateCode);
+        newProducts[index] = { ...newProducts[index], ...updatedProduct };
+    
         setInvoiceDetails({
             ...invoiceDetails,
             products: newProducts
         });
     };
+    
 
     const addMoreProducts = () => {
         setInvoiceDetails({
@@ -102,7 +143,40 @@ const AddProformaInvoice = () => {
             ]
         });
     };
-
+    const calculateTax = (product, stateCode) => {
+        const amount = parseFloat(product.qty || 0);
+        const price = parseFloat(product.rate || 0);
+        const taxable = (amount * price).toFixed(2);
+        let cgstAmount = '0.00';
+        let sgstAmount = '0.00';
+        let igstAmount = '0.00';
+        let cgstRate = '0.00';
+        let sgstRate = '0.00';
+        let igstRate = '0.00';
+    
+        if (GSTCode === "03") {
+            console.log("GSTCode", GSTCode);
+            const gstAmount = ((taxable * 18) / 100).toFixed(2);
+            cgstAmount = (gstAmount / 2).toFixed(2);
+            sgstAmount = (gstAmount / 2).toFixed(2);
+            cgstRate = '9.00';
+            sgstRate = '9.00';
+        } else {
+            igstAmount = ((taxable * 18) / 100).toFixed(2);
+            igstRate = '18.00';
+        }
+    
+        return {
+            taxableAmount: taxable,
+            cgstRate,
+            cgstAmount,
+            sgstRate,
+            sgstAmount,
+            igstRate,
+            igstAmount
+        };
+    };
+    
     const handleSave = async () => {
         const missingFields = [];
 
@@ -194,6 +268,8 @@ const AddProformaInvoice = () => {
             stateCode: client.state,
             products: initialInvoiceDetails.products
         });
+        const stateCode = client.gst_no.substring(0, 2);
+            setGSTCode(stateCode);
         setSelectedClientId(client.client_id);
         setSearchTerm('');
         setFilteredClients(clients);
@@ -312,7 +388,8 @@ const AddProformaInvoice = () => {
                             <label>State Code:</label>
                             <input
                                 type="text"
-                                value={invoiceDetails.stateCode}
+                                // value={invoiceDetails.stateCode}
+                                value={GSTCode}
                                 onChange={(e) => handleInputChange('stateCode', e.target.value)}
                             />
                         </div>
@@ -347,7 +424,7 @@ const AddProformaInvoice = () => {
                                                 type="text"
                                                 // value={product.hsn}
                                                 value={998314}
-                                                onChange={(e) => handleProductChange(index, 'hsn', e.target.value)}
+                                                onChange={(e) => handleProductChange(index, 'hsn', "998314")}
                                             />
                                         </td>
                                         <td>
