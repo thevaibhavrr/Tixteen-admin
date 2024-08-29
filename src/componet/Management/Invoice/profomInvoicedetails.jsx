@@ -293,7 +293,7 @@ useEffect(() => {
                                 </div>
                                 <div className="table_data_invoice">
                                     <div>ACCOUNT NAME:</div>
-                                    <div>TXTTEEN PRIVATE LIMITED</div>
+                                    <div>TIXTEEN PRIVATE LIMITED</div>
                                 </div>
                                 <div className="table_data_invoice">
                                     <div>ACCOUNT NUMBER:</div>
