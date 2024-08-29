@@ -403,10 +403,10 @@ function CreateCampaign() {
               <textarea id="not_todo" name="not_todo" className='form_textarea' onChange={handleChange} />
             </div>
             {/* Availability */}
-            <div className='form_group'>
+            {/* <div className='form_group'>
               <label htmlFor="availability" className='form_label'>Availability:</label>
               <textarea id="availability" name="availability" className='form_textarea' onChange={handleChange} />
-            </div>
+            </div> */}
             {/* Country */}
             <div className='form_group'>
               <label htmlFor="country" className='form_label'>Country:</label>
