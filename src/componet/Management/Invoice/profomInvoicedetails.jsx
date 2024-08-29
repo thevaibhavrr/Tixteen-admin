@@ -184,7 +184,7 @@ useEffect(() => {
                                 </div>
                                 <div className="table_data_invoice">
                                     <div>GSTIN</div>
-                                    <div>03AAJACT2066K1Z9</div>
+                                    <div>03AAJCT2066K1Z9</div>
                                 </div>
                                 <div className="table_data_invoice">
                                     <div>State</div>
