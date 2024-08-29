@@ -52,7 +52,10 @@
     background-color: var(--white-color);
     position: relative;
   }
-  
+  .past-deadline {
+    background-color: #f8d7da; /* Light red background color */
+}
+
   .new_user_on_campaign_badge {
     position: absolute;
     top: 0px;

@@ -122,13 +122,21 @@
     border-radius: 5px;
     cursor: pointer;
   }
-  
+  .applied-users-list{
+    /* display: flex; */
+    /* flex-wrap: wrap; */
+    /* justify-content: space-around; */
+    /* gap: 20px; */
+    width: 100%;
+  }
   .view-applied-users-button svg {
     margin-left: 10px;
   }
 
   .applied-users-list-unique {
     margin-top: 20px;
+    width: 100%;
+
   }
   
   .applied-user-card-unique {
@@ -139,6 +147,9 @@
     border: 1px solid var(--light-gray-color);
     border-radius: 5px;
     background-color: var(--white-color);
+    /* max-width: 100%; */
+    /* min-width: 500px; */
+    width: 100%;
   }
   
   .applied-user-content-unique {

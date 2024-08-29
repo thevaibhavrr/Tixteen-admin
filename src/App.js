@@ -12,6 +12,7 @@ import MonthlyAttendance from './componet/staff/MonthlyAttendance';
 import Profile from './pages/Profile';
 import PaymentSchedule from './componet/Payment/PaymentSchedule';
 import Payment from './pages/Payment';
+import Advance from './pages/advance';
 
 const App = () => {
   const location = useLocation();
@@ -45,6 +46,7 @@ const App = () => {
         <Route path='/z/:id' element={<EditInvoiceDetails />} />
         <Route path='/login' element={<Login />} />
         <Route path='/payment/*' element={<Payment />} />
+        <Route path='/advance/*' element={<Advance />} />
       </Routes>
     </div>
   );
