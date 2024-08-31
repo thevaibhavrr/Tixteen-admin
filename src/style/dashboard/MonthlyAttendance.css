@@ -71,3 +71,35 @@
     padding: 8px;
     border-bottom: 1px solid #dee2e6;
 }
+
+
+
+/* Add this to MonthlyAttendance.css */
+.attendance-legend {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.attendance-legend-item {
+    display: flex;
+    align-items: center;
+    margin: 0 15px;
+}
+
+.attendance-legend-color {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    margin-right: 8px;
+}
+
+.attendance-legend-text {
+    font-size: 1em;
+}
+
+
+
+
+
+
