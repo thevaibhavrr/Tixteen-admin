@@ -283,10 +283,17 @@ const AddProformaInvoice = () => {
         setSearchTerm('');
         setFilteredClients(clients);
     };
-
+    const removeProduct = (index) => {
+        const newProducts = invoiceDetails.products.filter((_, i) => i !== index);
+        setInvoiceDetails({
+            ...invoiceDetails,
+            products: newProducts
+        });
+    };
+    
     return (
         <>
-            <ToastContainer position="top-center" autoClose={3000} /> {/* Add ToastContainer to render toasts */}
+            <ToastContainer position="top-center" autoClose={3000} /> 
             {loading ? (
                 <div style={{ height: "100%", width: "100%", top: "0", display: "flex", justifyContent: "center", alignItems: "center", zIndex: "9999", position: "fixed", backgroundColor: "rgba(0,0,0,0.3)" }}>
                     <PrimaryLoader />
@@ -416,92 +423,109 @@ const AddProformaInvoice = () => {
                                     <th>SGST Amount</th>
                                     <th>IGST Rate</th>
                                     <th>IGST Amount</th>
+                                    <th>Total</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {invoiceDetails.products.map((product, index) => (
-                                    <tr key={index}>
-                                        <td>
-                                            <input
-                                                type="text"
-                                                value={product.productName}
-                                                onChange={(e) => handleProductChange(index, 'productName', e.target.value)}
-                                            />
-                                        </td>
-                                        <td>
-                                            <input
-                                                type="text"
-                                                // value={product.hsn}
-                                                value={998314}
-                                                onChange={(e) => handleProductChange(index, 'hsn', "998314")}
-                                            />
-                                        </td>
-                                        <td>
-                                            <input
-                                                type="text"
-                                                value={product.qty}
-                                                onChange={(e) => handleProductChange(index, 'qty', e.target.value)}
-                                            />
-                                        </td>
-                                        <td>
-                                            <input
-                                                type="text"
-                                                value={product.rate}
-                                                onChange={(e) => handleProductChange(index, 'rate', e.target.value)}
-                                            />
-                                        </td>
-                                        <td>
-                                            <input
-                                                type="text"
-                                                value={product.taxableAmount}
-                                                onChange={(e) => handleProductChange(index, 'taxableAmount', e.target.value)}
-                                            />
-                                        </td>
-                                        <td>
-                                            <input
-                                                type="text"
-                                                value={product.cgstRate}
-                                                onChange={(e) => handleProductChange(index, 'cgstRate', e.target.value)}
-                                            />
-                                        </td>
-                                        <td>
-                                            <input
-                                                type="text"
-                                                value={product.cgstAmount}
-                                                onChange={(e) => handleProductChange(index, 'cgstAmount', e.target.value)}
-                                            />
-                                        </td>
-                                        <td>
-                                            <input
-                                                type="text"
-                                                value={product.sgstRate}
-                                                onChange={(e) => handleProductChange(index, 'sgstRate', e.target.value)}
-                                            />
-                                        </td>
-                                        <td>
-                                            <input
-                                                type="text"
-                                                value={product.sgstAmount}
-                                                onChange={(e) => handleProductChange(index, 'sgstAmount', e.target.value)}
-                                            />
-                                        </td>
-                                        <td>
-                                            <input
-                                                type="text"
-                                                value={product.igstRate}
-                                                onChange={(e) => handleProductChange(index, 'igstRate', e.target.value)}
-                                            />
-                                        </td>
-                                        <td>
-                                            <input
-                                                type="text"
-                                                value={product.igstAmount}
-                                                onChange={(e) => handleProductChange(index, 'igstAmount', e.target.value)}
-                                            />
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
+    {invoiceDetails.products.map((product, index) => {
+        // Calculate the total for the product
+        const total = (
+            parseFloat(product.taxableAmount || 0) +
+            parseFloat(product.cgstAmount || 0) +
+            parseFloat(product.sgstAmount || 0) +
+            parseFloat(product.igstAmount || 0)
+        ).toFixed(2);
+
+        return (
+            <tr key={index}>
+                <td>
+                    <input
+                        type="text"
+                        value={product.productName}
+                        onChange={(e) => handleProductChange(index, 'productName', e.target.value)}
+                    />
+                </td>
+                <td>
+                    <input
+                        type="text"
+                        value={998314} // Static value for HSN
+                        onChange={(e) => handleProductChange(index, 'hsn', "998314")}
+                    />
+                </td>
+                <td>
+                    <input
+                        type="text"
+                        value={product.qty}
+                        onChange={(e) => handleProductChange(index, 'qty', e.target.value)}
+                    />
+                </td>
+                <td>
+                    <input
+                        type="text"
+                        value={product.rate}
+                        onChange={(e) => handleProductChange(index, 'rate', e.target.value)}
+                    />
+                </td>
+                <td>
+                    <input
+                        type="text"
+                        value={product.taxableAmount}
+                        onChange={(e) => handleProductChange(index, 'taxableAmount', e.target.value)}
+                    />
+                </td>
+                <td>
+                    <input
+                        type="text"
+                        value={product.cgstRate}
+                        onChange={(e) => handleProductChange(index, 'cgstRate', e.target.value)}
+                    />
+                </td>
+                <td>
+                    <input
+                        type="text"
+                        value={product.cgstAmount}
+                        onChange={(e) => handleProductChange(index, 'cgstAmount', e.target.value)}
+                    />
+                </td>
+                <td>
+                    <input
+                        type="text"
+                        value={product.sgstRate}
+                        onChange={(e) => handleProductChange(index, 'sgstRate', e.target.value)}
+                    />
+                </td>
+                <td>
+                    <input
+                        type="text"
+                        value={product.sgstAmount}
+                        onChange={(e) => handleProductChange(index, 'sgstAmount', e.target.value)}
+                    />
+                </td>
+                <td>
+                    <input
+                        type="text"
+                        value={product.igstRate}
+                        onChange={(e) => handleProductChange(index, 'igstRate', e.target.value)}
+                    />
+                </td>
+                <td>
+                    <input
+                        type="text"
+                        value={product.igstAmount}
+                        onChange={(e) => handleProductChange(index, 'igstAmount', e.target.value)}
+                    />
+                </td>
+                <td className="" >
+                    {total}
+                </td>
+                <td>
+                    <button className="btn btn-danger" onClick={() => removeProduct(index)}>Remove</button> 
+                </td>
+            </tr>
+        );
+    })}
+</tbody>
+
                         </table>
                         <button className="add-product-button" onClick={addMoreProducts}>Add More</button>
                         <button className="save-button" onClick={handleSave}>Save</button>

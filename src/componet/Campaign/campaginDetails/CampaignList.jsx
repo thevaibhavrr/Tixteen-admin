@@ -182,10 +182,10 @@ const CampaignList = () => {
                             onChange={(e) => setSearchTerm(e.target.value)}
                         />
                         <div className="campaign-list-filters">
-                            <button onClick={() => setFilter('All')} className={filter === 'All' ? 'active' : ''}>All</button>
                             <button onClick={() => setFilter('Running')} className={filter === 'Running' ? 'active' : ''}>Running</button>
                             <button onClick={() => setFilter('Completed')} className={filter === 'Completed' ? 'active' : ''}>Completed</button>
                             <button onClick={() => setFilter('New')} className={filter === 'New' ? 'active' : ''}>New-user</button>
+                            <button onClick={() => setFilter('All')} className={filter === 'All' ? 'active' : ''}>All</button>
                         </div>
                     </div>
                     <div className="campaign-list-content">

@@ -109,7 +109,9 @@ const App = () => {
       setIsLoading(true);
       try {
         const response = await makeApi("/v1/admin/api/filtered-campaign-summary", "GET");
-        setCampaigns(response.data.data);
+        const campaigns = response.data.data;
+        const reversedCampaigns = [...campaigns].reverse();
+        setCampaigns(reversedCampaigns);
       } catch (error) {
         console.error('Error fetching campaigns:', error);
       } finally {
@@ -122,11 +124,11 @@ const App = () => {
   const fetchUsers = async (filters) => {
     setIsLoading(true);
     try {
-
       const response = await makeApi(`/V1/influencers?MultiLevels=${filterLevel}&industry=${filterIndustry}&language=${filterLanguage}&gender=${filterGender}&perPage=50000000&page=${currentPage}`, 'GET');
-      console.log(response.data.data);
-      setUserList(response.data.data);
-      setFilteredUserList(response.data.data);
+      const users = response.data.data;
+      const reversedUsers = [...users].reverse(); 
+      setUserList(reversedUsers);
+      setFilteredUserList(reversedUsers);
     } catch (error) {
       console.error('Error fetching users:', error);
     } finally {
