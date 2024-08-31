@@ -16,7 +16,7 @@
 //         gst: '',
 //         stateCode: '',
 //         invoice_status: '',
-        
+
 //     });
 //     const [products, setProducts] = useState([]);
 //     const [alert, setAlert] = useState('');
@@ -328,6 +328,9 @@ import BackIcon from "../../../utils/BackIcon";
 import { useParams } from 'react-router-dom';
 import { makeApi } from "../../../api/callApi.tsx";
 import PrimaryLoader from '../../../utils/PrimaryLoader.jsx';
+import { format } from 'date-fns';
+import { ToastContainer, toast } from "react-toastify";
+
 
 const EditInvoiceDetails = () => {
     const { id } = useParams();
@@ -338,11 +341,17 @@ const EditInvoiceDetails = () => {
         gst: '',
         stateCode: '',
         invoice_status: '',
-        status : ''
+        status: '',
+        tax_invoice_no: '',
+        bill_date: "",
+        invoice_no: "",
+
     });
     const [products, setProducts] = useState([]);
     const [alert, setAlert] = useState('');
     const [loading, setLoading] = useState(false);
+    const [GSTCode, setGSTCode] = useState('');
+
 
     useEffect(() => {
         const fetchInvoiceData = async () => {
@@ -373,7 +382,12 @@ const EditInvoiceDetails = () => {
                     gst: bill.gst,
                     stateCode: bill.state_code,
                     invoice_status: bill.invoice_status,
-                    status : bill.status
+                    status: bill.status,
+                    tax_invoice_no: bill.tax_invoice_no,
+                    invoice_status: bill.invoice_status,
+                    invoice_no: bill.invoice_no,
+                    // bill_date: bill.bill_date
+                    bill_date: format(new Date(bill.bill_date), 'yyyy-MM-dd')
                 });
                 setProducts(products.length ? products : [{
                     productName: '',
@@ -398,16 +412,118 @@ const EditInvoiceDetails = () => {
         fetchInvoiceData();
     }, [id]);
 
-    useEffect(() => {
-        console.log('Updated Products:', products);
-    }, [products]);
+    const calculateTax = (product, stateCode) => {
+        const amount = parseFloat(product.qty || 0);
+        const price = parseFloat(product.rate || 0);
+        const taxable = (amount * price).toFixed(2);
+        let cgstAmount = '0.00';
+        let sgstAmount = '0.00';
+        let igstAmount = '0.00';
+        let cgstRate = '0.00';
+        let sgstRate = '0.00';
+        let igstRate = '0.00';
 
-    const handleInputChange = (field, value) => {
-        setInvoiceDetails({
-            ...invoiceDetails,
-            [field]: value
-        });
+        if (GSTCode === "03") {
+            console.log("GSTCode", GSTCode);
+            const gstAmount = ((taxable * 18) / 100).toFixed(2);
+            cgstAmount = (gstAmount / 2).toFixed(2);
+            sgstAmount = (gstAmount / 2).toFixed(2);
+            cgstRate = '9.00';
+            sgstRate = '9.00';
+        } else {
+            igstAmount = ((taxable * 18) / 100).toFixed(2);
+            igstRate = '18.00';
+        }
+
+        return {
+            taxableAmount: taxable,
+            cgstRate,
+            cgstAmount,
+            sgstRate,
+            sgstAmount,
+            igstRate,
+            igstAmount
+        };
     };
+
+
+
+    // const handleInputChange = (field, value) => {
+    //     setInvoiceDetails({
+    //         ...invoiceDetails,
+    //         [field]: value
+    //     });
+    // };
+    // const handleInputChange = (field, value) => {
+    //     if (field === 'gst') {
+    //         // Extract the state code from the first 2 digits of the GST number
+    //         const stateCode = value.substring(0, 2);
+    //         setGSTCode(stateCode);
+    //         setInvoiceDetails({
+    //             ...invoiceDetails,
+    //             gst: value,
+    //             stateCode: stateCode
+    //         });
+
+    //         // Recalculate tax for all products
+    //         const updatedProducts = products.map(product => 
+    //             calculateTax(product, stateCode)
+    //         );
+    //         setProducts(updatedProducts);
+
+    //     } else if (field === 'stateCode') {
+    //         setInvoiceDetails({
+    //             ...invoiceDetails,
+    //             stateCode: value
+    //         });
+
+    //         // Recalculate tax for all products
+    //         const updatedProducts = products.map(product => 
+    //             calculateTax(product, value)
+    //         );
+    //         setProducts(updatedProducts);
+
+    //     } else {
+    //         setInvoiceDetails({
+    //             ...invoiceDetails,
+    //             [field]: value
+    //         });
+    //     }
+    // };
+    const handleInputChange = (field, value) => {
+        console.log("field", field, "value", value);
+        if (field === 'bill_date') {
+            // Convert 'YYYY-MM-DD' to ISO 8601 format
+            const date = new Date(value);
+            var updatedValue = date.toISOString();
+            console.log("updatedValue", updatedValue);
+
+            setInvoiceDetails({
+                ...invoiceDetails,
+                bill_date: updatedValue
+            });
+        }
+        if (field === 'gst') {
+            const stateCode = value.substring(0, 2);
+            setGSTCode(stateCode);
+            setInvoiceDetails({
+                ...invoiceDetails,
+                gst: value,
+                stateCode: stateCode
+            });
+        } else if (field === 'stateCode') {
+            setInvoiceDetails({
+                ...invoiceDetails,
+                stateCode: value
+            });
+        } else {
+            setInvoiceDetails({
+                ...invoiceDetails,
+                [field]: value
+            });
+        }
+    };
+
 
     const handleProductChange = (index, field, value) => {
         const newProducts = [...products];
@@ -444,9 +560,12 @@ const EditInvoiceDetails = () => {
                 gst: invoiceDetails.gst,
                 contact_no: invoiceDetails.contact,
                 state_code: invoiceDetails.stateCode,
-                bill_date: new Date(),
-                status: invoiceDetails.status, 
+                // bill_date: new Date(),
+                status: invoiceDetails.status,
                 invoice_status: invoiceDetails.invoice_status,
+                tax_invoice_no: invoiceDetails.tax_invoice_no,
+                bill_date: invoiceDetails.bill_date,
+                invoice_no: invoiceDetails.invoice_no
             };
 
             const invoiceResponse = await makeApi(`/v1/admin/api/update-my-bill/${id}`, "PUT", updatedInvoice);
@@ -469,7 +588,7 @@ const EditInvoiceDetails = () => {
             }));
 
             await makeApi(`/v1/admin/api/update-bill-items`, "PUT", billItemsData);
-
+            toast.success("campaign update successfully");
             setAlert('Invoice saved successfully!');
         } catch (error) {
             console.error('Error saving invoice:', error);
@@ -478,6 +597,31 @@ const EditInvoiceDetails = () => {
             setLoading(false);
         }
     };
+    // useEffect(() => {
+    //     if (invoiceDetails.stateCode) {
+    //         const newProducts = products.map(product => ({
+    //             ...product,
+    //             ...calculateTax(product, invoiceDetails.stateCode)
+    //         }));
+    //         setProducts(newProducts);
+    //     }
+    // }, [invoiceDetails.stateCode, products]);
+
+    const deleteProduct = async (productId) => {
+        try {
+            console.log(productId);
+            const response = await makeApi(`/v1/admin/api/delete-bill-items/${productId}`, "DELETE");
+            setProducts(prevProducts => prevProducts.filter(product => product.id !== productId));
+        } catch (error) {
+            console.error("Error deleting product:", error);
+        }
+    };
+    const handleDeleteProduct = (productId) => {
+        if (window.confirm("Are you sure you want to delete this product?")) {
+            deleteProduct(productId);
+        }
+    };
+
 
     return (
         <>
@@ -491,13 +635,27 @@ const EditInvoiceDetails = () => {
                 </div>
             ) : (
                 <>
+                    <ToastContainer position="top-center" autoClose={1700} />
+
                     <div style={{ position: "relative" }}>
                         <BackIcon path={"management/invoices-management"} />
                     </div>
                     <div className="add-proforma-invoice" style={{ padding: "0px 70px" }}>
                         <h2>Edit Proforma Invoice</h2>
                         {alert && <div className="alert">{alert}</div>}
+                        {/* invoice_no */}
+                        <div className="form-group" >
+
+                            <label>Invoice No:</label>
+                            <input
+                                type="text"
+                                value={invoiceDetails.invoice_no}
+                                onChange={(e) => handleInputChange('invoice_no', e.target.value)}
+                                disabled
+                            />
+                        </div>
                         <div className="form-group">
+
                             <label>Client Name:</label>
                             <input
                                 type="text"
@@ -506,6 +664,8 @@ const EditInvoiceDetails = () => {
                             />
                         </div>
                         <div className="form-group">
+                            {/* tax_invoice_no */}
+
                             <label>Address:</label>
                             <input
                                 type="text"
@@ -633,12 +793,61 @@ const EditInvoiceDetails = () => {
                                                 onChange={(e) => handleProductChange(index, 'igstAmount', e.target.value)}
                                             />
                                         </td>
+                                        <button onClick={() => handleDeleteProduct(product.id)} className="btn btn-danger">Delete</button>
+
                                     </tr>
                                 ))}
                             </tbody>
                         </table>
-                        <button onClick={addMoreProducts}>Add More Products</button>
-                        <button onClick={handleSave}>Save Invoice</button>
+
+                        {/* Tax */}
+                        <div>
+
+                            <div className="form-group"  >
+                                <label>Tax Invoice No:</label>
+                                <input
+                                    type="text"
+                                    value={invoiceDetails.tax_invoice_no}
+                                    onChange={(e) => handleInputChange('tax_invoice_no', e.target.value)}
+                                />
+                            </div>
+                            {/* invoice_status */}
+
+                            {/* <div className="form-group"  >
+                                <label>Invoice Status:</label>
+                                <input
+                                    type="text"
+                                    value={invoiceDetails.invoice_status}
+                                    onChange={(e) => handleInputChange('invoice_status', e.target.value)}
+                                />
+                            </div> */}
+                            <div className="form-group">
+                                <label>Invoice Status:</label>
+                                <select
+                                    value={invoiceDetails.invoice_status}
+                                    onChange={(e) => handleInputChange('invoice_status', e.target.value)}
+                                >
+                                    <option value="">Select options</option>
+                                    <option value="Tax">Tax</option>
+                                </select>
+                            </div>
+
+                            {/* bill_date */}
+
+                            <div className="form-group"  >
+                                <label>Bill Date:</label>
+                                <input
+                                    type="date"
+                                    value={invoiceDetails.bill_date}
+                                    onChange={(e) => handleInputChange('bill_date', e.target.value)}
+                                />
+                                <small> {invoiceDetails.bill_date} </small>
+                            </div>
+
+                        </div>
+
+                        <button onClick={addMoreProducts} className="add-product-button" >Add More Products</button>
+                        <button onClick={handleSave} className="save-button" >Save Invoice</button>
                     </div>
                 </>
             )}

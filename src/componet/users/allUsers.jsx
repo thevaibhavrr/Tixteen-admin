@@ -363,7 +363,12 @@ const [countuser , setCountuser] = useState()
               <strong>{`TX${user?.user_name?.charAt(0).toUpperCase()}-${user.id}`}</strong>
               <img
                 // src={user.profile_img !== "" ? user.profile_img:dummyimage }
-                src={dummyimage}
+                // src={dummyimage}
+                src={
+                  user.profile_img && user.profile_img.includes('http://res.cloudinary.com')
+                    ? user.profile_img
+                    : dummyimage
+                }
                 alt={user.user_name}
                 className="all-user-user-image"
               />

@@ -273,7 +273,12 @@ function CampaignDetails() {
                       <div className="d-flex flex-column gap-4 align-items-center">
                         <div>
                           <img
-                            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTDJzEaxLN-jGRYYUO65pWu7Q9GXoNt4LUSSA&s"
+                            // src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTDJzEaxLN-jGRYYUO65pWu7Q9GXoNt4LUSSA&s"
+                            src={
+                              user?.user?.profile_img && user?.user?.profile_img.includes('http://res.cloudinary.com')
+                                ? user?.user?.profile_img
+                                : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTDJzEaxLN-jGRYYUO65pWu7Q9GXoNt4LUSSA&s"
+                            }
                             alt={user?.user?.user_name}
                             className="user-image-unique"
                           />

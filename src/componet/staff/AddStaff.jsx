@@ -9,7 +9,7 @@
 //         address: '',
 //         email: '',
 //         mobile: '',
-//         basic_salary: '',
+//         basicsalary: '',
 //         status: '0',// default status, you can adjust this as needed
 //         password: '',
 //     });
@@ -71,8 +71,8 @@
 //                             <input
 //                                 type="text"
 //                                 placeholder="Basic Salary"
-//                                 value={newStaff.basic_salary}
-//                                 onChange={(e) => setNewStaff({ ...newStaff, basic_salary: e.target.value })}
+//                                 value={newStaff.basicsalary}
+//                                 onChange={(e) => setNewStaff({ ...newStaff, basicsalary: e.target.value })}
 //                                 className='form-control'
 //                             />
 //                             <input
@@ -116,7 +116,7 @@ const AddStaffPopup = () => {
         address: '',
         email: '',
         mobile: '',
-        basic_salary: '',
+        basicsalary: '',
         status: '0', // default status, adjust as needed
         password: '',
     });
@@ -143,7 +143,7 @@ const AddStaffPopup = () => {
             !newStaff.address ||
             !newStaff.email ||
             !newStaff.mobile ||
-            !newStaff.basic_salary ||
+            !newStaff.basicsalary ||
             !newStaff.password
         ) {
             toast.error('Please fill in all fields');
@@ -221,8 +221,8 @@ const AddStaffPopup = () => {
                         <input
                             type="text"
                             placeholder="Basic Salary"
-                            value={newStaff.basic_salary}
-                            onChange={(e) => setNewStaff({ ...newStaff, basic_salary: e.target.value })}
+                            value={newStaff.basicsalary}
+                            onChange={(e) => setNewStaff({ ...newStaff, basicsalary: e.target.value })}
                             className='form-control'
                         />
                         <input

@@ -110,11 +110,11 @@ const StaffDetails = () => {
                         <tr key={staffMember._id}>
                             <td>{index + 1}</td>
                             <td>{staffMember.name}</td>
-                            <td>{staffMember.father_name}</td>
+                            <td>{staffMember.fathername}</td>
                             <td>{staffMember.address}</td>
                             <td>{staffMember.email}</td>
                             <td>{staffMember.mobile}</td>
-                            <td>{staffMember.basic_salary}</td>
+                            <td>{staffMember.basicsalary}</td>
                             <td>{staffMember.status === "1" ? "Yes" : "No"}</td>
                             <td>
                                 <span onClick={() => handleEdit(staffMember)} style={{ cursor: 'pointer' }}>
@@ -158,6 +158,8 @@ const StaffDetails = () => {
                             <div className="modal-body">
                                 <div className="form-group">
                                     <label htmlFor="editName">Name</label>
+
+                                    
                                     <input
                                         type="text"
                                         id="editName"
@@ -167,12 +169,22 @@ const StaffDetails = () => {
                                     />
                                 </div>
                                 <div className="form-group">
+                                    <label htmlFor="editName">username</label>
+                                    <input
+                                        type="text"
+                                        id="editName"
+                                        value={editedStaff.username || ''}
+                                        onChange={(e) => setEditedStaff({ ...editedStaff, username: e.target.value })}
+                                        className="form-control"
+                                    />
+                                </div>
+                                <div className="form-group">
                                     <label htmlFor="editFatherName">Father Name</label>
                                     <input
                                         type="text"
                                         id="editFatherName"
-                                        value={editedStaff.father_name || ''}
-                                        onChange={(e) => setEditedStaff({ ...editedStaff, father_name: e.target.value })}
+                                        value={editedStaff.fathername || ''}
+                                        onChange={(e) => setEditedStaff({ ...editedStaff, fathername: e.target.value })}
                                         className="form-control"
                                     />
                                 </div>
@@ -211,8 +223,8 @@ const StaffDetails = () => {
                                     <input
                                         type="text"
                                         id="editBasicSalary"
-                                        value={editedStaff.basic_salary || ''}
-                                        onChange={(e) => setEditedStaff({ ...editedStaff, basic_salary: e.target.value })}
+                                        value={editedStaff.basicsalary || ''}
+                                        onChange={(e) => setEditedStaff({ ...editedStaff, basicsalary: e.target.value })}
                                         className="form-control"
                                     />
                                 </div>

@@ -5,8 +5,10 @@ import BackIcon from '../../../utils/BackIcon';
 import { useParams, useNavigate } from 'react-router-dom';
 import { makeApi } from '../../../api/callApi.tsx';
 import PrimaryLoader from '../../../utils/PrimaryLoader.jsx';
+import { ToastContainer, toast } from "react-toastify";
 
 function CampaignUpdate() {
+
   const { id } = useParams();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -101,12 +103,11 @@ function CampaignUpdate() {
     e.preventDefault();
     try {
       const response = await makeApi(`/v1/campaign/update/${id}`, 'PUT', campaign);
-      if (response.success) {
-        console.log('Campaign updated successfully:', response.data);
-        navigate(`/campaign/campaign-details/${id}`);
-      } else {
-        console.error('Failed to update campaign:', response.message);
-      }
+      toast("campaign update successfully", {
+        onClose: () => {
+          navigate("/campaign/CampaignList");
+        }
+      });
     } catch (error) {
       console.error('Error updating campaign:', error);
     }
@@ -114,6 +115,8 @@ function CampaignUpdate() {
 
   return (
     <>
+      <ToastContainer position="top-center" autoClose={1700} />
+
       {loading && <div style={{ height: "100%", width: "100%", top: "0", display: "flex", justifyContent: "center", alignItems: "center", zIndex: "9999", position: "fixed", backgroundColor: "rgba(0,0,0,0.3)" }}> <PrimaryLoader /> </div>}
     
     <div className=''>

@@ -5,6 +5,9 @@ import { makeApi } from '../../../api/callApi.tsx';
 import PrimaryLoader from '../../../utils/PrimaryLoader.jsx';
 import uploadToCloudinary from '../../../utils/cloudinaryUpload.jsx';
 import BackIcon from '../../../utils/BackIcon.jsx';
+import { ToastContainer, toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+
 
 
 
@@ -12,8 +15,10 @@ const stateList = [
   { _id: 1, name: 'California' },
   { _id: 2, name: 'New York' },
 ];
-
+ 
 function CreateCampaign() {
+  const navigate = useNavigate();
+
   const [CampaignLanguage, setCampaignLanguage] = useState([]);
   const [clients, setClients] = useState([]);
   const [totalCampaignPrice, setTotalCampaignPrice] = useState(0);
@@ -226,9 +231,18 @@ function CreateCampaign() {
         followers,
         influencerData
       });
+      toast("campaign created successfully", {
+        onClose: () => {
+          navigate("/campaign/CampaignList");
+        }
+      });
+
       console.log('API Response:', response.data);
     } catch (error) {
       console.error('There was a problem with the fetch operation:', error);
+
+      toast.error(error.response.data.message);
+      toast.error("Error creating campaign");
     } finally {
       setLoading(false);
     }
@@ -236,6 +250,7 @@ function CreateCampaign() {
 
   return (
     <>
+      <ToastContainer position="top-center" autoClose={1700} />
       {loading && (
         <div style={{ height: "100vh", width: "100%", top: "0", position: "fixed" }}>
           <PrimaryLoader />

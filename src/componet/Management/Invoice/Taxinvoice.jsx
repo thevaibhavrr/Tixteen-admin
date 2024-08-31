@@ -22,7 +22,7 @@ const TaxInvoices = () => {
 
 
     useEffect(() => {
-        fetchInvoices();
+        fetchInvoices(); 
     }, []);
 
     const fetchInvoices = async () => {
@@ -30,7 +30,7 @@ const TaxInvoices = () => {
             setLoading(true);
 
             const response = await makeApi('/v1/admin/api/get-my-bill?invoice_status=Tax', 'GET');
-
+ 
             if (response.data.success) {
                 setInvoices(response.data.mybill);
             } else {
@@ -175,7 +175,7 @@ const TaxInvoices = () => {
                                 <td>{invoice.client_name}</td>
                                 <td>{invoice.address}</td>
                                 <td>{invoice.contact_no}</td>
-                                <Link to={`/management/invoice/details/${invoice._id}`} target='_blank' >
+                                <Link to={`/management/tax-invoice/details/${invoice._id}`} target='_blank' >
                                     <td>{invoice.gst}</td>
                                 </Link>
                                 <td>{invoice.state_code}</td>
@@ -233,7 +233,7 @@ const TaxInvoices = () => {
                                 name="stateCode"
                                 value={editInvoice.stateCode}
                                 onChange={handleEditChange}
-                            />
+                            />  
                             <button onClick={saveEdit}>Save Changes</button>
                             <button onClick={closeModal}>Cancel</button>
                         </div>

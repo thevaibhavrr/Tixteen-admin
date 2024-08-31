@@ -5,6 +5,8 @@ import "react-toastify/dist/ReactToastify.css";
 import BackIcon from "../../../utils/BackIcon";
 import { makeApi } from "../../../api/callApi.tsx";
 import PrimaryLoader from "../../../utils/PrimaryLoader.jsx";
+import {  useNavigate } from 'react-router-dom';
+
 
 const initialInvoiceDetails = {
     clientName: '',
@@ -30,6 +32,8 @@ const initialInvoiceDetails = {
 };
 
 const AddProformaInvoice = () => {
+  const navigate = useNavigate();
+
     const [invoiceDetails, setInvoiceDetails] = useState(initialInvoiceDetails);
     const [alert, setAlert] = useState('');
     const [loading, setLoading] = useState(false);
@@ -251,6 +255,11 @@ const AddProformaInvoice = () => {
 
             setAlert('Invoice saved successfully!');
             setInvoiceDetails(initialInvoiceDetails);
+            toast("Invoice created successfully", {
+                onClose: () => {
+                  navigate("/management/invoices-management");
+                }
+              });
         } catch (error) {
             console.error('Error saving invoice:', error);
             setAlert('Error saving invoice. Please try again.');
@@ -277,7 +286,7 @@ const AddProformaInvoice = () => {
 
     return (
         <>
-            <ToastContainer /> {/* Add ToastContainer to render toasts */}
+            <ToastContainer position="top-center" autoClose={3000} /> {/* Add ToastContainer to render toasts */}
             {loading ? (
                 <div style={{ height: "100%", width: "100%", top: "0", display: "flex", justifyContent: "center", alignItems: "center", zIndex: "9999", position: "fixed", backgroundColor: "rgba(0,0,0,0.3)" }}>
                     <PrimaryLoader />

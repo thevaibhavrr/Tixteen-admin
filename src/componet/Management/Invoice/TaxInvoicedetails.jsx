@@ -10,7 +10,7 @@ import PrimaryLoader from '../../../utils/PrimaryLoader.jsx';
 import numberToWords from 'number-to-words';
 
 
-const Invoice = () => {
+const TaxInvoiceDetails = () => {
     const { id } = useParams();
     const [invoiceData, setInvoiceData] = useState(null);
     const invoiceRef = useRef();
@@ -74,6 +74,7 @@ useEffect(() => {
             totalIGST += igst_Amount;
             grandTotal += taxable + cgst_Amount + sgst_Amount + igst_Amount;
         });
+
         return {
             totalTaxable,
             totalCGST,
@@ -109,6 +110,9 @@ useEffect(() => {
             setLoading(false);
         }
     };
+
+    
+
     return (
         <>
             {loading ? <div style={{ height: "100%", width: "100%", top: "0", display: "flex", justifyContent: "center", alignItems: "center", zIndex: "9999", position: "fixed", backgroundColor: "rgba(0,0,0,0.3)" }}> <PrimaryLoader /> </div> : (
@@ -124,16 +128,19 @@ useEffect(() => {
                                 <img src={Icon} alt="Logo" />
                             </div>
                             <div className="invoice_page_border">
-                                <h3>PROFORMA INVOICE</h3>
+                                {/* <h3>PROFORMA INVOICE</h3> */}
+                                <h3>TAX INVOICE</h3>
                             </div>
                             <div className="invoice-info">
                                 <div className="d-flex justify-content-around w-75">
                                     <div>Invoice Number:</div>
-                                    <div><strong>{mybill.invoice_no}</strong></div>
+                                    <div><strong>{mybill.tax_invoice_no}</strong></div>
+                                    {/* <div><strong>TXT242520</strong></div> */}
                                 </div>
                                 <div className="d-flex justify-content-around w-75">
                                     <div className="">Invoice Date:</div>
-                                    <div><strong>{new Date(mybill.bill_date).toLocaleDateString()}</strong></div>
+                                    {/* <div><strong>{new Date(mybill.bill_date).toLocaleDateString()}</strong></div> */}
+                                    <div><strong>30-8-2024</strong></div>
                                 </div>
                             </div>
                         </div>
@@ -238,9 +245,10 @@ useEffect(() => {
 
                         <div className="invoice-summary invoice_page_border p-1">
                             <div className="total-amount invoice_page_border text-center">
-                                <p className="pt-2" >Total Invoice Amount in Words: <strong>{/* Add logic to convert numbers to words */}</strong></p>
-                                {/* <p style={{ fontSize: '20px'  }} className="uppercase" >{totalInWords}</p> */}
+                                <p className="pt-2" >Total Invoice Amount in Words: <strong></strong></p>
+                                {/* <p style={{ fontSize: '17px' , textTransform: 'uppercase', fontWeight: 'bold' }} >{totalInWords}</p> */}
                                 <p style={{ fontSize: '17px' , textTransform: 'uppercase', fontWeight: 'bold' }} >{totalInWords} Rupees Only</p>
+
 
                             </div>
                             <div className="amount-summary invoice_page_border">
@@ -326,4 +334,4 @@ useEffect(() => {
     );
 };
 
-export default Invoice;
+export default TaxInvoiceDetails;

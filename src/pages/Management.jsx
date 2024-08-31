@@ -16,6 +16,8 @@ import AddStaffPopup from '../componet/staff/AddStaff';
 import MonthlyAttendance from '../componet/staff/MonthlyAttendance';
 import Createregister from '../componet/client/Clinetregister';
 import ManageClients from '../componet/client/ManageClients';
+import TaxInvoiceDetails from '../componet/Management/Invoice/TaxInvoicedetails';
+import EditInvoiceDetails from '../componet/Management/Invoice/editInvoicedetails';
 
  
 function Management() {
@@ -29,10 +31,16 @@ function Management() {
         <Route path='/platform-management' element={<ManagePlatform/>} />
         <Route path="/checklist-management" element={<ManageCheckList />} />
         <Route path="/send-message-management" element={<SendMessageForCamp />} />
+
+        {/* invoice */}
         <Route path='/invoices-management' element={<ProformaInvoices />} />
         <Route path='/Add-invoices-management' element={<AddProformaInvoice />} />
         <Route path='/invoice/details/:id'element={<Invoice/>} />
+        <Route path='/tax-invoice/details/:id'element={<TaxInvoiceDetails/>} />
         <Route path='/tax-invoices-management' element={<TaxInvoices />} />
+        <Route path="/invoice-edit/:id" element={<EditInvoiceDetails/>} />
+
+        {/* staff */}
        <Route path="/staff-management" element={<StaffDetails />} />
        <Route path="/add-staff" element={<AddStaffPopup />} />
 
