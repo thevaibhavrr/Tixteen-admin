@@ -74,7 +74,6 @@
 
 
 
-/* Add this to MonthlyAttendance.css */
 .attendance-legend {
     display: flex;
     justify-content: center;
@@ -97,6 +96,7 @@
 .attendance-legend-text {
     font-size: 1em;
 }
+
 
 
 

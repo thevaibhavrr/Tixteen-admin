@@ -561,6 +561,288 @@
 
 // export default MonthlyAttendance;
 
+// import React, { useState, useEffect } from 'react';
+// import '../../style/dashboard/MonthlyAttendance.css';
+// import { makeApi } from '../../api/callApi.tsx';
+// import PrimaryLoader from '../../utils/PrimaryLoader.jsx';
+// import CustomPopup from '../../utils/CustomPopup.jsx';
+
+// const MonthlyAttendance = () => {
+//     const [loading, setLoading] = useState(true);
+//     const [monthlyData, setMonthlyData] = useState([]);
+//     const [currentMonth, setCurrentMonth] = useState(new Date().getMonth() + 1);
+//     const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
+//     const [allAdmins, setAllAdmins] = useState([]);
+//     const [Isadmin, setIsadmin] = useState("");
+//     const [selectedStaff, setSelectedStaff] = useState("");
+//     const [popupData, setPopupData] = useState({ isOpen: false, date: '', type: '' });
+//     const [summaryData, setSummaryData] = useState({});
+
+//     const fetchAllAdmins = async () => {
+//         try {
+//             const res = await makeApi('/v1/get-all-staff', 'GET');
+
+//             setAllAdmins(res.data.data);
+//         } catch (error) {
+//             console.error('Error fetching admins:', error);
+//         }
+//     };
+
+//     useEffect(() => {
+//         fetchAllAdmins();
+//     }, []);
+
+  
+//     useEffect(() => {
+//         const fetchMonthlyData = async () => {
+//             setLoading(true);
+//             try {
+//                 const url = selectedStaff 
+//                     ? `/v1/get-monthly-attendance-data/${selectedStaff}?month=${currentMonth}&year=${currentYear}` 
+//                     : `/v1/get-monthly-attendance-data?month=${currentMonth}&year=${currentYear}`;
+//                 const response = await makeApi(url, "GET");
+//                 const data = response.data;
+//                 console.log("response.data.user",response.data)
+//             setIsadmin(response.data.user);
+
+    
+//                 setSummaryData({
+//                     salary: data.salary,
+//                     perDaySalary: data.perDaySalary,
+//                     perMinuteSalary: data.perMinuteSalary,
+//                     fullDayCount: data.fullDayCount,
+//                     halfDayCount: data.halfDayCount,
+//                     leaveDayCount: data.leaveDayCount,
+//                     totalShortLeaveMinutes: data.totalShortLeaveMinutes,
+//                     totalDelayMinutes: data.totalDelayMinutes,
+//                     totalSalary: data.totalSalary,
+//                 });
+//             } catch (error) {
+//                 console.error('Error fetching monthly data:', error);
+//             } finally {
+//                 setLoading(false);
+//             }
+//         };
+//         fetchMonthlyData();
+//     }, [currentMonth, currentYear, selectedStaff]);
+    
+    
+//     const handleMonthChange = (e) => {
+//         setCurrentMonth(parseInt(e.target.value));
+//     };
+
+//     const handleYearChange = (e) => {
+//         setCurrentYear(parseInt(e.target.value));
+//     };
+
+//     const openPopup = (date, type) => {
+//         setPopupData({ isOpen: true, date, type });
+//     };
+
+//     const closePopup = () => {
+//         setPopupData({ isOpen: false, date: '', type: '' });
+//     };
+//     const handleSubmit = async ({ hour, minute, date, type }) => {
+//         try {
+//             const body = type === 'attendance'
+//                 ? { staff_id: selectedStaff, hour, minute, date, leave: 'present' }
+//                 : { staff_id: selectedStaff, hour: '0', minute: '0', date, leave: 'on leave' };
+    
+//             const endpoint = '/v1/attendance/create-or-update';
+            
+//             await makeApi(endpoint, "POST", body);
+            
+//             // Refresh data after marking attendance or leave
+//             const url = selectedStaff 
+//                 ? `/v1/get-monthly-attendance-data/${selectedStaff}?month=${currentMonth}&year=${currentYear}`
+//                 : `/v1/get-monthly-attendance-data?month=${currentMonth}&year=${currentYear}`;
+//             const response = await makeApi(url, "GET");
+//             const data = response.data.data;
+//             setMonthlyData(data);
+//             setIsadmin(response.data.user);
+    
+//             // Recalculate summary data
+//             const salary = response.data.salary;
+//             const daysInMonth = new Date(currentYear, currentMonth, 0).getDate();
+//             const perDaySalary = (salary / 30).toFixed(2);
+//             const perMinuteSalary = (perDaySalary / (9 * 60)).toFixed(2);
+//             const { totalHalfDays, totalFullDays, totalLeaves, totalShortLeaveMinutes, totalActiveMinutes } = response.data;
+//             const totalSalary = (perMinuteSalary * totalActiveMinutes).toFixed(2);
+    
+//             setSummaryData({
+//                 salary,
+//                 perDaySalary,
+//                 perMinuteSalary,
+//                 totalHalfDays,
+//                 totalFullDays,
+//                 totalLeaves: daysInMonth - totalHalfDays - totalFullDays, 
+//                 totalShortLeaveMinutes,
+//                 totalActiveMinutes,
+//                 totalSalary,
+//             });
+//         } catch (error) {
+//             console.error('Error submitting data:', error);
+//         } finally {
+//             closePopup();
+//         }
+//     };
+    
+    
+//     return (
+//         <>
+//             <div className="manage-industry-chart">
+//                 <div className='text-center'>
+//                     <h5>{Isadmin} Monthly Attendance</h5>
+//                 </div>
+//                 <div className="attendance-legend">
+//                     <div className="attendance-legend-item">
+//                         <div className="attendance-legend-color" style={{ backgroundColor: '#979797' }}></div>
+//                         <div className="attendance-legend-text">Sunday</div>
+//                     </div>
+//                     <div className="attendance-legend-item">
+//                         <div className="attendance-legend-color" style={{ backgroundColor: '#c4bfa8' }}></div>
+//                         <div className="attendance-legend-text">Half Day</div>
+//                     </div>
+//                     <div className="attendance-legend-item">
+//                         <div className="attendance-legend-color" style={{ backgroundColor: '#dff0d8' }}></div>
+//                         <div className="attendance-legend-text">Full Day</div>
+//                     </div>
+//                 </div>
+//                 <div className="date-selection d-flex">
+//                     {Isadmin === "admin" &&
+//                         <div className="px-2">
+//                             <label htmlFor="staff">User: </label>
+//                             <select id="staff" value={selectedStaff} onChange={(e) => setSelectedStaff(e.target.value)} className='all-user-search'>
+//                                 <option value="">Select User</option>
+//                                 {allAdmins.map((admin, index) => (
+//                                     <option key={index} value={admin.username}>
+//                                         {admin.username}
+//                                     </option>
+//                                 ))}
+//                             </select>
+//                         </div>
+//                     }
+//                     <div className="px-2">
+//                         <label htmlFor="month">Month: </label>
+//                         <select id="month" value={currentMonth} onChange={handleMonthChange} className='all-user-search'>
+//                             {[...Array(12).keys()].map(month => (
+//                                 <option key={month + 1} value={month + 1}>
+//                                     {new Date(0, month).toLocaleString('default', { month: 'long' })}
+//                                 </option>
+//                             ))}
+//                         </select>
+//                     </div>
+//                     <div className="px-2">
+//                         <label htmlFor="year">Year: </label>
+//                         <select id="year" value={currentYear} onChange={handleYearChange} className='all-user-search'>
+//                             {Array.from({ length: 10 }, (_, i) => currentYear - 5 + i).map(year => (
+//                                 <option key={year} value={year}>
+//                                     {year}
+//                                 </option>
+//                             ))}
+//                         </select>
+//                     </div>
+//                 </div>
+//                 {loading && <PrimaryLoader />}
+//                 <table>
+//                     <thead>
+//                         <tr>
+//                             <th>Date</th>
+//                             <th>Login Time</th>
+//                             <th>Short Leave (Minutes)</th>
+//                             <th>Total Active Hours</th>
+//                             {Isadmin === "admin" &&
+//                                 <>
+//                                     <th>Mark Attendance</th>
+//                                     <th>Mark Leave</th>
+//                                 </>
+//                             }
+//                         </tr>
+//                     </thead>
+//                     <tbody>
+//                         {monthlyData.map((data, index) => {
+//                             // const activeHours = `${Math.floor(data.totalActiveMinutes / 60)} hours ${Math.floor(data.totalActiveMinutes % 60)} minutes`;
+//                             const isSunday = new Date(data.date).getDay() === 0;
+//                             const rowClass = data.status === 'half day' ? 'half-day' : data.status === 'full day' ? 'full-day' : '';
+
+//                             return (
+//                                 <tr key={index} className={`${isSunday ? 'sunday-row' : ''} ${rowClass}`}>
+//                                     <td>{data.date}</td>
+//                                     <td>{data.loginTime}</td>
+//                                     <td>{data.shortLeaveMinutes}</td>
+//                                     <td>{data.totalActiveMinutes}</td>
+//                                     {Isadmin === "admin" &&
+//                                         <>
+//                                             <td>
+//                                                 <button className='btn-warning btn' onClick={() => openPopup(data.date, 'attendance')}>Mark Attendance</button>
+//                                             </td>
+//                                             <td>
+//                                                 <button className='btn btn-danger' onClick={() => openPopup(data.date, 'leave')}>Mark Leave</button>
+//                                             </td>
+//                                         </>
+//                                     }
+//                                 </tr>
+//                             );
+//                         })}
+//                     </tbody>
+//                 </table>
+             
+//                 <CustomPopup
+//                     isOpen={popupData.isOpen}
+//                     onClose={closePopup}
+//                     onSubmit={handleSubmit}
+//                     date={popupData.date}
+//                     type={popupData.type}
+//                 />
+//             </div>
+
+            // <div className="manage-industry-chart">
+
+
+            //     {loading && <PrimaryLoader />}
+            //     <table>
+            //         <thead>
+            //             <tr>
+            //                 <th>Salary</th>
+            //                 <th>Day Salary:</th>
+            //                 <th>Minute Salary:</th>
+            //                 <th>Total Full Days:</th>
+            //                 <th>Total Half Days:</th>
+            //                 <th>Total Leaves:</th>
+            //                 <th>Total Short Leave Minutes:</th>
+            //                 <th>Total Active Minutes:</th>
+            //                 <th>Total Salary:</th>
+            //             </tr>
+            //         </thead>
+            //         <tbody>
+            //             <tr >
+            //                 <td>{summaryData.salary}</td>
+            //                 <td>{summaryData.perDaySalary}</td>
+            //                 <td>{summaryData.perMinuteSalary}</td>
+            //                 <td>{summaryData.totalFullDays}</td>
+            //                 <td>{summaryData.totalHalfDays}</td>
+            //                 <td>{summaryData.totalLeaves}</td>
+            //                 <td>{summaryData.totalShortLeaveMinutes}</td>
+            //                 <td>{summaryData.totalActiveMinutes}</td>
+            //                 <td>{summaryData.totalSalary}</td>
+                          
+            //             </tr>
+            //         </tbody>
+            //     </table>
+              
+//                 <CustomPopup
+//                     isOpen={popupData.isOpen}
+//                     onClose={closePopup}
+//                     onSubmit={handleSubmit}
+//                     date={popupData.date}
+//                     type={popupData.type}
+//                 />
+//             </div>
+//         </>
+//     );
+// };
+
+// export default MonthlyAttendance;
 import React, { useState, useEffect } from 'react';
 import '../../style/dashboard/MonthlyAttendance.css';
 import { makeApi } from '../../api/callApi.tsx';
@@ -580,9 +862,7 @@ const MonthlyAttendance = () => {
 
     const fetchAllAdmins = async () => {
         try {
-            // const response = await makeApi(`/v1/admin/api/get-all-admins`, "GET");
             const res = await makeApi('/v1/get-all-staff', 'GET');
-
             setAllAdmins(res.data.data);
         } catch (error) {
             console.error('Error fetching admins:', error);
@@ -593,7 +873,7 @@ const MonthlyAttendance = () => {
         fetchAllAdmins();
     }, []);
 
-    useEffect(() => { 
+    useEffect(() => {
         const fetchMonthlyData = async () => {
             setLoading(true);
             try {
@@ -601,28 +881,22 @@ const MonthlyAttendance = () => {
                     ? `/v1/get-monthly-attendance-data/${selectedStaff}?month=${currentMonth}&year=${currentYear}` 
                     : `/v1/get-monthly-attendance-data?month=${currentMonth}&year=${currentYear}`;
                 const response = await makeApi(url, "GET");
-                const data = response.data.data;
-                setMonthlyData(data);
-                setIsadmin(response.data.user);
-
-                // Calculate the required data for the summary
-                const salary = response.data.salary;
-                const daysInMonth = new Date(currentYear, currentMonth, 0).getDate();
-                const perDaySalary = (salary / daysInMonth).toFixed(2);
-                const perMinuteSalary = (perDaySalary / (9 * 60)).toFixed(2); // Assuming 9 working hours per day
-                const { totalHalfDays, totalFullDays, totalLeaves, totalShortLeaveMinutes, totalActiveMinutes } = response.data;
-                const totalSalary = (perMinuteSalary * totalActiveMinutes).toFixed(2);
+                const data = response.data;
+                
+                setIsadmin(data.user);
+                setMonthlyData(data.dayDetails);
 
                 setSummaryData({
-                    salary,
-                    perDaySalary,
-                    perMinuteSalary,
-                    totalHalfDays,
-                    totalFullDays,
-                    totalLeaves: daysInMonth - totalHalfDays - totalFullDays, 
-                    totalShortLeaveMinutes,
-                    totalActiveMinutes,
-                    totalSalary,
+                    salary: data.salary,
+                    perDaySalary: data.perDaySalary,
+                    perMinuteSalary: data.perMinuteSalary,
+                    fullDayCount: data.fullDayCount,
+                    halfDayCount: data.halfDayCount,
+                    leaveDayCount: data.leaveDayCount,
+                    totalShortLeaveMinutes: data.totalShortLeaveMinutes,
+                    totalDelayMinutes: data.totalDelayMinutes,
+                    totalSalary: data.totalSalary,
+                    dailySalary: data.dailySalary,
                 });
             } catch (error) {
                 console.error('Error fetching monthly data:', error);
@@ -652,42 +926,33 @@ const MonthlyAttendance = () => {
     const handleSubmit = async ({ hour, minute, date, type }) => {
         try {
             const body = type === 'attendance'
-                ? { staff_id: selectedStaff, hour, minute, date }
-                : { staff_id: selectedStaff, hour: '0', minute: '0', date };
+                ? { staff_id: selectedStaff, hour, minute, date, leave: 'present' }
+                : { staff_id: selectedStaff, hour: '0', minute: '0', date, leave: 'on leave' };
 
-            const endpoint = type === 'attendance'
-                ? '/v1/attendance/create'
-                : '/v1/leave/create';
-
+            const endpoint = '/v1/attendance/create-or-update';
+            
             await makeApi(endpoint, "POST", body);
             
             // Refresh data after marking attendance or leave
             const url = selectedStaff 
-                ? `/v1/get-monthly-attendance-data/${selectedStaff}?month=${currentMonth}&year=${currentYear}` 
+                ? `/v1/get-monthly-attendance-data/${selectedStaff}?month=${currentMonth}&year=${currentYear}`
                 : `/v1/get-monthly-attendance-data?month=${currentMonth}&year=${currentYear}`;
             const response = await makeApi(url, "GET");
-            const data = response.data.data;
-            setMonthlyData(data);
-            setIsadmin(response.data.user);
+            const data = response.data;
+            setMonthlyData(data.dayDetails);
+            setIsadmin(data.user);
 
             // Recalculate summary data
-            const salary = response.data.salary;
-            const daysInMonth = new Date(currentYear, currentMonth, 0).getDate();
-            const perDaySalary = (salary / daysInMonth).toFixed(2);
-            const perMinuteSalary = (perDaySalary / (9 * 60)).toFixed(2);
-            const { totalHalfDays, totalFullDays, totalLeaves, totalShortLeaveMinutes, totalActiveMinutes } = response.data;
-            const totalSalary = (perMinuteSalary * totalActiveMinutes).toFixed(2);
-
             setSummaryData({
-                salary,
-                perDaySalary,
-                perMinuteSalary,
-                totalHalfDays,
-                totalFullDays,
-                totalLeaves: daysInMonth - totalHalfDays - totalFullDays, 
-                totalShortLeaveMinutes,
-                totalActiveMinutes,
-                totalSalary,
+                salary: data.salary,
+                perDaySalary: data.perDaySalary,
+                perMinuteSalary: data.perMinuteSalary,
+                fullDayCount: data.fullDayCount,
+                halfDayCount: data.halfDayCount,
+                leaveDayCount: data.leaveDayCount,
+                totalShortLeaveMinutes: data.totalShortLeaveMinutes,
+                totalDelayMinutes: data.totalDelayMinutes,
+                totalSalary: data.totalSalary,
             });
         } catch (error) {
             console.error('Error submitting data:', error);
@@ -695,6 +960,7 @@ const MonthlyAttendance = () => {
             closePopup();
         }
     };
+
     return (
         <>
             <div className="manage-industry-chart">
@@ -756,28 +1022,32 @@ const MonthlyAttendance = () => {
                         <tr>
                             <th>Date</th>
                             <th>Login Time</th>
+                            <th>Status</th>
                             <th>Short Leave (Minutes)</th>
-                            <th>Total Active Hours</th>
+                            <th>Delay (Minutes)</th>
+                            <th>Salary Deduction</th>
                             {Isadmin === "admin" &&
                                 <>
                                     <th>Mark Attendance</th>
                                     <th>Mark Leave</th>
                                 </>
                             }
+                            <th>daily Salary</th>
                         </tr>
                     </thead>
                     <tbody>
                         {monthlyData.map((data, index) => {
-                            const activeHours = `${Math.floor(data.totalActiveMinutes / 60)} hours ${Math.floor(data.totalActiveMinutes % 60)} minutes`;
                             const isSunday = new Date(data.date).getDay() === 0;
                             const rowClass = data.status === 'half day' ? 'half-day' : data.status === 'full day' ? 'full-day' : '';
 
                             return (
                                 <tr key={index} className={`${isSunday ? 'sunday-row' : ''} ${rowClass}`}>
                                     <td>{data.date}</td>
-                                    <td>{data.loginTime}</td>
+                                    <td>{data.logintime}</td>
+                                    <td>{data.status}</td>
                                     <td>{data.shortLeaveMinutes}</td>
-                                    <td>{activeHours}</td>
+                                    <td>{data.delayMinutes}</td>
+                                    <td>{data.salaryDeduction}</td>
                                     {Isadmin === "admin" &&
                                         <>
                                             <td>
@@ -788,12 +1058,13 @@ const MonthlyAttendance = () => {
                                             </td>
                                         </>
                                     }
+                                    <th>{data.dailySalary}</th>
                                 </tr>
                             );
                         })}
                     </tbody>
                 </table>
-             
+
                 <CustomPopup
                     isOpen={popupData.isOpen}
                     onClose={closePopup}
@@ -803,51 +1074,359 @@ const MonthlyAttendance = () => {
                 />
             </div>
 
-            <div className="manage-industry-chart">
 
 
-                {loading && <PrimaryLoader />}
+            <div className="summary mt-5 manage-industry-chart">
+                <h3>Monthly Summary</h3>
                 <table>
-                    <thead>
+                    <tbody >
                         <tr>
-                            <th>Salary</th>
-                            <th>Day Salary:</th>
-                            <th>Minute Salary:</th>
-                            <th>Total Full Days:</th>
-                            <th>Total Half Days:</th>
-                            <th>Total Leaves:</th>
-                            <th>Total Short Leave Minutes:</th>
-                            <th>Total Active Minutes:</th>
-                            <th>Total Salary:</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr >
+                            <td>Salary:</td>
                             <td>{summaryData.salary}</td>
+                        </tr>
+                        <tr>
+                            <td>Per Day Salary:</td>
                             <td>{summaryData.perDaySalary}</td>
+                        </tr>
+                        <tr>
+                            <td>Per Minute Salary:</td>
                             <td>{summaryData.perMinuteSalary}</td>
-                            <td>{summaryData.totalFullDays}</td>
-                            <td>{summaryData.totalHalfDays}</td>
-                            <td>{summaryData.totalLeaves}</td>
+                        </tr>
+                        <tr>
+                            <td>Full Day Count:</td>
+                            <td>{summaryData.fullDayCount}</td>
+                        </tr>
+                        <tr>
+                            <td>Half Day Count:</td>
+                            <td>{summaryData.halfDayCount}</td>
+                        </tr>
+                        <tr>
+                            <td>Leave Day Count:</td>
+                            <td>{summaryData.leaveDayCount}</td>
+                        </tr>
+                        <tr>
+                            <td>Total Short Leave Minutes:</td>
                             <td>{summaryData.totalShortLeaveMinutes}</td>
-                            <td>{summaryData.totalActiveMinutes}</td>
+                        </tr>
+                        <tr>
+                            <td>Total Delay Minutes:</td>
+                            <td>{summaryData.totalDelayMinutes}</td>
+                        </tr>
+                        <tr>
+                            <td>Total Salary:</td>
                             <td>{summaryData.totalSalary}</td>
-                          
                         </tr>
                     </tbody>
                 </table>
-              
-                <CustomPopup
-                    isOpen={popupData.isOpen}
-                    onClose={closePopup}
-                    onSubmit={handleSubmit}
-                    date={popupData.date}
-                    type={popupData.type}
-                />
             </div>
+            <div className="manage-industry-chart">
+
+
+<table>
+    <thead>
+        <tr>
+            <th>Salary</th>
+            <th>Day Salary:</th>
+            <th>Minute Salary:</th>
+            <th>Total Full Days:</th>
+            <th>Total Half Days:</th>
+            <th>Total Leaves:</th>
+            <th>Total Short Leave Minutes:</th>
+            <th>Total Active Minutes:</th>
+            <th>Total Salary:</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr >
+            <td>{summaryData.salary}</td>
+            <td>{summaryData.perDaySalary}</td>
+            <td>{summaryData.perMinuteSalary}</td>
+            <td>{summaryData.totalFullDays}</td>
+            <td>{summaryData.totalHalfDays}</td>
+            <td>{summaryData.totalLeaves}</td>
+            <td>{summaryData.totalShortLeaveMinutes}</td>
+            <td>{summaryData.totalActiveMinutes}</td>
+            <td>{summaryData.totalSalary}</td>
+          
+        </tr>
+    </tbody>
+</table>
+</div>  
+
         </>
     );
 };
 
 export default MonthlyAttendance;
 
+// import React, { useState, useEffect } from 'react';
+// import '../../style/dashboard/MonthlyAttendance.css';
+// import { makeApi } from '../../api/callApi.tsx';
+// import PrimaryLoader from '../../utils/PrimaryLoader.jsx';
+// import CustomPopup from '../../utils/CustomPopup.jsx';
+
+// const MonthlyAttendance = () => {
+//     const [loading, setLoading] = useState(true);
+//     const [monthlyData, setMonthlyData] = useState([]);
+//     const [currentMonth, setCurrentMonth] = useState(new Date().getMonth() + 1);
+//     const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
+//     const [allAdmins, setAllAdmins] = useState([]);
+//     const [isAdmin, setIsAdmin] = useState("");
+//     const [selectedStaff, setSelectedStaff] = useState("");
+//     const [popupData, setPopupData] = useState({ isOpen: false, date: '', type: '' });
+//     const [summaryData, setSummaryData] = useState({});
+
+//     const fetchAllAdmins = async () => {
+//         try {
+//             const res = await makeApi('/v1/get-all-staff', 'GET');
+//             setAllAdmins(res.data.data);
+//         } catch (error) {
+//             console.error('Error fetching admins:', error);
+//         }
+//     };
+
+//     useEffect(() => {
+//         fetchAllAdmins();
+//     }, []);
+
+//     useEffect(() => {
+//         const fetchMonthlyData = async () => {
+//             setLoading(true);
+//             try {
+//                 const url = selectedStaff 
+//                     ? `/v1/get-monthly-attendance-data/${selectedStaff}?month=${currentMonth}&year=${currentYear}` 
+//                     : `/v1/get-monthly-attendance-data?month=${currentMonth}&year=${currentYear}`;
+//                 const response = await makeApi(url, "GET");
+//                 const data = response.data;
+//                 setIsAdmin(response.data.user);
+
+//                 setSummaryData({
+//                     salary: data.salary,
+//                     perDaySalary: data.perDaySalary,
+//                     perMinuteSalary: data.perMinuteSalary,
+//                     fullDayCount: data.fullDayCount,
+//                     halfDayCount: data.halfDayCount,
+//                     leaveDayCount: data.leaveDayCount,
+//                     totalShortLeaveMinutes: data.totalShortLeaveMinutes,
+//                     totalDelayMinutes: data.totalDelayMinutes,
+//                     totalSalary: data.totalSalary,
+//                 });
+//             } catch (error) {
+//                 console.error('Error fetching monthly data:', error);
+//             } finally {
+//                 setLoading(false);
+//             }
+//         };
+//         fetchMonthlyData();
+//     }, [currentMonth, currentYear, selectedStaff]);
+
+//     const handleMonthChange = (e) => {
+//         setCurrentMonth(parseInt(e.target.value));
+//     };
+
+//     const handleYearChange = (e) => {
+//         setCurrentYear(parseInt(e.target.value));
+//     };
+
+//     const handleStaffChange = (e) => {
+//         setSelectedStaff(e.target.value);
+//     };
+
+//     const openPopup = (date, type) => {
+//         setPopupData({ isOpen: true, date, type });
+//     };
+
+//     const closePopup = () => {
+//         setPopupData({ isOpen: false, date: '', type: '' });
+//     };
+
+//     const handleSubmit = async ({ hour, minute, date, type }) => {
+//         try {
+//             const body = type === 'attendance'
+//                 ? { staff_id: selectedStaff, hour, minute, date, leave: 'present' }
+//                 : { staff_id: selectedStaff, hour: '0', minute: '0', date, leave: 'on leave' };
+    
+//             const endpoint = '/v1/attendance/create-or-update';
+            
+//             await makeApi(endpoint, "POST", body);
+            
+//             // Refresh data after marking attendance or leave
+//             const url = selectedStaff 
+//                 ? `/v1/get-monthly-attendance-data/${selectedStaff}?month=${currentMonth}&year=${currentYear}`
+//                 : `/v1/get-monthly-attendance-data?month=${currentMonth}&year=${currentYear}`;
+//             const response = await makeApi(url, "GET");
+//             const data = response.data;
+//             setMonthlyData(data);
+//             setIsAdmin(response.data.user);
+    
+//             // Recalculate summary data
+//             setSummaryData({
+//                 salary: response.data.salary,
+//                 perDaySalary: response.data.perDaySalary,
+//                 perMinuteSalary: response.data.perMinuteSalary,
+//                 fullDayCount: response.data.fullDayCount,
+//                 halfDayCount: response.data.halfDayCount,
+//                 leaveDayCount: response.data.leaveDayCount,
+//                 totalShortLeaveMinutes: response.data.totalShortLeaveMinutes,
+//                 totalDelayMinutes: response.data.totalDelayMinutes,
+//                 totalSalary: response.data.totalSalary,
+//             });
+//         } catch (error) {
+//             console.error('Error submitting data:', error);
+//         } finally {
+//             closePopup();
+//         }
+//     };
+
+//     return (
+//         <div className="manage-industry-chart">
+//             <div className="text-center">
+//                 <h5>{isAdmin} Monthly Attendance</h5>
+//             </div>
+//             <div className="attendance-content">
+//                 <div className="attendance-legend">
+//                     <div className="attendance-legend-item">
+//                         <div className="attendance-legend-color" style={{ backgroundColor: '#979797' }}></div>
+//                         <div className="attendance-legend-text">Sunday</div>
+//                     </div>
+//                     <div className="attendance-legend-item">
+//                         <div className="attendance-legend-color" style={{ backgroundColor: '#c4bfa8' }}></div>
+//                         <div className="attendance-legend-text">Half Day</div>
+//                     </div>
+//                     <div className="attendance-legend-item">
+//                         <div className="attendance-legend-color" style={{ backgroundColor: '#dff0d8' }}></div>
+//                         <div className="attendance-legend-text">Full Day</div>
+//                     </div>
+//                 </div>
+//                 <div className="date-selection d-flex">
+//                     {isAdmin === "admin" && (
+//                         <div className="px-2">
+//                             <label htmlFor="staff">User: </label>
+//                             <select id="staff" value={selectedStaff} onChange={handleStaffChange} className='all-user-search'>
+//                                 <option value="">Select User</option>
+//                                 {allAdmins.map((admin, index) => (
+//                                     <option key={index} value={admin.username}>
+//                                         {admin.username}
+//                                     </option>
+//                                 ))}
+//                             </select>
+//                         </div>
+//                     )}
+//                     <div className="px-2">
+//                         <label htmlFor="month">Month: </label>
+//                         <select id="month" value={currentMonth} onChange={handleMonthChange} className='all-user-search'>
+//                             {[...Array(12).keys()].map(month => (
+//                                 <option key={month + 1} value={month + 1}>
+//                                     {new Date(0, month).toLocaleString('default', { month: 'long' })}
+//                                 </option>
+//                             ))}
+//                         </select>
+//                     </div>
+//                     <div className="px-2">
+//                         <label htmlFor="year">Year: </label>
+//                         <select id="year" value={currentYear} onChange={handleYearChange} className='all-user-search'>
+//                             {Array.from({ length: 10 }, (_, i) => currentYear - 5 + i).map(year => (
+//                                 <option key={year} value={year}>
+//                                     {year}
+//                                 </option>
+//                             ))}
+//                         </select>
+//                     </div>
+//                 </div>
+//                 {loading && <PrimaryLoader />}
+//                 <table className="attendance-table">
+//                     <thead className="attendance-table-header">
+//                         <tr>
+//                             <th>Date</th>
+//                             <th>Login Time</th>
+//                             <th>Short Leave (Minutes)</th>
+//                             <th>Total Active Minutes</th>
+//                             {isAdmin === "admin" && (
+//                                 <>
+//                                     <th>Mark Attendance</th>
+//                                     <th>Mark Leave</th>
+//                                 </>
+//                             )}
+//                         </tr>
+//                     </thead>
+//                     <tbody>
+//                         {monthlyData.map((data, index) => {
+//                             const isSunday = new Date(data.date).getDay() === 0;
+//                             const rowClass = data.status === 'half day' ? 'half-day' : data.status === 'full day' ? 'full-day' : '';
+
+//                             return (
+//                                 <tr key={index} className={`${isSunday ? 'sunday-row' : ''} ${rowClass}`}>
+//                                     <td>{data.date}</td>
+//                                     <td>{data.loginTime}</td>
+//                                     <td>{data.shortLeaveMinutesx    }</td>
+//                                     <td>{data.totalActiveMinutes}</td>
+//                                     {isAdmin === "admin" && (
+//                                         <>
+//                                             <td>
+//                                                 <button className='btn-warning btn' onClick={() => openPopup(data.date, 'attendance')}>Mark Attendance</button>
+//                                             </td>
+//                                             <td>
+//                                                 <button className='btn btn-danger' onClick={() => openPopup(data.date, 'leave')}>Mark Leave</button>
+//                                             </td>
+//                                         </>
+//                                     )}
+//                                 </tr>
+//                             );
+//                         })}
+//                     </tbody>
+//                 </table>
+//                 <CustomPopup
+//                     isOpen={popupData.isOpen}
+//                     onClose={closePopup}
+//                     onSubmit={handleSubmit}
+//                     date={popupData.date}
+//                     type={popupData.type}
+//                 />
+//             </div>
+//             <div className="attendance-summary">
+//                 <table>
+//                     <tbody>
+//                         <tr>
+//                             <td>Salary:</td>
+//                             <td>{summaryData.salary}</td>
+//                         </tr>
+//                         <tr>
+//                             <td>Per Day Salary:</td>
+//                             <td>{summaryData.perDaySalary}</td>
+//                         </tr>
+//                         <tr>
+//                             <td>Per Minute Salary:</td>
+//                             <td>{summaryData.perMinuteSalary}</td>
+//                         </tr>
+//                         <tr>
+//                             <td>Full Day Count:</td>
+//                             <td>{summaryData.fullDayCount}</td>
+//                         </tr>
+//                         <tr>
+//                             <td>Half Day Count:</td>
+//                             <td>{summaryData.halfDayCount}</td>
+//                         </tr>
+//                         <tr>
+//                             <td>Leave Day Count:</td>
+//                             <td>{summaryData.leaveDayCount}</td>
+//                         </tr>
+//                         <tr>
+//                             <td>Total Short Leave Minutes:</td>
+//                             <td>{summaryData.totalShortLeaveMinutes}</td>
+//                         </tr>
+//                         <tr>
+//                             <td>Total Delay Minutes:</td>
+//                             <td>{summaryData.totalDelayMinutes}</td>
+//                         </tr>
+//                         <tr>
+//                             <td>Total Salary:</td>
+//                             <td>{summaryData.totalSalary}</td>
+//                         </tr>
+//                     </tbody>
+//                 </table>
+//             </div>
+//         </div>
+//     );
+// };
+
+// export default MonthlyAttendance;

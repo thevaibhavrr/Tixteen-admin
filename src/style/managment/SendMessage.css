@@ -157,10 +157,17 @@
   background-color: var(--dark-yellow-color);
   color: var(--white-color);
   font-family: var(--kumbh-font);
+ 
 }
+
 
 .app__user-table tr:nth-child(even) {
   background-color: var(--light-yellow-color);
+}
+.send-message-user-data-table-div{
+  max-height: 500px;
+  width: 100%;
+  overflow-y: scroll;
 }
 
 .app__send-button {

@@ -109,7 +109,7 @@ import { makeApi } from '../../../api/callApi.tsx';
 import PrimaryLoader from '../../../utils/PrimaryLoader.jsx';
 
 const CampaignList = () => {
-    const [filter, setFilter] = useState('All');
+    const [filter, setFilter] = useState('New');
     const [searchTerm, setSearchTerm] = useState('');
     const [campaignList, setCampaignList] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -183,8 +183,8 @@ const CampaignList = () => {
                         />
                         <div className="campaign-list-filters">
                             <button onClick={() => setFilter('Running')} className={filter === 'Running' ? 'active' : ''}>Running</button>
-                            <button onClick={() => setFilter('Completed')} className={filter === 'Completed' ? 'active' : ''}>Completed</button>
                             <button onClick={() => setFilter('New')} className={filter === 'New' ? 'active' : ''}>New-user</button>
+                            <button onClick={() => setFilter('Completed')} className={filter === 'Completed' ? 'active' : ''}>Completed</button>
                             <button onClick={() => setFilter('All')} className={filter === 'All' ? 'active' : ''}>All</button>
                         </div>
                     </div>

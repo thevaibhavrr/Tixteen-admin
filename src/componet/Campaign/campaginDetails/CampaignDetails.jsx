@@ -2,14 +2,16 @@
 
 import React, { useEffect, useState } from 'react';
 import '../../../style/campaign/campaignDetails.css';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams , useNavigate } from 'react-router-dom';
 import BackIcon from '../../../utils/BackIcon';
 import EditIcon from '../../../utils/EditIcon';
 import { makeApi } from '../../../api/callApi.tsx';
 import PrimaryLoader from '../../../utils/PrimaryLoader.jsx';
+import DeletePopup from '../../../utils/DeletePopup.jsx';
 
 function CampaignDetails() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [showAppliedUsers, setShowAppliedUsers] = useState(false);
   const [showMoreDetails, setShowMoreDetails] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -20,6 +22,8 @@ function CampaignDetails() {
   const [showDenyInput, setShowDenyInput] = useState("");
   const [remark, setRemark] = useState('');
   const [followerrequired, setFollowerrequired] = useState([]);
+  const [showDeletePopup, setShowDeletePopup] = useState(false);
+
 
   const fetchCampaignDetailsWithAppliedUsers = async () => {
     try {
@@ -163,6 +167,26 @@ function CampaignDetails() {
     return link;
   };
 
+  const handleDelete = () => {
+    setShowDeletePopup(true);
+  };
+  const deleteLanguage = async () => {
+    try {
+      setLoading(true);
+
+      await makeApi(`/v1/campaign/delete/${id}`, 'DELETE');
+      // setLanguages(languages.filter(language => language._id !== currentLanguage._id));
+      navigate('/campaign/CampaignList');
+      setShowDeletePopup(false);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
+
   return (
     <>
       {loading && (
@@ -173,7 +197,15 @@ function CampaignDetails() {
       <div>
         <BackIcon path={"campaign/CampaignList"} />
       </div>
+      <div className="text-end me-5 " >
+        <div className='btn btn-danger' onClick={() => handleDelete()} >
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
+            <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5" />
+          </svg>
+        </div>
+      </div>
       <div className="campaign-details-unique">
+        {/* delete */}
         <EditIcon path={`campaign/update-campaign/${id}`} />
         <img src="https://cdn.shopify.com/s/files/1/1276/5299/files/Filler-mobile-2-power-sunglasses.jpg?v=1685976704?v=1719360000163" alt="Campaign Banner" className="campaign-banner-unique" />
         <div className="campaign-content-unique">
@@ -456,6 +488,13 @@ function CampaignDetails() {
           </>
         )}
       </div>
+      <DeletePopup
+        isOpen={showDeletePopup}
+        onClose={() => setShowDeletePopup(false)}
+        onDelete={deleteLanguage}
+        message="Are you sure you want to delete this campaign?"
+        
+      />
 
     </>
   );

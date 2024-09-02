@@ -20,8 +20,8 @@ export const makeApi = async (
 		const config: AxiosRequestConfig = {
 			method,
 			// url: `http://localhost:5000${endpoint}`, 
-			url: `https://ritaz.in${endpoint}`, 
-			// url: `https://tixteen-backend.onrender.com${endpoint}`,
+			// url: `https://ritaz.in${endpoint}`, 
+			url: `https://tixteen-backend.onrender.com${endpoint}`,
 			headers,
 			data,
 		}

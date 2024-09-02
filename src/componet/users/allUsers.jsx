@@ -39,7 +39,7 @@ function AllUser() {
 
   const [showRejectionPopup, setShowRejectionPopup] = useState(false);
 
-const [countuser , setCountuser] = useState()
+  const [countuser, setCountuser] = useState()
 
 
   const fetchUsers = async () => {
@@ -203,7 +203,7 @@ const [countuser , setCountuser] = useState()
 
   };
   const updateUserverificationStatus = (e) => {
-    setEditUser({ ...editUser, verification: e.target.value  });
+    setEditUser({ ...editUser, verification: e.target.value });
     if (e.target.value === 'Rejected') {
       setShowRejectionPopup(true);
     } else {
@@ -236,22 +236,27 @@ const [countuser , setCountuser] = useState()
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+
     try {
       // const response = await makeApi(`/V1/influencers/${editUser._id}`, 'PUT', editUser);
       const data = {
         ...editUser,
         level: selectedinfulencerLevel
       }
-      const response = await makeApi(`/api/update-user/${editUser._id}`, 'PUT', {editUser : data});
+      const response = await makeApi(`/api/update-user/${editUser._id}`, 'PUT', { editUser: data });
+      setShowPopup(false);
+      setShowRejectionPopup(false)
       setUsers((prevUsers) =>
         prevUsers.map((user) => (user._id === editUser._id ? response.data : user))
       );
-      setShowPopup(false);
 
     } catch (error) {
       console.error('Error updating user:', error);
     } finally {
       fetchUsers();
+    setLoading(false);
+
     }
   };
 
@@ -271,16 +276,16 @@ const [countuser , setCountuser] = useState()
 
     return age;
   };
- 
- const filterName = [
+
+  const filterName = [
     { name: `All\n${countuser?.countAlluser}`, value: "" },
     { name: `New\n${countuser?.countPaninguser}`, value: "Social Media Verification Pending" },
     { name: `Verified\n${countuser?.countVerifieduser}`, value: "Verified" },
     { name: `Rejected\n${countuser?.countRejecteduser}`, value: "Rejected" },
-    { name: "Suspended", value: "Suspended" },
+    // { name: "Suspended", value: "Suspended" },
     // { name: "Sleep mode", value: "Sleep mode" },
     // { name: "Prime Content", value: "Prime Content" },
-];
+  ];
 
 
   const getFullLink = (platform, link) => {
@@ -306,17 +311,17 @@ const [countuser , setCountuser] = useState()
         <div className="all-user-top-bar">
           <div className="all-user-tabs">
 
-          {filterName.map((tab) => (
-  <button
-    key={tab.name}
-    className={`tab-button ${selectedVerification === tab.value ? 'active' : ''}`}
-    onClick={() => handleVerificationChange({ target: { value: tab.value } })}
-  >
-    <span  dangerouslySetInnerHTML={{ __html: tab.name.replace(/\n/g, '<br />') }} />
-  </button>
-))}
+            {filterName.map((tab) => (
+              <button
+                key={tab.name}
+                className={`tab-button ${selectedVerification === tab.value ? 'active' : ''}`}
+                onClick={() => handleVerificationChange({ target: { value: tab.value } })}
+              >
+                <span dangerouslySetInnerHTML={{ __html: tab.name.replace(/\n/g, '<br />') }} />
+              </button>
+            ))}
 
-        
+
             <button
               className={`tab-button `}
               onClick={() => setApplyFilterPopup(true)}
@@ -496,15 +501,15 @@ const [countuser , setCountuser] = useState()
               </label>
 
               <label>
-              Level:
-              <select value={selectedinfulencerLevel} onChange={handleChangeLevel}>
-                <option value="">Select a level</option>
-                {levels.map((level) => (
-                  <option key={level.id} value={level.level}>
-                    Level {level.level}
-                  </option>
-                ))}
-              </select>
+                Level:
+                <select value={selectedinfulencerLevel} onChange={handleChangeLevel}>
+                  <option value="">Select a level</option>
+                  {levels.map((level) => (
+                    <option key={level.id} value={level.level}>
+                      Level {level.level}
+                    </option>
+                  ))}
+                </select>
               </label>
 
               <label>

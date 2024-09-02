@@ -5,11 +5,12 @@ const uploadToCloudinary = async (file) => {
   try {
     const data = new FormData();
     data.append("file", file);
-    data.append("upload_preset", "wnsxe2pa");
+    data.append("upload_preset", "Tixteen-admin");
+    // data.append("folder", "Tixteen Admin")
 
     
     const response = await axios.post(
-      `https://api.cloudinary.com/v1_1/dzvsrft15/upload`,
+      `https://api.cloudinary.com/v1_1/dnjhxyruk/upload`,
       data
     );
 
