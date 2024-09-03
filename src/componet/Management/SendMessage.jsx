@@ -35,6 +35,8 @@ const App = () => {
   const [ḶevelLoading, setḶevelLoading] = useState(false);
   const [languages, setLanguages] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [selectedStatus, setSelectedStatus] = useState('All'); // Add this line
+
 
   const [filterIndustry, setFilterIndustry] = useState("");
   const [filterLevel, setFilterLevel] = useState("");
@@ -106,12 +108,75 @@ const App = () => {
     fetchLanguages();
   }, []);
 
+  function StatusCheckbox() {
+    return (
+      <div  >
+        <label className="app__filter-label">Campaign Status:</label>
+        <div className='d-flex gap-3'>
+          <input
+            type="checkbox"
+            id="completed"
+            value="Completed"
+            checked={selectedStatus === 'Completed'}
+            onChange={() => setSelectedStatus('Completed')}
+            style={{ width: "20px", height: "20px", cursor: "pointer" }}
+          />
+          <label htmlFor="completed">Completed</label>
+  
+          <input
+            type="checkbox"
+            id="running"
+            value="Running"
+            checked={selectedStatus === 'Running'}
+            onChange={() => setSelectedStatus('Running')}
+            style={{ width: "20px", height: "20px", cursor: "pointer" }}
+          />
+          <label htmlFor="running">Running</label>
+  
+          <input
+            type="checkbox"
+            id="all"
+            value="All"
+            checked={selectedStatus === 'All'}
+            onChange={() => setSelectedStatus('All')}
+            style={{ width: "20px", height: "20px", cursor: "pointer" }}
+          />
+          <label htmlFor="all">All</label>
+        </div>
+      </div>
+    );
+  }
+  
+
+  // useEffect(() => {
+  //   const fetchCampaigns = async () => {
+  //     setIsLoading(true);
+  //     try {
+  //       const response = await makeApi("/v1/admin/api/filtered-campaign-summary", "GET");
+  //       const campaigns = response.data.data;
+  //       const reversedCampaigns = [...campaigns].reverse();
+  //       setCampaigns(reversedCampaigns);
+  //     } catch (error) {
+  //       console.error('Error fetching campaigns:', error);
+  //     } finally {
+  //       setIsLoading(false);
+  //     }
+  //   };
+  //   fetchCampaigns();
+  // }, []);
   useEffect(() => {
     const fetchCampaigns = async () => {
       setIsLoading(true);
       try {
         const response = await makeApi("/v1/admin/api/filtered-campaign-summary", "GET");
-        const campaigns = response.data.data;
+        let campaigns = response.data.data;
+  
+        if (selectedStatus === 'Completed') {
+          campaigns = campaigns.filter(campaign => campaign.status === 'Completed');
+        } else if (selectedStatus === 'Running') {
+          campaigns = campaigns.filter(campaign => new Date(campaign.dead_line) >= new Date());
+        }
+  
         const reversedCampaigns = [...campaigns].reverse();
         setCampaigns(reversedCampaigns);
       } catch (error) {
@@ -121,7 +186,7 @@ const App = () => {
       }
     };
     fetchCampaigns();
-  }, []);
+  }, [selectedStatus])
 
   const fetchUsers = async (filters) => {
     setIsLoading(true);
@@ -539,6 +604,8 @@ const App = () => {
         <h1 className="app__title">Send Campaign Messages</h1>
         <div className="app__filter-section">
           <div className="app__campaign-selection">
+          <StatusCheckbox />
+
             <div className="app__search-container">
               <input
                 type="text"
@@ -608,7 +675,7 @@ const App = () => {
                     <th>Level</th>
                     <th>Industry</th>
                     <th>Gender</th>
-                    <th>Country</th>
+                    {/* <th>Country</th> */}
                     <th>State</th>
                     <th>City</th>
                   </tr>
@@ -629,7 +696,7 @@ const App = () => {
                       <td>{user.level}</td>
                       <td>{user.industry}</td>
                       <td>{user.gender}</td>
-                      <td>{user.country}</td>
+                      {/* <td>{user.country}</td> */}
                       <td>{user.state}</td>
                       <td>{user.city}</td>
                     </tr>
