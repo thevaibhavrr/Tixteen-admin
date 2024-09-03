@@ -1022,7 +1022,7 @@ const MonthlyAttendance = () => {
                         <tr>
                             <th>Date</th>
                             <th>Login Time</th>
-                            <th>Status</th>
+                            {/* <th>Status</th> */}
                             <th>Short Leave (Minutes)</th>
                             <th>Delay (Minutes)</th>
                             <th>Salary Deduction</th>
@@ -1044,7 +1044,7 @@ const MonthlyAttendance = () => {
                                 <tr key={index} className={`${isSunday ? 'sunday-row' : ''} ${rowClass}`}>
                                     <td>{data.date}</td>
                                     <td>{data.logintime}</td>
-                                    <td>{data.status}</td>
+                                    {/* <td>{data.status}</td> */}
                                     <td>{data.shortLeaveMinutes}</td>
                                     <td>{data.delayMinutes}</td>
                                     <td>{data.salaryDeduction}</td>

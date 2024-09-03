@@ -191,7 +191,7 @@ const App = () => {
   const fetchUsers = async (filters) => {
     setIsLoading(true);
     try {
-      const response = await makeApi(`/V1/influencers?MultiLevels=${filterLevel}&industry=${filterIndustry}&language=${filterLanguage}&gender=${filterGender}&perPage=50000000&page=${currentPage}`, 'GET');
+      const response = await makeApi(`/V1/influencers?MultiLevels=${filterLevel}&industry=${filterIndustry}&language=${filterLanguage}&gender=${filterGender}&perPage=50000000&page=${currentPage}&verification=verified`, 'GET');
       const users = response.data.data;
       const reversedUsers = [...users].reverse();
       setUserList(reversedUsers);
