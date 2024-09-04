@@ -4,24 +4,85 @@ import "../../style/user/updateUserDetails.css";
 import BackIcon from '../../utils/BackIcon';
 import { makeApi } from '../../api/callApi.tsx';
 import PrimaryLoader from '../../utils/PrimaryLoader.jsx';
-import { toast } from 'react-toastify'; 
+import { toast } from 'react-toastify';
 function UpdateUserDetails() {
     const { id } = useParams();
     const [userData, setUserData] = useState(null);
     const [industryList, setIndustryList] = useState([]);
     const [filterIndustry, setFilterIndustry] = useState('');
     const [isOpen, setIsOpen] = useState(false);
+    const [socialMediaData, setSocialMediaData] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [newSocialMedia, setNewSocialMedia] = useState({
+        platform: '',
+        link: '',
+        follower: ''
+    });
 
     const fetchUserData = async () => {
         try {
             const response = await makeApi('/V1/influencers', 'POST', { _id: id });
 
-            setUserData(response.data.data);
-            setFilterIndustry(response.data.data.industry || '');
+            await setUserData(response.data.data);
+            await setFilterIndustry(response.data.data.industry || '');
+
+            fetchSocialMediaData(response.data.data.influ_soc_link);
 
         } catch (error) {
             console.error('Error fetching user data:', error);
+        }
+    };
+    const fetchSocialMediaData = async (id) => {
+        console.log('Fetching social media data for user:', id);
+        setLoading(true);
+        try {
+            const response = await makeApi(`/api/get-social-media-by-user-id/${id}`, "GET");
+            console.log('Social media data:', response.data.data);
+            setSocialMediaData(response.data.data);
+        } catch (error) {
+            console.error('Error fetching social media data:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+    const handleAddNewSocialMedia = async () => {
+        const { platform, link, follower } = newSocialMedia;
+        if (!platform || !link || !follower) {
+            toast.error('Please fill in all fields');
+            return;
+        }
+
+        try {
+            const response = await makeApi('/api/add-social-media', 'POST', {
+                ...newSocialMedia,
+                influ_soc_link: userData.influ_soc_link,
+                id: userData.influ_soc_link
+            });
+            setSocialMediaData([...socialMediaData, response.data.data]);
+            setNewSocialMedia({ platform: '', link: '', follower: '' });
+        } catch (error) {
+            console.error('Error adding new social media link:', error);
+        }
+    };
+
+    const handleUpdate = async (id, updatedLink, updatedFollower) => {
+        try {
+            const response = await makeApi(`/api/update-social-media/${id}`, 'PUT', { link: updatedLink, follower: updatedFollower });
+            const data = await response.json();
+            setSocialMediaData((prevData) =>
+                prevData.map((item) => (item._id === id ? data.data : item))
+            );
+        } catch (error) {
+            console.error('Error updating social media link:', error);
+        }
+    };
+
+    const handleDelete = async (id) => {
+        try {
+            await makeApi(`/api/delete-social-media/${id}`, 'DELETE');
+            setSocialMediaData((prevData) => prevData.filter((item) => item._id !== id));
+        } catch (error) {
+            console.error('Error deleting social media link:', error);
         }
     };
 
@@ -57,8 +118,8 @@ function UpdateUserDetails() {
         try {
             const updatedUserData = { ...userData, industry: filterIndustry };
             const response = await makeApi(`/v1/influencers/${id}`, 'PUT', updatedUserData);
-                console.log('User data updated:', response);
-           
+            console.log('User data updated:', response);
+
         } catch (error) {
             console.error('Error updating user data:', error);
         }
@@ -93,7 +154,7 @@ function UpdateUserDetails() {
     }
 
     return (
-        <>
+        <div style={{marginBottom:"100px"}}  >
             <BackIcon path={`user/user-details/${userData._id}`} />
             <div className="update-user-details-page">
                 <h2>Update User Details</h2>
@@ -144,7 +205,7 @@ function UpdateUserDetails() {
                         <div className='influncer_item_first_div'>Industry</div>
                         <div className="accordion-container influncer_item_second_div">
                             <div className="">
-                                <div className='industy_accordion btn ' style={{ maxWidth: "75%" ,backgroundColor: "lightgray" }}>
+                                <div className='industy_accordion btn ' style={{ maxWidth: "75%", backgroundColor: "lightgray" }}>
                                     <div className='industy_accordion-header align-items-center' style={{ cursor: "pointer", padding: "2px", gap: "15px", width: "100%" }} onClick={handleToggle}>
                                         <div>Industry Filter</div>
                                         <div className={`industy_accordion-icon ${isOpen ? 'open' : ''}`}>
@@ -215,7 +276,101 @@ function UpdateUserDetails() {
                     <button type="submit" className="update-user-details-submit">Update</button>
                 </form>
             </div>
-        </>
+        <div className='w-100 d-flex justify-content-center ' >
+            <div className="deliverables-container w-75">
+            <h4>Social Media Manager</h4>
+            {loading ? (
+                <p>Loading...</p>
+            ) : (
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Platform</th>
+                            <th>Link</th>
+                            <th>Follower</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {socialMediaData.map((item) => (
+                            <tr key={item._id}>
+                                <td>{item.platform}</td>
+                                <td className='deliverable-row' >
+                                    <input
+                                        type="text"
+                                        value={item.link}
+                                        onChange={(e) =>
+                                            setSocialMediaData((prevData) =>
+                                                prevData.map((i) =>
+                                                    i._id === item._id ? { ...i, link: e.target.value } : i
+                                                )
+                                            )
+                                        }
+                                    />
+                                </td>
+                                <td>
+                                    <input
+                                        type="text"
+                                        value={item.follower}
+                                        onChange={(e) =>
+                                            setSocialMediaData((prevData) =>
+                                                prevData.map((i) =>
+                                                    i._id === item._id ? { ...i, follower: e.target.value } : i
+                                                )
+                                            )
+                                        }
+                                    />
+                                </td>
+                                <td>
+                                    <button className='btn btn-primary' onClick={() => handleUpdate(item._id, item.link, item.follower)}>
+                                        Update
+                                    </button>
+                                    <button className='btn btn-danger'  onClick={() => handleDelete(item._id)}>Delete</button>
+                                </td>
+                            </tr>
+                        ))}
+                        <tr>
+                            <td>
+                                <input
+                                    type="text"
+                                    placeholder="Platform"
+                                    value={newSocialMedia.platform}
+                                    onChange={(e) =>
+                                        setNewSocialMedia({ ...newSocialMedia, platform: e.target.value })
+                                    }
+                                />
+                            </td>
+                            <td>
+                                <input
+                                    type="text"
+                                    placeholder="Link"
+                                    value={newSocialMedia.link}
+                                    onChange={(e) =>
+                                        setNewSocialMedia({ ...newSocialMedia, link: e.target.value })
+                                    }
+                                />
+                            </td>
+                            <td>
+                                <input
+                                    type="text"
+                                    placeholder="Follower"
+                                    value={newSocialMedia.follower}
+                                    onChange={(e) =>
+                                        setNewSocialMedia({ ...newSocialMedia, follower: e.target.value })
+                                    }
+                                />
+                            </td>
+                            <td>
+                                <button className='btn btn-primary' onClick={handleAddNewSocialMedia}>Add</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            )}
+        </div>
+        </div>
+
+        </div>
     );
 }
 

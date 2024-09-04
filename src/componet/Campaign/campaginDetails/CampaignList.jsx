@@ -201,7 +201,6 @@ const CampaignList = () => {
                                 <img src={banner} alt={campaign.campaign_name} className="campaign-banner" />
                                 <div className="campaign-details">
                                     <h3>{campaign.campaign_name}</h3>
-                                    <p>Status: {campaign.status}</p>
                                     <p>Deadline: {formatDate(campaign.dead_line)}</p>
                                     <Link to={`/campaign/campaign-details/${campaign.campaign_no}`}>
                                         <button className="view-more-button">View More</button>

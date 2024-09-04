@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import '../../../style/campaign/campaignDetails.css';
-import { Link, useParams , useNavigate } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import BackIcon from '../../../utils/BackIcon';
 import EditIcon from '../../../utils/EditIcon';
 import { makeApi } from '../../../api/callApi.tsx';
@@ -23,6 +23,9 @@ function CampaignDetails() {
   const [remark, setRemark] = useState('');
   const [followerrequired, setFollowerrequired] = useState([]);
   const [showDeletePopup, setShowDeletePopup] = useState(false);
+  const [deliverables, setDeliverables] = useState([]);
+  const [viewmoreuserdata, setViewmoreuserdata] = useState([]);
+
 
 
   const fetchCampaignDetailsWithAppliedUsers = async () => {
@@ -55,10 +58,23 @@ function CampaignDetails() {
       setLoading(false);
     }
   };
+  const fetchCampaignDeliverables = async () => {
+    try {
+      setLoading(true);
+      const response = await makeApi(`/api/campaign_deliverable/${id}`, 'GET');
+      const campaignData = response.data.data;
+      setDeliverables(campaignData);
+    } catch (error) {
+      console.error('Error fetching campaign deliverables:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     fetchCampaignDetailsWithAppliedUsers();
     fetchFollowers();
+    fetchCampaignDeliverables()
   }, [id]);
 
   const handleSearch = (query) => {
@@ -104,8 +120,24 @@ function CampaignDetails() {
   };
 
   const toggleMoreDetails = (userId) => {
+    fetchSocialMediaData(userId);
     setShowMoreDetails(showMoreDetails === userId ? null : userId);
+    // setViewmoreuserdata
+
   };
+  const fetchSocialMediaData = async (id) => {
+    setLoading(true);
+
+    try {
+      const response = await makeApi(`/api/get-social-media-by-user-id/${id}`, "GET");
+      setViewmoreuserdata(response.data.data);
+    }
+    catch (error) {
+      console.error("Error fetching social media data:", error);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   const handleVerifieruserForcapaign = async (userId, approvalStatus, changes = '') => {
     try {
@@ -232,7 +264,7 @@ function CampaignDetails() {
           <p className="campaign-platform-unique"><strong>Platform:</strong> {campaignDetails?.platforms}</p>
           <p className="campaign-link-unique"><strong>Link:</strong> <Link to={campaignDetails?.platform_link} target="_blank" rel="noopener noreferrer">{campaignDetails?.platform_link}</Link></p>
           <p className="campaign-tags-unique"><strong>Profiles to Tag: </strong>{campaignDetails?.profile_tag}</p>
-          <p className="campaign-location-unique"><strong>Location:</strong> {campaignDetails?.city}, {campaignDetails?.state}, {campaignDetails?.country}</p>
+          {/* <p className="campaign-location-unique"><strong>Location:</strong> {campaignDetails?.city}, {campaignDetails?.state}, {campaignDetails?.country}</p> */}
           <p className="campaign-deadline-unique"><strong>Deadline:</strong> {formatDate(campaignDetails?.dead_line)}</p>
           <p className="campaign-todo-unique"><strong>To Do:</strong> {campaignDetails?.to_do}</p>
           <p className="campaign-nottodo-unique"><strong>Not To Do:</strong> {campaignDetails?.not_todo}</p>
@@ -240,11 +272,31 @@ function CampaignDetails() {
           <p className="campaign-deadline-unique" ><strong> Created Date: </strong> {campaignDetails?.created_date}</p>
 
           <p className="campaign-screenshots-unique"><strong>Screenshots Required:</strong> {campaignDetails?.is_screen_shots_required ? "Yes" : "No"}</p>
-          <div className="campaign-location-unique">
+          {/* <div className="campaign-location-unique">
             <h3>Location</h3>
             <p>Country: {campaignDetails?.country}</p>
             <p>State: {campaignDetails?.state}</p>
             <p>City: {campaignDetails?.city}</p>
+          </div> */}
+          <div className="deliverables-container w-25">
+            <strong>Deliverables -</strong>
+            {deliverables.map((item) => (
+              <div key={item._id} className="deliverable-row">
+                <input
+                  type="text"
+                  value={item.deliverable}
+                  onChange={(e) => {
+                    const updatedDeliverables = deliverables.map((deliverable) =>
+                      deliverable._id === item._id ? { ...deliverable, deliverable: e.target.value } : deliverable
+                    );
+                  }}
+                  className="deliverable-input"
+                />
+
+              </div>
+            ))}
+
+
           </div>
         </div>
         <button
@@ -468,13 +520,27 @@ function CampaignDetails() {
                         ) :
                           null
                         }
-                        <button className="view-more-button-unique" onClick={() => toggleMoreDetails(user.id)}>View More</button>
-                        {showMoreDetails === user.id && (
+                        <button className="view-more-button-unique" onClick={() => toggleMoreDetails(user.user.influ_soc_link)}>View More</button>
+                        {showMoreDetails === user.user.influ_soc_link && (
                           <div className="more-details-unique">
-                            <p>Instagram Followers: {user?.user?.instagramFollowers}</p>
-                            <p>YouTube Subscribers: {user?.user?.youtubeSubscribers}</p>
-                            <p>Facebook Followers: {user?.user?.facebookFollowers}</p>
-                            <p>Engagement Rate: {user?.user?.engagementRate}</p>
+                            <div>
+                              {viewmoreuserdata?.map((data) => {
+                                return <div style={{borderBottom: "1px solid black" , padding: "10px", backgroundColor: "lightgray" }} >
+                                  <p>
+                                    platform : {data.platform}
+                                  </p>
+                                  <p>
+
+                                    Link : <Link to={data.link} target="_blank" rel="noopener noreferrer">Open</Link>
+                                  </p>
+                                  <p>
+
+                                    follower : {data.follower}
+                                  </p>
+                                </div>
+                              })
+                              }
+                            </div>
                           </div>
                         )}
                       </div>
@@ -493,7 +559,7 @@ function CampaignDetails() {
         onClose={() => setShowDeletePopup(false)}
         onDelete={deleteLanguage}
         message="Are you sure you want to delete this campaign?"
-        
+
       />
 
     </>

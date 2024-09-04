@@ -60,4 +60,45 @@
   .form-button:hover {
     background-color: var(--third-yellow-color);
   }
+
+  .deliverables-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .deliverable-row, .add-deliverable-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .deliverable-input {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .delete-btn, .update-btn, .add-btn {
+    padding: 8px 12px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .delete-btn {
+    background-color: #dc3545;
+  }
+  
+  .update-btn {
+    background-color: #28a745;
+  }
+  
+  .add-btn {
+    background-color: #007bff;
+  }
+  
   

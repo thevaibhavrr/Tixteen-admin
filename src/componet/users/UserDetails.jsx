@@ -10,24 +10,44 @@ import { Link } from "react-router-dom"
 const UserDetails = () => {
     const { id } = useParams();
     const [user, setUser] = useState(null);
+
     const [applications, setApplications] = useState([]);
     const [filteredApplications, setFilteredApplications] = useState([]);
     const [socialData, setSocialData] = useState([]);
     const [BankDetails, setBankdetails] = useState([]);
     const [activeTab, setActiveTab] = useState('Pending');
+    const [socialMediaData, setSocialMediaData] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     const fetchData = async () => {
+        setLoading(true);
         try {
             const response = await makeApi('/V1/influencers', 'POST', { _id: id });
-            setUser(response.data.data);
-            setApplications(response.data.apply);
-            setSocialData(response.data.socialMedia);
-            setBankdetails(response.data.BankDetails)
-            filterApplications('Pending', response.data.apply); // Initial filter
+            await setUser(response.data.data);
+            await setApplications(response.data.apply);
+            await setSocialData(response.data.socialMedia);
+            await setBankdetails(response.data.BankDetails)
+            await filterApplications('Pending', response.data.apply); // Initial filter
+            fetchSocialMediaData(response.data.data.influ_soc_link)
         } catch (error) {
             console.error('Error fetching user data:', error);
+        } finally {
+            setLoading(false);
         }
     };
+    const fetchSocialMediaData = async (id) => {
+        setLoading(true);
+
+        try {
+            const response = await makeApi(`/api/get-social-media-by-user-id/${id}`, "GET");
+            setSocialMediaData(response.data.data);
+        }
+        catch (error) {
+            console.error("Error fetching social media data:", error);
+        } finally {
+            setLoading(false);
+        }
+    }
     const getFullLink = (platform, link) => {
         if (!link.startsWith("www.") && !link.startsWith("https://")) {
             switch (platform) {
@@ -123,6 +143,7 @@ const UserDetails = () => {
                             <p>{user.rating ? `Rating: ${user.rating}` : 'Rating: Not Provided'}</p>
                         </div>
                     </div>
+
                     <div className="user-body">
                         <div className="user-section">
                             <h2>Contact Information</h2>
@@ -168,43 +189,65 @@ const UserDetails = () => {
                             <p>{user.primary_platform ? `Instagram: ${user.primary_platform}` : 'Instagram: Not Provided'}</p>
                             <p>{user.influ_soc_link ? `Influence Social Link: ${user.influ_soc_link}` : 'Influence Social Link: Not Provided'}</p>
                         </div>
-                        <div className='d-flex gap-3 my-2' >
-                            {console.log(user)}
-                            <div>
-                                Social :
-                            </div>
-                            <div>
-                                {socialData?.platform === "Instagram" && (
-                                    <div className='d-flex gap-3' >
-                                        <div>
-                                            <Link to={getFullLink("Instagram", socialData?.link)} target="_blank" className='text-black' style={{ textDecoration: 'none', color: 'black' }} rel="noopener noreferrer" >
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" className="bi bi-instagram" viewBox="0 0 16 16">
-                                                    <path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.9 3.9 0 0 0-1.417.923A3.9 3.9 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.372 1.942.372.853.038 1.125.048 3.297.048 2.173 0 2.444-.01 3.297-.048.851-.04 1.432-.174 1.941-.372a3.9 3.9 0 0 0 1.417-.923 3.9 3.9 0 0 0 .923-1.417c.198-.51.372-1.09.372-1.942.038-.853.048-1.125.048-3.297 0-2.174-.01-2.445-.048-3.297-.04-.852-.174-1.433-.372-1.942a3.9 3.9 0 0 0-.923-1.417 3.9 3.9 0 0 0-1.417-.923c-.51-.198-1.09-.372-1.942-.372C10.445.01 10.173 0 8 0ZM8 1.46c2.13 0 2.384.01 3.226.047.78.035 1.204.166 1.485.276.374.145.64.318.92.598.28.28.453.546.598.92.11.281.24.705.276 1.485.037.842.046 1.096.046 3.227 0 2.13-.01 2.384-.046 3.226-.035.78-.166 1.204-.276 1.485a2.45 2.45 0 0 1-.598.92 2.45 2.45 0 0 1-.92.598c-.281.11-.705.24-1.485.276-.842.037-1.096.047-3.226.047-2.131 0-2.385-.01-3.227-.047-.78-.035-1.204-.166-1.485-.276a2.45 2.45 0 0 1-.92-.598 2.45 2.45 0 0 1-.598-.92c-.11-.281-.24-.705-.276-1.485-.037-.842-.047-1.096-.047-3.226 0-2.131.01-2.385.047-3.227.035-.78.166-1.204.276-1.485a2.45 2.45 0 0 1 .598-.92 2.45 2.45 0 0 1 .92-.598c.281-.11.705-.24 1.485-.276.842-.037 1.096-.046 3.227-.046ZM8 3.892A4.108 4.108 0 1 0 8 12.108 4.108 4.108 0 0 0 8 3.892Zm0 1.455a2.653 2.653 0 1 1 0 5.306 2.653 2.653 0 0 1 0-5.306ZM12.733 3.534a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92Z" />
-                                                </svg>
-                                            </Link>
+                        <div className='d-flex flex-column gap-3 my-2' >
+                            <div className='d-flex gap-3 my-2' >
+                                <div>
+                                    Social :
+                                </div>
+                                <div>
+                                    {socialData?.platform === "Instagram" && (
+                                        <div className='d-flex gap-3' >
+                                            <div>
+                                                <Link to={getFullLink("Instagram", socialData?.link)} target="_blank" className='text-black' style={{ textDecoration: 'none', color: 'black' }} rel="noopener noreferrer" >
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" className="bi bi-instagram" viewBox="0 0 16 16">
+                                                        <path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.9 3.9 0 0 0-1.417.923A3.9 3.9 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.372 1.942.372.853.038 1.125.048 3.297.048 2.173 0 2.444-.01 3.297-.048.851-.04 1.432-.174 1.941-.372a3.9 3.9 0 0 0 1.417-.923 3.9 3.9 0 0 0 .923-1.417c.198-.51.372-1.09.372-1.942.038-.853.048-1.125.048-3.297 0-2.174-.01-2.445-.048-3.297-.04-.852-.174-1.433-.372-1.942a3.9 3.9 0 0 0-.923-1.417 3.9 3.9 0 0 0-1.417-.923c-.51-.198-1.09-.372-1.942-.372C10.445.01 10.173 0 8 0ZM8 1.46c2.13 0 2.384.01 3.226.047.78.035 1.204.166 1.485.276.374.145.64.318.92.598.28.28.453.546.598.92.11.281.24.705.276 1.485.037.842.046 1.096.046 3.227 0 2.13-.01 2.384-.046 3.226-.035.78-.166 1.204-.276 1.485a2.45 2.45 0 0 1-.598.92 2.45 2.45 0 0 1-.92.598c-.281.11-.705.24-1.485.276-.842.037-1.096.047-3.226.047-2.131 0-2.385-.01-3.227-.047-.78-.035-1.204-.166-1.485-.276a2.45 2.45 0 0 1-.92-.598 2.45 2.45 0 0 1-.598-.92c-.11-.281-.24-.705-.276-1.485-.037-.842-.047-1.096-.047-3.226 0-2.131.01-2.385.047-3.227.035-.78.166-1.204.276-1.485a2.45 2.45 0 0 1 .598-.92 2.45 2.45 0 0 1 .92-.598c.281-.11.705-.24 1.485-.276.842-.037 1.096-.046 3.227-.046ZM8 3.892A4.108 4.108 0 1 0 8 12.108 4.108 4.108 0 0 0 8 3.892Zm0 1.455a2.653 2.653 0 1 1 0 5.306 2.653 2.653 0 0 1 0-5.306ZM12.733 3.534a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92Z" />
+                                                    </svg>
+                                                </Link>
+                                            </div>
+
+                                            <div> {socialData?.follower} </div>
+
                                         </div>
+                                    )}
+                                    {socialData?.platform === "Facebook" && (
+                                        <Link to={getFullLink("Facebook", socialData?.link)} target="_blank" className='' style={{ textDecoration: 'none' }} rel="noopener noreferrer" >
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" className="bi bi-facebook" viewBox="0 0 16 16">
+                                                <path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951" />
+                                            </svg>
+                                        </Link>
+                                    )}
 
-                                        <div> {socialData?.follower} </div>
+                                    {socialData?.platform === "YouTube" && (
+                                        <Link to={socialData?.link} target="_blank" className='text-black' style={{ textDecoration: 'none', color: 'red' }} rel="noopener noreferrer" >
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" className="bi bi-youtube" viewBox="0 0 16 16">
+                                                <path d="M8.051 1.999h.089c.822.003 4.987.033 6.11.335a2.01 2.01 0 0 1 1.415 1.42c.101.38.172.883.22 1.402l.01.104.022.26.008.104c.065.914.073 1.77.074 1.957v.075c-.001.194-.01 1.108-.082 2.06l-.008.105-.009.104c-.05.572-.124 1.14-.235 1.558a2.01 2.01 0 0 1-1.415 1.42c-1.16.312-5.569.334-6.18.335h-.142c-.309 0-1.587-.006-2.927-.052l-.17-.006-.087-.004-.171-.007-.171-.007c-1.11-.049-2.167-.128-2.654-.26a2.01 2.01 0 0 1-1.415-1.419c-.111-.417-.185-.986-.235-1.558L.09 9.82l-.008-.104A31 31 0 0 1 0 7.68v-.123c.002-.215.01-.958.064-1.778l.007-.103.003-.052.008-.104.022-.26.01-.104c.048-.519.119-1.023.22-1.402a2.01 2.01 0 0 1 1.415-1.42c.487-.13 1.544-.21 2.654-.26l.17-.007.172-.006.086-.003.171-.007A100 100 0 0 1 7.858 2zM6.4 5.209v4.818l4.157-2.408z" />
+                                            </svg>
+                                        </Link>
+                                    )}
 
-                                    </div>
-                                )}
-                                {socialData?.platform === "Facebook" && (
-                                    <Link to={getFullLink("Facebook", socialData?.link)} target="_blank" className='' style={{ textDecoration: 'none' }} rel="noopener noreferrer" >
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" className="bi bi-facebook" viewBox="0 0 16 16">
-                                            <path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951" />
-                                        </svg>
-                                    </Link>
-                                )}
-
-                                {socialData?.platform === "YouTube" && (
-                                    <Link to={socialData?.link} target="_blank" className='text-black' style={{ textDecoration: 'none', color: 'red' }} rel="noopener noreferrer" >
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" className="bi bi-youtube" viewBox="0 0 16 16">
-                                            <path d="M8.051 1.999h.089c.822.003 4.987.033 6.11.335a2.01 2.01 0 0 1 1.415 1.42c.101.38.172.883.22 1.402l.01.104.022.26.008.104c.065.914.073 1.77.074 1.957v.075c-.001.194-.01 1.108-.082 2.06l-.008.105-.009.104c-.05.572-.124 1.14-.235 1.558a2.01 2.01 0 0 1-1.415 1.42c-1.16.312-5.569.334-6.18.335h-.142c-.309 0-1.587-.006-2.927-.052l-.17-.006-.087-.004-.171-.007-.171-.007c-1.11-.049-2.167-.128-2.654-.26a2.01 2.01 0 0 1-1.415-1.419c-.111-.417-.185-.986-.235-1.558L.09 9.82l-.008-.104A31 31 0 0 1 0 7.68v-.123c.002-.215.01-.958.064-1.778l.007-.103.003-.052.008-.104.022-.26.01-.104c.048-.519.119-1.023.22-1.402a2.01 2.01 0 0 1 1.415-1.42c.487-.13 1.544-.21 2.654-.26l.17-.007.172-.006.086-.003.171-.007A100 100 0 0 1 7.858 2zM6.4 5.209v4.818l4.157-2.408z" />
-                                        </svg>
-                                    </Link>
-                                )}
+                                </div>
                             </div>
+                            <div className="user-section" >
+                                {socialMediaData?.map((data) => {
+                                    return <div style={{ borderBottom: "1px solid black", backgroundColor:"lightcyan" }} >
+                                        <p>
+                                            platform : {data.platform}
+                                        </p>
+                                        <p>
+
+                                            Link : <Link to={data.link} target="_blank" rel="noopener noreferrer">Open</Link>
+                                        </p>
+                                        <p>
+
+                                            follower : {data.follower}
+                                        </p>
+                                    </div>
+                                })
+                                }
+                            </div>
+
                         </div>
+
                         <div className="user-section">
                             <h2>Shipping Address</h2>
                             <p>{user.shipping_address ? user.shipping_address : 'Shipping Address: Not Provided'}</p>
@@ -244,6 +287,7 @@ const UserDetails = () => {
                         <p>{BankDetails?.bankdate ? `bankdate: ${BankDetails?.bankdate}` : 'bankdate: Not Provided'}</p>
                     </div>
                 </div>
+
                 <div className="user-section px-5">
                     <div className="user-tabs">
                         {['Pending', 'Ongoing', 'Completed', 'Rejected'].map(tab => (
@@ -282,6 +326,7 @@ const UserDetails = () => {
                                             </Link>
                                         }
                                     </p>
+
 
                                     <p><strong>Price:</strong> {app.campaignDetails.price}</p>
                                     <p><strong>Deadline:</strong> {app.campaignDetails.dead_line}</p>
