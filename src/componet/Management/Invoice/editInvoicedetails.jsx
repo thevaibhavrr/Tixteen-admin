@@ -588,7 +588,7 @@ const EditInvoiceDetails = () => {
             }));
 
             await makeApi(`/v1/admin/api/update-bill-items`, "PUT", billItemsData);
-            toast.success("campaign update successfully");
+            toast.success("Invoice  update successfully");
             setAlert('Invoice saved successfully!');
         } catch (error) {
             console.error('Error saving invoice:', error);

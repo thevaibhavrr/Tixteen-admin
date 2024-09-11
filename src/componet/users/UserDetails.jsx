@@ -18,6 +18,8 @@ const UserDetails = () => {
     const [activeTab, setActiveTab] = useState('Pending');
     const [socialMediaData, setSocialMediaData] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [IdentityINfo, setIdentityINfo] = useState();
+    console.log("IdentityINfo",IdentityINfo)
 
     const fetchData = async () => {
         setLoading(true);
@@ -27,6 +29,7 @@ const UserDetails = () => {
             await setApplications(response.data.apply);
             await setSocialData(response.data.socialMedia);
             await setBankdetails(response.data.BankDetails)
+            await setIdentityINfo(response.data.InfluencerIdentity)
             await filterApplications('Pending', response.data.apply); // Initial filter
             fetchSocialMediaData(response.data.data.influ_soc_link)
         } catch (error) {
@@ -229,7 +232,7 @@ const UserDetails = () => {
                             </div>
                             <div className="user-section" >
                                 {socialMediaData?.map((data) => {
-                                    return <div style={{ borderBottom: "1px solid black", backgroundColor:"lightcyan" }} >
+                                    return <div style={{ borderBottom: "1px solid black", backgroundColor: "lightcyan" }} >
                                         <p>
                                             platform : {data.platform}
                                         </p>
@@ -257,15 +260,24 @@ const UserDetails = () => {
                     </div>
                     <div className="user-section ps-2">
                         <h2>Introduction Video</h2>
-                        {!user.intro_video ? (
-                            <video width="100%" controls>
-                                <source src="https://res.cloudinary.com/dyl3gzm7d/video/upload/v1715863302/exaqwk3k1lqa2xhklsha.mp4" type="video/mp4" />
-                                Your browser does not support the video tag.
-                            </video>
-                        ) : (
+                        {!user.intro_video_link ? (
+                            // <video width="100%" controls>
+                            //     <source src="https://res.cloudinary.com/dyl3gzm7d/video/upload/v1715863302/exaqwk3k1lqa2xhklsha.mp4" type="video/mp4" />
+                            //     Your browser does not support the video tag.
+                            // </video>
                             <p>Introduction Video: Not Provided</p>
+                        ) : (
+                            <>
+                                <video width="100%" height="auto" controls>
+                                    <source src={user.intro_video_link} type="video/mp4" />
+                                    Your browser does not support the video tag.
+                                </video>
+
+                            </>
                         )}
                     </div>
+                    <h1></h1>
+
 
 
                     <div className="user-section ps-4 ">
@@ -285,6 +297,13 @@ const UserDetails = () => {
                         <p>{BankDetails?.phone ? `phone: ${BankDetails?.phone}` : 'phone: Not Provided'}</p>
                         <p>{BankDetails?.verify ? `verify: ${BankDetails?.verify}` : 'verify: Not Provided'}</p>
                         <p>{BankDetails?.bankdate ? `bankdate: ${BankDetails?.bankdate}` : 'bankdate: Not Provided'}</p>
+                    </div>
+                    <div className="user-section user-footer">
+                        <h2>Idetity details</h2>
+                        <p>{IdentityINfo?.adhar_front ? <> Addhar front: <img src={IdentityINfo?.adhar_front} alt="adhar_front" style={{maxWidth: "100px"}} /></> : 'adhar_front: Not Provided'}</p>
+                        <p>{IdentityINfo?.adhar_back ? <> Addhar Back: <img src={IdentityINfo?.adhar_back} alt="adhar_back" style={{maxWidth: "100px"}} /></> : 'adhar_back: Not Provided'}</p>
+                        <p>{IdentityINfo?.pan ? <> pan Card: <img src={IdentityINfo?.pan} alt="pan" style={{maxWidth: "100px"}} /></> : 'pan: Not Provided'}</p>
+                        <p>{IdentityINfo?.pan_no ? `pan_no: ${IdentityINfo?.pan_no}` : 'pan_no: Not Provided'}</p>
                     </div>
                 </div>
 

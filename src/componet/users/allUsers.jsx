@@ -337,6 +337,7 @@ function AllUser() {
               <select className="tab-button all-user-search" value={serachQuery} onChange={(e) => { setSerachQuery(e.target.value) }}>
                 <option value="name">From Name</option>
                 <option value="id">From Id</option>
+                <option value="phone">From Phone</option>
               </select>
             </div>
 
