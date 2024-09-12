@@ -8,6 +8,7 @@ import EditIcon from '../../../utils/EditIcon';
 import { makeApi } from '../../../api/callApi.tsx';
 import PrimaryLoader from '../../../utils/PrimaryLoader.jsx';
 import DeletePopup from '../../../utils/DeletePopup.jsx';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 function CampaignDetails() {
   const { id } = useParams();
@@ -350,7 +351,7 @@ function CampaignDetails() {
                     <div className="applied-user-content-unique">
                       <div className="d-flex flex-column gap-4 align-items-center">
                         <div>
-                          <img
+                          {/* <img
                             // src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTDJzEaxLN-jGRYYUO65pWu7Q9GXoNt4LUSSA&s"
                             src={
                               user?.user?.profile_img && user?.user?.profile_img.includes('http://res.cloudinary.com')
@@ -359,7 +360,17 @@ function CampaignDetails() {
                             }
                             alt={user?.user?.user_name}
                             className="user-image-unique"
-                          />
+                          /> */}
+                                                  <LazyLoadImage effect="blur"
+                            src={
+                                user?.user?.profile_img && user?.user?.profile_img.includes('http://res.cloudinary.com')
+                                    ? user?.user?.profile_img
+                                    : `https://storage.tixteen.com/assets/${user?.user?.profile_img}`
+                            }
+                            alt={user?.user?.user_name}
+                            className="user-image-unique"
+                            loading='lazy'
+                        />
                         </div>
                         <Link to={`/user/user-details/${user?.user?._id}`} target="_blank">
                           <div className="btn btn-warning">View Profile</div>

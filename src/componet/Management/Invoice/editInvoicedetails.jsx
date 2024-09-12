@@ -422,7 +422,7 @@ const EditInvoiceDetails = () => {
         let cgstRate = '0.00';
         let sgstRate = '0.00';
         let igstRate = '0.00';
-
+    
         if (GSTCode === "03") {
             console.log("GSTCode", GSTCode);
             const gstAmount = ((taxable * 18) / 100).toFixed(2);
@@ -434,7 +434,7 @@ const EditInvoiceDetails = () => {
             igstAmount = ((taxable * 18) / 100).toFixed(2);
             igstRate = '18.00';
         }
-
+    
         return {
             taxableAmount: taxable,
             cgstRate,
@@ -525,12 +525,26 @@ const EditInvoiceDetails = () => {
     };
 
 
+    // const handleProductChange = (index, field, value) => {
+    //     const newProducts = [...products];
+    //     calculateTax(newProducts[index], 222);
+    //     newProducts[index][field] = value;
+    //     setProducts(newProducts);
+    // };
     const handleProductChange = (index, field, value) => {
         const newProducts = [...products];
         newProducts[index][field] = value;
+    
+        // Calculate tax only for the updated product
+        const updatedProduct = {
+            ...newProducts[index],
+            ...calculateTax(newProducts[index], invoiceDetails.stateCode)
+        };
+        newProducts[index] = updatedProduct;
+    
         setProducts(newProducts);
     };
-
+    
     const addMoreProducts = () => {
         setProducts([
             ...products,
@@ -606,6 +620,16 @@ const EditInvoiceDetails = () => {
     //         setProducts(newProducts);
     //     }
     // }, [invoiceDetails.stateCode, products]);
+    useEffect(() => {
+        if (invoiceDetails.stateCode) {
+            const newProducts = products.map(product => ({
+                ...product,
+                ...calculateTax(product, invoiceDetails.stateCode)
+            }));
+            setProducts(newProducts);
+        }
+    }, [invoiceDetails.stateCode]); // Remove 'products' from the dependency array
+    
 
     const deleteProduct = async (productId) => {
         try {

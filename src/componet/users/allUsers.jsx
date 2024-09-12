@@ -3,7 +3,9 @@ import { Link } from 'react-router-dom';
 import { makeApi } from '../../api/callApi.tsx';
 import "../../style/user/allUsers.css";
 import PrimaryLoader from '../../utils/PrimaryLoader.jsx';
-
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import 'react-lazy-load-image-component/src/effects/blur.css';
+ 
 function AllUser() {
   const dummyimage = "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
   const [users, setUsers] = useState([]);
@@ -367,14 +369,15 @@ function AllUser() {
             <div key={user._id} className={`all-user-user-card ${getVerificationClass(user.verification)}`}>
               {/* <strong className='pb-1 text-danger' >TXT-{user.id}</strong> */}
               <strong>{`TX${user?.user_name?.charAt(0).toUpperCase()}-${user.id}`}</strong>
-              <img
-                // src={user.profile_img !== "" ? user.profile_img:dummyimage }
-                // src={dummyimage}
+              <LazyLoadImage effect="blur"
+               
                 src={
                   user.profile_img && user.profile_img.includes('http://res.cloudinary.com')
                     ? user.profile_img
-                    : dummyimage
+                    :  `https://storage.tixteen.com/assets/${user.profile_img}`
                 }
+                loading='lazy'
+               
                 alt={user.user_name}
                 className="all-user-user-image"
               />

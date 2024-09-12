@@ -6,6 +6,7 @@ import { makeApi } from "../../api/callApi.tsx";
 import { useParams } from "react-router-dom";
 import PrimaryLoader from '../../utils/PrimaryLoader.jsx';
 import { Link } from "react-router-dom"
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 const UserDetails = () => {
     const { id } = useParams();
@@ -19,7 +20,7 @@ const UserDetails = () => {
     const [socialMediaData, setSocialMediaData] = useState([]);
     const [loading, setLoading] = useState(false);
     const [IdentityINfo, setIdentityINfo] = useState();
-    console.log("IdentityINfo",IdentityINfo)
+    console.log("IdentityINfo", IdentityINfo)
 
     const fetchData = async () => {
         setLoading(true);
@@ -136,7 +137,18 @@ const UserDetails = () => {
                 <div className="user-card">
                     <EditIcon path={`user/update-user-details/${user._id}`} />
                     <div className="user-header">
-                        <img src={user.profile_img} alt={user.user_name} className="user-profile-img" />
+                        {/* <img src={user.profile_img} alt={user.user_name} className="user-profile-img" /> */}
+                        <LazyLoadImage effect="blur"
+                            src={
+                                user.profile_img && user.profile_img.includes('http://res.cloudinary.com')
+                                    ? user.profile_img
+                                    : `https://storage.tixteen.com/assets/${user.profile_img}`
+                            }
+                            alt={user.user_name}
+                            className="user-profile-img"
+                            loading='lazy'
+
+                        />
                         <div className="user-info">
                             <h1>{user.user_name}</h1>
                             <p>{user.gender ? `${user.gender}, Age: ${user.age}` : 'Gender: Not Provided'}</p>
@@ -300,9 +312,9 @@ const UserDetails = () => {
                     </div>
                     <div className="user-section user-footer">
                         <h2>Idetity details</h2>
-                        <p>{IdentityINfo?.adhar_front ? <> Addhar front: <img src={IdentityINfo?.adhar_front} alt="adhar_front" style={{maxWidth: "100px"}} /></> : 'adhar_front: Not Provided'}</p>
-                        <p>{IdentityINfo?.adhar_back ? <> Addhar Back: <img src={IdentityINfo?.adhar_back} alt="adhar_back" style={{maxWidth: "100px"}} /></> : 'adhar_back: Not Provided'}</p>
-                        <p>{IdentityINfo?.pan ? <> pan Card: <img src={IdentityINfo?.pan} alt="pan" style={{maxWidth: "100px"}} /></> : 'pan: Not Provided'}</p>
+                        <p>{IdentityINfo?.adhar_front ? <> Addhar front: <img src={IdentityINfo?.adhar_front} alt="adhar_front" style={{ maxWidth: "100px" }} /></> : 'adhar_front: Not Provided'}</p>
+                        <p>{IdentityINfo?.adhar_back ? <> Addhar Back: <img src={IdentityINfo?.adhar_back} alt="adhar_back" style={{ maxWidth: "100px" }} /></> : 'adhar_back: Not Provided'}</p>
+                        <p>{IdentityINfo?.pan ? <> pan Card: <img src={IdentityINfo?.pan} alt="pan" style={{ maxWidth: "100px" }} /></> : 'pan: Not Provided'}</p>
                         <p>{IdentityINfo?.pan_no ? `pan_no: ${IdentityINfo?.pan_no}` : 'pan_no: Not Provided'}</p>
                     </div>
                 </div>
