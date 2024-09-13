@@ -155,7 +155,9 @@ const UserDetails = () => {
 
                             <p>{user.language ? user.language : 'Language: Not Provided'}</p>
                             <p>{user.level ? `Level: ${user.level}` : 'Level: Not Provided'}</p>
-                            <p>{user.rating ? `Rating: ${user.rating}` : 'Rating: Not Provided'}</p>
+                            {/* <p>{user.rating ? `Rating: ${user.rating}` : 'Rating: Not Provided'}</p> */}
+                            <p>   Approved By - <b style={{ color: 'black' }}> <em> {user.approved_by}</em> </b> </p>
+
                         </div>
                     </div>
 

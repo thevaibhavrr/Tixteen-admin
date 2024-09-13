@@ -456,6 +456,7 @@ function AllUser() {
                   </button>
                 </div>
               </div>
+              Approved By - <b> {user.approved_by} </b>
             </div>
           ))}
         </div>
