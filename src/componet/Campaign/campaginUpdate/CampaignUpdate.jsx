@@ -33,6 +33,7 @@ function CampaignUpdate() {
     to_do: '',
     not_todo: '',
     product_price: '',
+    price: '',
     dead_line: '',
     is_screen_shots_required: '',
     country: '',
@@ -64,6 +65,7 @@ function CampaignUpdate() {
         to_do: campaignData.to_do || '',
         not_todo: campaignData.not_todo || '',
         product_price: campaignData.product_price || '',
+        price: campaignData.price || '',
         dead_line: campaignData.dead_line ? campaignData.dead_line.substring(0, 10) : '',
         is_screen_shots_required: campaignData.is_screen_shots_required || 'No',
         country: campaignData.country || '',
@@ -338,6 +340,16 @@ function CampaignUpdate() {
                 type="text"
                 name="product_price"
                 value={campaign.product_price}
+                onChange={handleChange}
+                className="form-input"
+              />
+            </label>
+            <label>
+              Payout:
+              <input
+                type="text"
+                name="price"
+                value={campaign.price}
                 onChange={handleChange}
                 className="form-input"
               />

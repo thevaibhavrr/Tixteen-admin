@@ -243,7 +243,8 @@ function CampaignDetails() {
         <img src="https://cdn.shopify.com/s/files/1/1276/5299/files/Filler-mobile-2-power-sunglasses.jpg?v=1685976704?v=1719360000163" alt="Campaign Banner" className="campaign-banner-unique" />
         <div className="campaign-content-unique">
           <h1 className="campaign-title-unique">{campaignDetails?.campaign_name}</h1>
-          <p className="campaign-status-unique"><strong>Status:</strong> {campaignDetails?.status}</p>
+          <p className="campaign-status-unique"><strong>Payout:</strong> {campaignDetails?.price}</p>
+          <p className="campaign-status-unique"><strong>product_price:</strong> {campaignDetails?.product_price}</p>
           <p className="campaign-type-unique"><strong>Type:</strong> {campaignDetails?.campaign_type}</p>
           <p className="campaign-product-unique"><strong>Product:</strong> {campaignDetails?.product}</p>
           <p className="campaign-industry-unique"><strong>Target Industry:</strong> {campaignDetails?.industry}</p>
