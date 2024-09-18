@@ -11,7 +11,6 @@ function ManagementBar() {
 
     const fetchUser = async () => {
         const response = await makeApi(`/v1/admin/api/get-admin-details`, "GET")
-        console.log("------------", response.data.data)
         setUser(response.data.data)
     }
     useEffect(() => {
