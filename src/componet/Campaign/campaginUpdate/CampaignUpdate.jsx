@@ -163,7 +163,7 @@ function CampaignUpdate() {
       const response = await makeApi(`/v1/campaign/update/${id}`, 'PUT', campaign);
       toast("campaign update successfully", {
         onClose: () => {
-          navigate("/campaign/CampaignList");
+          navigate(`/campaign/campaign-details/${id}`);
         }
       });
     } catch (error) {

@@ -129,7 +129,7 @@ const AttendanceForm = () => {
         <>
             {loading && <PrimaryLoader />}
             <div className='d-flex justify-content-between w-100'>
-                <div className="attendance-container w-50 ">
+                <div className=" w-50 ">
                     <div className='w-25'>
                         <div>
                             <button onClick={handleLogout} className="mark-attendance-btn btn-danger">
