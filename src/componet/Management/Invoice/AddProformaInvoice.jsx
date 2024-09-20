@@ -7,7 +7,7 @@ import { makeApi } from "../../../api/callApi.tsx";
 import PrimaryLoader from "../../../utils/PrimaryLoader.jsx";
 import {  useNavigate } from 'react-router-dom';
 
-
+ 
 const initialInvoiceDetails = {
     clientName: '',
     address: '',
@@ -253,7 +253,7 @@ const AddProformaInvoice = () => {
             const billItemsData = invoiceDetails.products.map(product => ({
                 Invoice_no: myBillData.mybill.invoice_no,
                 product: product.productName,
-                hsn: product.hsn,
+                hsn: "998314",
                 qty: product.qty,
                 rate: product.rate,
                 taxable: product.taxableAmount,
@@ -265,7 +265,6 @@ const AddProformaInvoice = () => {
                 igst_Amount: product.igstAmount,
                 tax_invoice_no: myBillData.mybill.tax_invoice_no
             }));
-
             await makeApi("/v1/admin/api/create-bill-items", "POST", billItemsData);
 
             setAlert('Invoice saved successfully!');
