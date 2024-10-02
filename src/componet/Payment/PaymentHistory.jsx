@@ -20,7 +20,7 @@
  
 //     // Fetch all data when the component mounts
 //     useEffect(() => {
-//         const fetchData = async () => {
+//         const fetchData = async () => { 
 //             setLoading(true);
 //             try {
 //                 const res = await makeApi(`/v1/admin/api/get-all-pending-payments?all=traction`, 'GET');

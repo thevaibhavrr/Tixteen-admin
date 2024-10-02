@@ -68,7 +68,7 @@ function PaymentBar() {
                         onClick={() => handleFilterClick('schedule-traction')}
                         className={filter === 'scheduletraction' ? 'active' : ''}
                     >
-                        Schedule Traction
+                        Schedule Transaction
                     </button>
                     <button
                         onClick={() => handleFilterClick('payment-history')}

@@ -3,6 +3,7 @@
 // import * as XLSX from 'xlsx';
 // import { makeApi } from '../../api/callApi.tsx';
 // import PrimaryLoader from '../../utils/PrimaryLoader.jsx';
+// import { Link } from 'react-router-dom';
 
 // const PaymentScheduleTraction = () => {
 //     const [payments, setPayments] = useState([]);
@@ -22,10 +23,11 @@
 //                     };
 
 //                     return {
-//                         submitted: parseDate(payment.content_upload_date),
+//                         submitted: payment.content_upload_date,
 //                         campaign: payment.campaignDetails.campaign_name,
 //                         campaignType: payment.campaignDetails.campaign_type,
-//                         influencerEmail: payment.influ_id,
+//                         influencerEmail: payment.influencerDetails?.email,  // Updated
+//                         influencerName: payment.influencerDetails?.user_name,  // New field
 //                         postLink: payment.post_link,
 //                         productRs: payment.campaignDetails.product_price,
 //                         infAmount: payment.amount,
@@ -35,6 +37,7 @@
 //                         campaign_no: payment.campaign_no,
 //                         influ_id: payment.influ_id,
 //                         transaction_id: payment.transaction_id || '', // New field for transaction_id
+//                         infuID: payment.influencerDetails?._id, // New field for user ID
 //                     };
 //                 });
 //                 setPayments(mappedPayments);
@@ -119,6 +122,7 @@
 //                             <th>Campaign</th>
 //                             <th>Campaign Type</th>
 //                             <th>Influencer Email</th>
+//                             <th>Influencer Name</th> {/* New Column */}
 //                             <th>Post Link</th>
 //                             <th>Product (Rs.)</th>
 //                             <th>Inf Amount</th>
@@ -136,6 +140,11 @@
 //                                 <td>{payment.campaign}</td>
 //                                 <td>{payment.campaignType}</td>
 //                                 <td>{payment.influencerEmail}</td>
+//                                 <td>
+//                                     <Link to={`/user/user-details/${payment.infuID}`} target='_blank'>
+//                                         {payment.influencerName}
+//                                     </Link>
+//                                 </td> {/* New Data */}
 //                                 <td><a href={payment.postLink} target="_blank" rel="noopener noreferrer">Link</a></td>
 //                                 <td>
 //                                     <input
@@ -222,8 +231,8 @@ const PaymentScheduleTraction = () => {
                         submitted: payment.content_upload_date,
                         campaign: payment.campaignDetails.campaign_name,
                         campaignType: payment.campaignDetails.campaign_type,
-                        influencerEmail: payment.influencerDetails?.email,  // Updated
-                        influencerName: payment.influencerDetails?.user_name,  // New field
+                        influencerEmail: payment.influencerDetails?.email,
+                        influencerName: payment.influencerDetails?.user_name,
                         postLink: payment.post_link,
                         productRs: payment.campaignDetails.product_price,
                         infAmount: payment.amount,
@@ -232,8 +241,8 @@ const PaymentScheduleTraction = () => {
                         actionDate: parseDate(payment.pay_scedule_date) || new Date().toISOString().split('T')[0],
                         campaign_no: payment.campaign_no,
                         influ_id: payment.influ_id,
-                        transaction_id: payment.transaction_id || '', // New field for transaction_id
-                        infuID: payment.influencerDetails?._id, // New field for user ID
+                        transaction_id: payment.transaction_id || '',
+                        infuID: payment.influencerDetails?._id,
                     };
                 });
                 setPayments(mappedPayments);
@@ -267,17 +276,21 @@ const PaymentScheduleTraction = () => {
     const updatePayment = async (index) => {
         setLoading(true);
         const payment = payments[index];
-        const { campaign_no, influ_id, postLink, reward, transaction_id } = payment;
+        const { campaign_no, influ_id, postLink, reward, transaction_id, productRs, infAmount, total } = payment;
 
         const payment_date = new Date().toISOString().slice(0, 19).replace('T', ' '); // Get current date and time
 
         try {
+            console.log("payment: ", campaign_no, influ_id, postLink, reward, transaction_id, productRs, infAmount, total);
             const res = await makeApi(`/v1/influencer/edit-apply-campaign/${influ_id}/${campaign_no}`, 'PUT', {
                 post_link: postLink,
                 rewards: reward,
+                productRs, // Include productRs
+                infAmount, // Include infAmount
+                total, // Include total
                 pay_scedule_date: payment.actionDate,
-                transaction_id, // Include transaction_id
-                payment_date,   // Include payment_date
+                transaction_id,
+                payment_date,
             });
             if (res.success) {
                 console.log("Updated payment: ", payment);
@@ -318,7 +331,7 @@ const PaymentScheduleTraction = () => {
                             <th>Campaign</th>
                             <th>Campaign Type</th>
                             <th>Influencer Email</th>
-                            <th>Influencer Name</th> {/* New Column */}
+                            <th>Influencer Name</th>
                             <th>Post Link</th>
                             <th>Product (Rs.)</th>
                             <th>Inf Amount</th>
@@ -340,7 +353,7 @@ const PaymentScheduleTraction = () => {
                                     <Link to={`/user/user-details/${payment.infuID}`} target='_blank'>
                                         {payment.influencerName}
                                     </Link>
-                                </td> {/* New Data */}
+                                </td>
                                 <td><a href={payment.postLink} target="_blank" rel="noopener noreferrer">Link</a></td>
                                 <td>
                                     <input
@@ -348,6 +361,7 @@ const PaymentScheduleTraction = () => {
                                         value={payment.productRs}
                                         onChange={(e) => handleInputChange(e, index, 'productRs')}
                                         className='form-control w-75'
+                                        readOnly
                                     />
                                 </td>
                                 <td>
