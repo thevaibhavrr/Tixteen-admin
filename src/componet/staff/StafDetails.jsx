@@ -14,7 +14,7 @@
 //     const [editedStaff, setEditedStaff] = useState({});
 //     const [loading, setLoading] = useState(false);
 
-//     const fetchStaffList = async () => {
+//     const fetchStaffList = async () => { 
 //         setLoading(true);
 //         try {
 //             const res = await makeApi('/v1/get-all-staff?status=1', 'GET');
@@ -134,9 +134,9 @@
 //                     ))}
 //                 </tbody>
 //             </table>
-//             <Link to="/management/add-staff" className="create-campaign-button">
-//                         Add New Staff 
-//                     </Link>
+            // <Link to="/management/add-staff" className="create-campaign-button">
+            //             Add New Staff 
+            //         </Link>
 
 //             <DeletePopup
 //                 isOpen={showDeletePopup}
@@ -383,6 +383,9 @@ const StaffDetails = () => {
         <div className="manage-industry-chart mb-5 pb-5">
             {/* Active staff table */}
             <h3>Active Staff Members</h3>
+            <Link to="/management/add-staff" className="create-campaign-button">
+                        Add New Staff 
+                    </Link>
             <table className="table">
                 <thead>
                     <tr>
