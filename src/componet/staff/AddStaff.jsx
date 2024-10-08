@@ -5,7 +5,7 @@
 // const AddStaffPopup = () => {
 //     const [newStaff, setNewStaff] = useState({
 //         name: '',
-//         father_name: '',
+//         fathername: '',
 //         address: '',
 //         email: '',
 //         mobile: '',
@@ -43,8 +43,8 @@
 //                             <input
 //                                 type="text"
 //                                 placeholder="Father Name"
-//                                 value={newStaff.father_name}
-//                                 onChange={(e) => setNewStaff({ ...newStaff, father_name: e.target.value })}
+//                                 value={newStaff.fathername}
+//                                 onChange={(e) => setNewStaff({ ...newStaff, fathername: e.target.value })}
 //                                 className='form-control'
 //                             />
 //                             <input
@@ -112,7 +112,7 @@ const AddStaffPopup = () => {
 
     const [newStaff, setNewStaff] = useState({
         name: '',
-        father_name: '',
+        fathername: '',
         address: '',
         email: '',
         mobile: '',
@@ -139,7 +139,7 @@ const AddStaffPopup = () => {
         // Check if any required fields are empty
         if (
             !newStaff.name ||
-            !newStaff.father_name ||
+            !newStaff.fathername ||
             !newStaff.address ||
             !newStaff.email ||
             !newStaff.mobile ||
@@ -159,6 +159,8 @@ const AddStaffPopup = () => {
         setLoading(true);
         try {
             const res = await makeApi('/v1/add-staf', 'POST', newStaff);
+            const firstName = newStaff.name.split(' ')[0]
+            const adminregisteer = await makeApi('/v1/admin/api/create-admin', 'POST', {user:firstName , password: newStaff.password , email : newStaff.email});
             toast.success('Staff added successfully', {
                 onClose: () => {
                     navigate("/management/staff-management");
@@ -193,8 +195,8 @@ const AddStaffPopup = () => {
                         <input
                             type="text"
                             placeholder="Father Name"
-                            value={newStaff.father_name}
-                            onChange={(e) => setNewStaff({ ...newStaff, father_name: e.target.value })}
+                            value={newStaff.fathername}
+                            onChange={(e) => setNewStaff({ ...newStaff, fathername: e.target.value })}
                             className='form-control'
                         />
                         <input
