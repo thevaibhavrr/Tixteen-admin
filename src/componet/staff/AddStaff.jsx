@@ -243,7 +243,7 @@ const AddStaffPopup = () => {
                     </div>
                 </div>
             </div>
-            <ToastContainer /> {/* Container for displaying toast messages */}
+            <ToastContainer position='top-center' autoClose={1000} /> 
         </div>
         </>
 
