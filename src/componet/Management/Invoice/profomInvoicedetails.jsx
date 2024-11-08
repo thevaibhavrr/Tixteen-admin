@@ -10,7 +10,7 @@ import PrimaryLoader from '../../../utils/PrimaryLoader.jsx';
 import toWords from 'num-words';
 
 
-
+ 
 const Invoice = () => {
     const { id } = useParams();
     const [invoiceData, setInvoiceData] = useState(null);
