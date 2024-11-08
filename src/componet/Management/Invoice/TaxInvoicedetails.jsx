@@ -7,7 +7,6 @@ import { makeApi } from "../../../api/callApi.tsx";
 import Sign from "../../../assets/Sign/Stamp and Sign.png"
 import html2pdf from "html2pdf.js";
 import PrimaryLoader from '../../../utils/PrimaryLoader.jsx';
-import numberToWords from 'number-to-words';
 import toWords from 'num-words';
 
 
