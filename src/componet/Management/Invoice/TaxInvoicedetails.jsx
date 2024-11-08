@@ -8,6 +8,7 @@ import Sign from "../../../assets/Sign/Stamp and Sign.png"
 import html2pdf from "html2pdf.js";
 import PrimaryLoader from '../../../utils/PrimaryLoader.jsx';
 import numberToWords from 'number-to-words';
+import toWords from 'num-words';
 
 
 const TaxInvoiceDetails = () => {
@@ -23,7 +24,12 @@ useEffect(() => {
     if (invoiceData) {
         const { totalTaxable, totalCGST, totalSGST, totalIGST, grandTotal } = calculateTotal();
         setGrandTotal(grandTotal);
-        setTotalInWords(numberToWords.toWords(grandTotal));
+        // setTotalInWords(numberToWords.toWords(grandTotal));
+        const inWords = toWords(grandTotal);
+        const formattedWords = inWords.replace(/^(one lakh)/, 'One Lakh')
+                                      .replace(/^(one crore)/, 'One Crore');
+
+        setTotalInWords(formattedWords);
     }
 }, [invoiceData]);
 

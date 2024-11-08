@@ -20,7 +20,7 @@ const UserDetails = () => {
     const [socialMediaData, setSocialMediaData] = useState([]);
     const [loading, setLoading] = useState(false);
     const [IdentityINfo, setIdentityINfo] = useState();
-    console.log("IdentityINfo", IdentityINfo)
+    console.log("socialMediaData", socialMediaData)
 
     const fetchData = async () => {
         setLoading(true);

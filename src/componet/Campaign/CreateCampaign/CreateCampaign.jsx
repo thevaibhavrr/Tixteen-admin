@@ -224,7 +224,6 @@ function CreateCampaign() {
     e.preventDefault();
 
     try {
-      console.log('Form Data:', { ...formData, totalCampaignPrice, deliverables, followers, influencerData });
       setLoading(true);
       const response = await makeApi('/v1/create-campaign', 'POST', {
         ...formData,

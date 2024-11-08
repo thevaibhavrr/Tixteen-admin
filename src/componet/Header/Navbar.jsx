@@ -14,7 +14,7 @@ function Navbar() {
       <div className="navbar-links">
         <Link to="/user/all-users">All Users</Link>
         <Link to="/campaign/CampaignList">Campaign List</Link>
-        <Link to="/management/level-management">Management</Link>
+        <Link to="/management/send-message-management">Management</Link>
         <Link to="/payment/payment-schedule-management"> Payment </Link>
       </div>
     </div>

@@ -7,7 +7,8 @@ import { makeApi } from "../../../api/callApi.tsx";
 import Sign from "../../../assets/Sign/Stamp and Sign.png"
 import html2pdf from "html2pdf.js";
 import PrimaryLoader from '../../../utils/PrimaryLoader.jsx';
-import numberToWords from 'number-to-words';
+import toWords from 'num-words';
+
 
 
 const Invoice = () => {
@@ -17,15 +18,33 @@ const Invoice = () => {
     const [loading, setLoading] = useState(false);
     const [grandtotall, setGrandTotal] = useState(0);
 const [totalInWords, setTotalInWords] = useState('');
-console.log("totalInWords: ", totalInWords);
 
+
+
+
+// useEffect(() => {
+//     if (invoiceData) {
+//         const { totalTaxable, totalCGST, totalSGST, totalIGST, grandTotal } = calculateTotal();
+//         setGrandTotal(grandTotal);
+//         // setTotalInWords(numberToWords.toWords(grandTotal));
+//         // setTotalInWords(formatIndianWords(grandTotal));
+//         setTotalInWords(numberToIndianWords(grandTotal));
+//     }
+// }, [invoiceData]);
 useEffect(() => {
     if (invoiceData) {
-        const { totalTaxable, totalCGST, totalSGST, totalIGST, grandTotal } = calculateTotal();
+        const { grandTotal } = calculateTotal();
         setGrandTotal(grandTotal);
-        setTotalInWords(numberToWords.toWords(grandTotal));
+
+        // Convert grand total to words using Indian numbering format
+        const inWords = toWords(grandTotal);
+        const formattedWords = inWords.replace(/^(one lakh)/, 'One Lakh')
+                                      .replace(/^(one crore)/, 'One Crore');
+
+        setTotalInWords(formattedWords);
     }
 }, [invoiceData]);
+
 
 
     useEffect(() => {
@@ -237,12 +256,15 @@ useEffect(() => {
                         </div>
 
                         <div className="invoice-summary invoice_page_border p-1">
-                            <div className="total-amount invoice_page_border text-center">
-                                <p className="pt-2" >Total Invoice Amount in Words: <strong>{/* Add logic to convert numbers to words */}</strong></p>
-                                {/* <p style={{ fontSize: '20px'  }} className="uppercase" >{totalInWords}</p> */}
+                            {/* <div className="total-amount invoice_page_border text-center">
+                                <p className="pt-2" >Total Invoice Amount in Words: <strong></strong></p>
                                 <p style={{ fontSize: '17px' , textTransform: 'uppercase', fontWeight: 'bold' }} >{totalInWords} Rupees Only</p>
+                            </div> */}
+                            <div className="total-amount invoice_page_border text-center">
+    <p className="pt-2">Total Invoice Amount in Words:</p>
+    <p style={{ fontSize: '17px', textTransform: 'uppercase', fontWeight: 'bold' }}>{totalInWords} Rupees Only</p>
+</div>
 
-                            </div>
                             <div className="amount-summary invoice_page_border">
                                 <div className="table_data_invoice">
                                     <div>Total Amount Before Tax:</div>
