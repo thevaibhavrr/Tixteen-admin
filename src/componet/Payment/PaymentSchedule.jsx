@@ -8,22 +8,24 @@ import { Link } from 'react-router-dom';
 
 const PaymentSchedule = () => {
     const [payments, setPayments] = useState([]);
+    console.log("payments: ", payments);
     const [loading, setLoading] = useState(false);
     const [data, setdata] = useState([]);
-
+ 
     const fetchData = async () => {
         setLoading(true);
         try {
             const res = await makeApi('/v1/admin/api/get-all-pending-payments?all=yes', 'GET');
+            
             setdata(res?.data?.apply);
             const mappedPayments = res?.data?.apply.map(payment => ({
                 submitted: payment?.content_upload_date,
-                campaign: payment?.campaignDetails.campaign_name,
-                campaignType: payment?.campaignDetails.campaign_type,
+                campaign: payment?.campaignDetails?.campaign_name,
+                campaignType: payment?.campaignDetails?.campaign_type,
                 influencerEmail: payment?.influencerDetails?.email,
                 influencerName: payment?.influencerDetails?.user_name,
                 postLink: payment?.post_link,
-                productRs: payment?.campaignDetails.product_price,
+                productRs: payment?.campaignDetails?.product_price,
                 infAmount: payment?.amount,
                 reward: payment?.rewards || 0,
                 total: (parseFloat(payment?.amount) + parseFloat(payment?.rewards || 0)).toFixed(2),
