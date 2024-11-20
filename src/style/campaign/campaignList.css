@@ -117,6 +117,19 @@
   .create-campaign-button:hover {
     background-color: var(--light-yellow-color);
   }
+  .camping_deactive {
+    opacity: 0.5; 
+    background-color: #ffdfdf; 
+    border: 1px solid #dcdcdc; 
+  }
+   
+  .camping_deactive .campaign-banner {
+    filter: grayscale(100%); 
+  }
+  
+  .camping_deactive .view-more-button {
+    background-color: #ccc; 
+  }
   
   /* Media Queries */
   

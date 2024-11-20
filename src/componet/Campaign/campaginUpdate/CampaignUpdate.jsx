@@ -6,6 +6,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { makeApi } from '../../../api/callApi.tsx';
 import PrimaryLoader from '../../../utils/PrimaryLoader.jsx';
 import { ToastContainer, toast } from "react-toastify";
+import uploadToCloudinary from '../../../utils/cloudinaryUpload.jsx';
 
 function CampaignUpdate() {
 
@@ -40,38 +41,44 @@ function CampaignUpdate() {
     state: '',
     city: '',
     approval: '',
+    influ_working_days: '',
+    reward_days: '',
   });
+  console.log("---------", campaign);
 
   const fetchCampaignDetails = async () => {
     try {
       setLoading(true);
       const response = await makeApi(`/v1/campaign/details/${id}`, 'GET');
-      const campaignData = response.data.data;
+      const campaignData = response?.data?.data;
 
       setCampaign({
-        id: campaignData.id || '',
-        campaign_name: campaignData.campaign_name || '',
-        campaign_type: campaignData.campaign_type || '',
-        product: campaignData.product || '',
-        industry: campaignData.industry || '',
-        language: campaignData.language || '',
-        age: campaignData.age || '',
-        till_age: campaignData.till_age || '',
-        gender: campaignData.gender || '',
-        remark: campaignData.remark || '',
-        platforms: campaignData.platforms || '',
-        platform_link: campaignData.platform_link || '',
-        profile_tag: campaignData.profile_tag || '',
-        to_do: campaignData.to_do || '',
-        not_todo: campaignData.not_todo || '',
-        product_price: campaignData.product_price || '',
-        price: campaignData.price || '',
-        dead_line: campaignData.dead_line ? campaignData.dead_line.substring(0, 10) : '',
-        is_screen_shots_required: campaignData.is_screen_shots_required || 'No',
-        country: campaignData.country || '',
-        state: campaignData.state || '',
-        city: campaignData.city || '',
-        approval: campaignData.approval
+        id: campaignData?.id || '',
+        campaign_name: campaignData?.campaign_name || '',
+        campaign_type: campaignData?.campaign_type || '',
+        product: campaignData?.product || '',
+        industry: campaignData?.industry || '',
+        language: campaignData?.language || '',
+        age: campaignData?.age || '',
+        till_age: campaignData?.till_age || '',
+        gender: campaignData?.gender || '',
+        remark: campaignData?.remark || '',
+        platforms: campaignData?.platforms || '',
+        platform_link: campaignData?.platform_link || '',
+        profile_tag: campaignData?.profile_tag || '',
+        to_do: campaignData?.to_do || '',
+        not_todo: campaignData?.not_todo || '',
+        product_price: campaignData?.product_price || '',
+        price: campaignData?.price || '',
+        dead_line: campaignData?.dead_line ? campaignData?.dead_line.substring(0, 10) : '',
+        is_screen_shots_required: campaignData?.is_screen_shots_required || 'No',
+        country: campaignData?.country || '',
+        state: campaignData?.state || '',
+        city: campaignData?.city || '',
+        approval: campaignData?.approval,
+        influ_working_day: campaignData?.influ_working_day || '',
+        reward_days: campaignData?.reward_days || '',
+        banner: campaignData?.banner || '',
       });
 
     } catch (error) {
@@ -137,14 +144,56 @@ function CampaignUpdate() {
     }
   };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    console.log(name, value);
-    setCampaign((prevCampaign) => ({
-      ...prevCampaign,
-      [name]: value,
-    }));
+  // const handleChange = async (e) => {
+  //   const { name, value } = e.target;
+  //   if (name === 'banner') {
+  //     const file = e.target.files[0];
+
+  //     const uploadedUrl = await uploadToCloudinary(file);
+  //     console.log("1")
+  //     console.log("-===-=-",uploadedUrl);
+  //     console.log("2")
+  //     await setCampaign((prevCampaign) => ({
+  //       ...prevCampaign,
+  //       banner: uploadedUrl,
+  //     }));
+  //   }
+  //   setCampaign((prevCampaign) => ({
+  //     ...prevCampaign,
+  //     [name]: value,
+  //   }));
+  // };
+  const handleChange = async (e) => {
+    const { name, value, files } = e.target;
+    
+    if (name === 'banner' && files.length > 0) {
+      const file = files[0]; // Access the first selected file
+  
+      try {
+        // Show loading state here, if needed
+  
+        const uploadedUrl = await uploadToCloudinary(file); // Upload to Cloudinary
+        console.log("Banner uploaded:", uploadedUrl); // Debugging purpose
+  
+        // Update the state with the uploaded URL
+        setCampaign((prevCampaign) => ({
+          ...prevCampaign,
+          banner: uploadedUrl,
+        }));
+  
+      } catch (error) {
+        console.error("File upload error", error);
+        // Handle error state or notify the user
+      }
+    } else {
+      // For other form fields, update as normal
+      setCampaign((prevCampaign) => ({
+        ...prevCampaign,
+        [name]: value,
+      }));
+    }
   };
+  
 
   const handleNestedChange = (e, category) => {
     const { name, value } = e.target;
@@ -182,12 +231,29 @@ function CampaignUpdate() {
         <div className="campaign-update">
           <h1 className="update-title">Update Campaign Details</h1>
           <form onSubmit={handleSubmit} className="campaign-form">
+
+            {/* banner */}
+            <label>
+              Banner:
+              <img src={campaign?.banner} alt="Banner" style={{ width: "350px" }} />
+
+              {/* update banner */}
+              <input
+                type="file"
+                name="banner"
+                onChange={handleChange}
+                className="form-input"
+              />
+
+            </label>
+            {/* campaign_name */}
+
             <label>
               Campaign Name:
               <input
                 type="text"
                 name="campaign_name"
-                value={campaign.campaign_name}
+                value={campaign?.campaign_name}
                 onChange={handleChange}
                 className="form-input"
               />
@@ -196,7 +262,7 @@ function CampaignUpdate() {
               Approval:
               <select
                 name="approval"
-                value={campaign.approval}
+                value={campaign?.approval}
                 onChange={handleChange}
                 className="form-input"
               >
@@ -205,12 +271,36 @@ function CampaignUpdate() {
               </select>
             </label>
 
+            {/* influ_working_day */}
+            <label>
+              Influencer Working Day:
+              <input
+                type="number"
+                name="influ_working_day"
+                value={campaign?.influ_working_day}
+                onChange={handleChange}
+                className="form-input"
+              />
+            </label>
+            {/* reward_days */}
+            <label>
+              Reward Days:
+              <input
+                type="number"
+                name="reward_days"
+                value={campaign?.reward_days}
+                onChange={handleChange}
+                className="form-input"
+              />
+            </label>
+
+
             <label>
               Campaign Type:
               <input
                 type="text"
                 name="campaign_type"
-                value={campaign.campaign_type}
+                value={campaign?.campaign_type}
                 onChange={handleChange}
                 className="form-input"
               />
@@ -220,7 +310,7 @@ function CampaignUpdate() {
               <input
                 type="text"
                 name="product"
-                value={campaign.product}
+                value={campaign?.product}
                 onChange={handleChange}
                 className="form-input"
               />
@@ -230,7 +320,7 @@ function CampaignUpdate() {
               <input
                 type="text"
                 name="industry"
-                value={campaign.industry}
+                value={campaign?.industry}
                 onChange={handleChange}
                 className="form-input"
               />
@@ -240,7 +330,7 @@ function CampaignUpdate() {
               <input
                 type="text"
                 name="language"
-                value={campaign.language}
+                value={campaign?.language}
                 onChange={handleChange}
                 className="form-input"
               />
@@ -250,7 +340,7 @@ function CampaignUpdate() {
               <input
                 type="number"
                 name="age"
-                value={campaign.age}
+                value={campaign?.age}
                 onChange={handleChange}
                 className="form-input"
               />
@@ -260,7 +350,7 @@ function CampaignUpdate() {
               <input
                 type="number"
                 name="till_age"
-                value={campaign.till_age}
+                value={campaign?.till_age}
                 onChange={handleChange}
                 className="form-input"
               />
@@ -270,7 +360,7 @@ function CampaignUpdate() {
               <input
                 type="text"
                 name="gender"
-                value={campaign.gender}
+                value={campaign?.gender}
                 onChange={handleChange}
                 className="form-input"
               />
@@ -279,7 +369,7 @@ function CampaignUpdate() {
               Remark:
               <textarea
                 name="remark"
-                value={campaign.remark}
+                value={campaign?.remark}
                 onChange={handleChange}
                 className="form-input"
               />
@@ -289,7 +379,7 @@ function CampaignUpdate() {
               <input
                 type="text"
                 name="platforms"
-                value={campaign.platforms}
+                value={campaign?.platforms}
                 onChange={handleChange}
                 className="form-input"
               />
@@ -299,7 +389,7 @@ function CampaignUpdate() {
               <input
                 type="text"
                 name="platform_link"
-                value={campaign.platform_link}
+                value={campaign?.platform_link}
                 onChange={handleChange}
                 className="form-input"
               />
@@ -309,7 +399,7 @@ function CampaignUpdate() {
               <input
                 type="text"
                 name="profile_tag"
-                value={campaign.profile_tag}
+                value={campaign?.profile_tag}
                 onChange={handleChange}
                 className="form-input"
               />
@@ -319,7 +409,7 @@ function CampaignUpdate() {
               <input
                 type="text"
                 name="to_do"
-                value={campaign.to_do}
+                value={campaign?.to_do}
                 onChange={handleChange}
                 className="form-input"
               />
@@ -329,7 +419,7 @@ function CampaignUpdate() {
               <input
                 type="text"
                 name="not_todo"
-                value={campaign.not_todo}
+                value={campaign?.not_todo}
                 onChange={handleChange}
                 className="form-input"
               />
@@ -339,7 +429,7 @@ function CampaignUpdate() {
               <input
                 type="text"
                 name="product_price"
-                value={campaign.product_price}
+                value={campaign?.product_price}
                 onChange={handleChange}
                 className="form-input"
               />
@@ -349,7 +439,7 @@ function CampaignUpdate() {
               <input
                 type="text"
                 name="price"
-                value={campaign.price}
+                value={campaign?.price}
                 onChange={handleChange}
                 className="form-input"
               />
@@ -359,7 +449,7 @@ function CampaignUpdate() {
               <input
                 type="date"
                 name="dead_line"
-                value={campaign.dead_line}
+                value={campaign?.dead_line}
                 onChange={handleChange}
                 className="form-input"
               />
@@ -368,7 +458,7 @@ function CampaignUpdate() {
               Screenshots Required:
               <select
                 name="is_screen_shots_required"
-                value={campaign.is_screen_shots_required}
+                value={campaign?.is_screen_shots_required}
                 onChange={handleChange}
                 className="form-input"
               >
@@ -413,11 +503,11 @@ function CampaignUpdate() {
           <h4 className="update-title">Update Deliverables</h4>
 
           <div className="deliverables-container">
-            {deliverables.map((item) => (
+            {deliverables?.map((item) => (
               <div key={item._id} className="deliverable-row">
                 <input
                   type="text"
-                  value={item.deliverable}
+                  value={item?.deliverable}
                   onChange={(e) => {
                     const updatedDeliverables = deliverables.map((deliverable) =>
                       deliverable._id === item._id ? { ...deliverable, deliverable: e.target.value } : deliverable

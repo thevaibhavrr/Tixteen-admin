@@ -67,8 +67,9 @@ function CreateCampaign() {
     product_price: '',
     banner: '',
     area: '',
+    influ_working_day: '',
+    reward_days:'',
   });
-  console.log(formData);
   function formatDate(date) {
     const options = { day: '2-digit', month: 'short', year: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false, timeZone: 'UTC' };
     return new Intl.DateTimeFormat('en-GB', options).format(date).replace(',', '');
@@ -297,11 +298,20 @@ function CreateCampaign() {
                 <option value="1"> Active </option>
               </select>
             </div>
-
+            {/* influ_working_day */}
+            <div className='form_group'>
+              <label htmlFor="influ_working_day" className='form_label'>Influencer Working Day:</label>
+              <input type="number" id="influ_working_day" name="influ_working_day" className='form_input' onChange={handleChange} />
+            </div>
+            {/* influ_working_time */}
+            <div className='form_group'>
+              <label htmlFor="reward_days" className='form_label'>Reward Days:</label>
+              <input type="number"  id="reward_days" name="reward_days" className='form_input' onChange={handleChange} />
+            </div>
             {/* Campaign Banner */}
             <div className='form_group'>
-              <label htmlFor="attachment" className='form_label'>Campaign Banner:</label>
-              <input type="file" id="attachment" name="attachment" className='form_file_input' onChange={(e) => handleFileChange(e, 'attachment')} />
+              <label htmlFor="banner" className='form_label'>Campaign Banner:</label>
+              <input type="file" id="banner" name="banner" className='form_file_input' onChange={(e) => handleFileChange(e, 'banner')} />
             </div>
             {/* Campaign Type */}
             <div className='form_group'>

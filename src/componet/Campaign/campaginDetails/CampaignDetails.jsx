@@ -183,7 +183,26 @@ function CampaignDetails() {
     const year = dateObj.getFullYear().toString().slice(-2);
     return `${day}/${month}/${year}`;
   };
-
+  const getUserDeadline = (acceptDate) => {
+    const acceptDateObj = new Date(acceptDate);
+  
+    const deadlineDate = new Date(acceptDateObj.setDate(acceptDateObj.getDate() + campaignDetails.influ_working_day)); 
+    return formatDate(deadlineDate);
+  };
+  const getDaysDelayed = (acceptDate, camCompltDate) => {
+    const acceptDateObj = new Date(acceptDate);
+    const camCompltDateObj = new Date(camCompltDate);
+  
+    acceptDateObj.setHours(0, 0, 0, 0);
+    camCompltDateObj.setHours(0, 0, 0, 0);
+  
+    const delayDays = Math.floor((camCompltDateObj - acceptDateObj) / (1000 * 60 * 60 * 24));
+  
+    const adjustedDelay = delayDays - campaignDetails.influ_working_day;
+  
+    return adjustedDelay > 0 ? `${adjustedDelay} days delayed` : null;
+  };
+  
   const getFullLink = (platform, link) => {
     if (!link.startsWith("www.") && !link.startsWith("https://")) {
       switch (platform) {
@@ -240,12 +259,17 @@ function CampaignDetails() {
       <div className="campaign-details-unique">
         {/* delete */}
         <EditIcon path={`campaign/update-campaign/${id}`} />
-        <img src="https://cdn.shopify.com/s/files/1/1276/5299/files/Filler-mobile-2-power-sunglasses.jpg?v=1685976704?v=1719360000163" alt="Campaign Banner" className="campaign-banner-unique" />
+        {
+
+          campaignDetails?.banner ? <img src={campaignDetails?.banner} alt="Campaign Banner" className="campaign-banner-unique" /> :
+
+            <img src="https://cdn.shopify.com/s/files/1/1276/5299/files/Filler-mobile-2-power-sunglasses.jpg?v=1685976704?v=1719360000163" alt="Campaign Banner" className="campaign-banner-unique" />
+        }
         <div className="campaign-content-unique">
           <h1 className="campaign-title-unique">{campaignDetails?.campaign_name}</h1>
           <p className="campaign-status-unique"><strong>Payout:</strong> {campaignDetails?.price}</p>
-         
-          <p> Apply Link :  <a href={`https://tixteen.com/verified/creator/campaign/details/${campaignDetails?._id}`}>{`https://tixteen.com/verified/creator/campaign/details/${campaignDetails?._id}`} </a> </p>
+
+          <p> Apply Link :  <a target='_blank' href={`https://tixteen.com/verified/creator/campaign/details/${campaignDetails?._id}`}>{`https://tixteen.com/verified/creator/campaign/details/${campaignDetails?._id}`} </a> </p>
 
           <p className="campaign-status-unique"><strong>product_price:</strong> {campaignDetails?.product_price}</p>
           <p className="campaign-type-unique"><strong>Type:</strong> {campaignDetails?.campaign_type}</p>
@@ -265,7 +289,7 @@ function CampaignDetails() {
             )) : <p>No followers required</p>}
           </div>
           <p className="campaign-hashtags-unique"><strong>Hashtags:</strong> {campaignDetails?.hash_tag}</p>
-          <img src="https://images.pexels.com/photos/46710/pexels-photo-46710.jpeg?cs=srgb&dl=pexels-nitin-creative-46710.jpg&fm=jpg" alt="Product" className="campaign-product-image-unique" />
+          {/* <img src="https://images.pexels.com/photos/46710/pexels-photo-46710.jpeg?cs=srgb&dl=pexels-nitin-creative-46710.jpg&fm=jpg" alt="Product" className="campaign-product-image-unique" /> */}
           <p className="campaign-platform-unique"><strong>Platform:</strong> {campaignDetails?.platforms}</p>
           <p className="campaign-link-unique"><strong>Link:</strong> <Link to={campaignDetails?.platform_link} target="_blank" rel="noopener noreferrer">{campaignDetails?.platform_link}</Link></p>
           <p className="campaign-tags-unique"><strong>Profiles to Tag: </strong>{campaignDetails?.profile_tag}</p>
@@ -380,8 +404,21 @@ function CampaignDetails() {
                           <div className="btn btn-warning">View Profile</div>
                         </Link>
                       </div>
+
                       <div className="user-details-unique">
-                        <p>Apply Date: {formatDate(user?.opt_date)}</p>
+                        <p  >Apply Date: {formatDate(user?.opt_date)}</p>
+                        <p  >User Selected: {formatDate(user?.accept_date)}</p>
+                        {user?.accept_date &&
+                          <p style={{ color: 'red' }} >User Dedline: {getUserDeadline(user?.accept_date)}  </p>
+                        }
+                        {user?.cam_complt_date && (
+                          <>
+                            <p style={{ color: 'green' }}>Submitted Date: {formatDate(user?.cam_complt_date)}</p>
+                            {getDaysDelayed(user?.accept_date, user?.cam_complt_date) && (
+                              <p style={{ color: 'red' }}>{getDaysDelayed(user?.accept_date, user?.cam_complt_date)}</p>
+                            )}
+                          </>
+                        )}
                         <p>Name: <strong> {user?.user?.user_name}</strong>, <br />  City: <strong> {user?.user?.ship_city}</strong>, <br />  Contact: <strong> {formatPhoneNumber(user?.user?.mobile)}</strong></p>
                         <p>Level: {user?.user?.level}</p>
 
@@ -541,8 +578,8 @@ function CampaignDetails() {
                         ) :
                           null
                         }
-                        <button className="view-more-button-unique" onClick={() => toggleMoreDetails(user.user.influ_soc_link)}>View More</button>
-                        {showMoreDetails === user.user.influ_soc_link && (
+                        <button className="view-more-button-unique" onClick={() => toggleMoreDetails(user?.user?.influ_soc_link)}>View More</button>
+                        {showMoreDetails === user?.user?.influ_soc_link && (
                           <div className="more-details-unique">
                             <div>
                               {viewmoreuserdata?.map((data) => {
