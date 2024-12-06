@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import axios from 'axios';
@@ -7,8 +6,8 @@ import PrimaryLoader from '../../../utils/PrimaryLoader.jsx';
 
 function Influencerchart() {
     const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
-    const [includeData1, setIncludeData1] = useState(true);
-    const [includeData2, setIncludeData2] = useState(true);
+    const [includeVerified, setIncludeVerified] = useState(true);
+    const [includeRejected, setIncludeRejected] = useState(true);
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
 
@@ -20,15 +19,15 @@ function Influencerchart() {
 
             const mergedData = rejectedMonthlyCounts.map((item, index) => ({
                 name: item.month,
-                data1: verifiedMonthlyCounts[index].count,
-                data2: item.count,
+                verified: verifiedMonthlyCounts[index].count,
+                rejected: item.count,
                 year
             }));
 
             setData(mergedData);
         } catch (error) {
             console.error('Error fetching data', error);
-        }finally {
+        } finally {
             setLoading(false);
         }
     };
@@ -45,17 +44,17 @@ function Influencerchart() {
 
     const handleCheckboxChange = (e) => {
         const { name, checked } = e.target;
-        if (name === 'data1') {
-            setIncludeData1(checked);
-        } else if (name === 'data2') {
-            setIncludeData2(checked);
+        if (name === 'verified') {
+            setIncludeVerified(checked);
+        } else if (name === 'rejected') {
+            setIncludeRejected(checked);
         }
     };
 
     const filteredData = data.map(item => ({
         name: item.name,
-        ...(includeData1 && { data1: item.data1 }),
-        ...(includeData2 && { data2: item.data2 })
+        ...(includeVerified && { verified: item.verified }),
+        ...(includeRejected && { rejected: item.rejected })
     }));
 
     return (
@@ -78,8 +77,8 @@ function Influencerchart() {
                         <label>
                             <input
                                 type="checkbox"
-                                name="data1"
-                                checked={includeData1}
+                                name="verified"
+                                checked={includeVerified}
                                 onChange={handleCheckboxChange}
                             />
                             Verified
@@ -87,8 +86,8 @@ function Influencerchart() {
                         <label>
                             <input
                                 type="checkbox"
-                                name="data2"
-                                checked={includeData2}
+                                name="rejected"
+                                checked={includeRejected}
                                 onChange={handleCheckboxChange}
                             />
                             Rejected
@@ -97,33 +96,30 @@ function Influencerchart() {
                 </div>
                 <div className='main_earning_chart_div'>
                     {loading ? (
-                         <div>
-                         <PrimaryLoader />
-                     </div>
-                    ):(
-
-                    <div className="main_data_chart_div_earning">
-                        <ResponsiveContainer width="100%" height={400}>
-                            <BarChart
-                                height={300}
-                                data={filteredData}
-                                margin={{
-                                    top: 20, right: 30, left: 20, bottom: 5,
-                                }}
-                                borderRadius={5}
-                            >
-                                <CartesianGrid strokeDasharray="3 3" />
-                                <XAxis dataKey="name" />
-                                <YAxis />
-                                <Tooltip />
-                                {includeData1 && <Bar dataKey="data1" className='bar_chart_first' barSize={24} fill="#90EE90" />}
-                                {includeData2 && <Bar dataKey="data2" fill="#FF7F7F" barSize={24} />}
-                            </BarChart>
-                        </ResponsiveContainer>
-                    </div>
+                        <div>
+                            <PrimaryLoader />
+                        </div>
+                    ) : (
+                        <div className="main_data_chart_div_earning">
+                            <ResponsiveContainer width="100%" height={400}>
+                                <BarChart
+                                    height={300}
+                                    data={filteredData}
+                                    margin={{
+                                        top: 20, right: 30, left: 20, bottom: 5,
+                                    }}
+                                    borderRadius={5}
+                                >
+                                    <CartesianGrid strokeDasharray="3 3" />
+                                    <XAxis dataKey="name" />
+                                    <YAxis />
+                                    <Tooltip />
+                                    {includeVerified && <Bar dataKey="verified" className='bar_chart_first' barSize={24} fill="#90EE90" />}
+                                    {includeRejected && <Bar dataKey="rejected" fill="#FF7F7F" barSize={24} />}
+                                </BarChart>
+                            </ResponsiveContainer>
+                        </div>
                     )}
-
-                    
                 </div>
             </div>
         </div>

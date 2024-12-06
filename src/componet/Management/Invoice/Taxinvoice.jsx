@@ -132,8 +132,8 @@ const TaxInvoices = () => {
         const date = new Date(dateString);
         
         // Get the day, month, and year
-        const day = String(date.getDate()).padStart(2, '0'); // Ensure two digits
-        const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+        const day = String(date.getDate()).padStart(2, '0'); 
+        const month = String(date.getMonth() + 1).padStart(2, '0'); 
         const year = date.getFullYear();
         
         return `${day}-${month}-${year}`;
@@ -191,15 +191,22 @@ const TaxInvoices = () => {
                         {filteredInvoices.map((invoice, index) => (
                             <tr key={invoice._id}>
                                 <td>{index + 1}</td>
-                                <td style={{ wordWrap: 'break-word' , maxWidth: '100px' }}>{invoice.client_name}</td>
+
+                                <td style={{ wordWrap: 'break-word' , maxWidth: '100px' }}>
+                                <Link to={`/management/tax-invoice/details/${invoice._id}`} >
+                                    {invoice.client_name}
+                                </Link>
+                                    </td>
                                 <td style={{ wordWrap: 'break-word' , maxWidth: '500px' }} >{invoice.address}</td>
                                 <td>{invoice.contact_no}</td>
+                                    <td>
                                 <Link to={`/management/tax-invoice/details/${invoice._id}`} target='_blank' >
-                                    <td>{invoice.gst}</td>
+                                        {invoice.gst}
                                 </Link>
+                                        </td>
                                 <td>{invoice.state_code}</td>
                                 {/* <td>{formatDate(invoice.createdAt)}</td> */}
-                                <td>{formatDate(invoice.createdAt)}</td>
+                                <td>{formatDate(invoice.bill_date)}</td>
                                 <td className=''>
                                     <button className='me-2' onClick={() => openDeleteModal(invoice._id)}>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-trash3" viewBox="0 0 16 16">

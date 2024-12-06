@@ -140,7 +140,7 @@ const App = () => {
   const fetchCampaignDetails = async (id) => {
     setCampignLoading(true);
     try {
-      const response = await makeApi(`/v1/campaigns/${id}`, "GET");
+      const response = await makeApi(`/v1/campaign-id-for-admin/${id}`, "GET");
       setCampaignDetails(response.data.data);
       setFilters({
         ...filters,
@@ -157,7 +157,7 @@ const App = () => {
       setCampignLoading(false);
     }
   };
-
+ 
 
   // filter items 
 

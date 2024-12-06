@@ -1,4 +1,3 @@
-
 import "../../../style/managment/invoice/ProformaInvoices.css";
 import React, { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -9,29 +8,48 @@ import html2pdf from "html2pdf.js";
 import PrimaryLoader from '../../../utils/PrimaryLoader.jsx';
 import toWords from 'num-words';
 
-
 const TaxInvoiceDetails = () => {
     const { id } = useParams();
     const [invoiceData, setInvoiceData] = useState(null);
     const invoiceRef = useRef();
     const [loading, setLoading] = useState(false);
     const [grandtotall, setGrandTotal] = useState(0);
-const [totalInWords, setTotalInWords] = useState('');
-console.log("totalInWords: ", totalInWords);
-
-useEffect(() => {
-    if (invoiceData) {
-        const { totalTaxable, totalCGST, totalSGST, totalIGST, grandTotal } = calculateTotal();
-        setGrandTotal(grandTotal);
-        // setTotalInWords(numberToWords.toWords(grandTotal));
-        const inWords = toWords(grandTotal);
-        const formattedWords = inWords.replace(/^(one lakh)/, 'One Lakh')
-                                      .replace(/^(one crore)/, 'One Crore');
-
-        setTotalInWords(formattedWords);
-    }
-}, [invoiceData]);
-
+    const [totalInWords, setTotalInWords] = useState('');
+    useEffect(() => {
+        if (invoiceData) {
+            const { totalTaxable, totalCGST, totalSGST, totalIGST, grandTotal } = calculateTotal();
+    
+            // Round grandTotal to 2 decimal places (you can round it here if needed for display purposes)
+            const roundedGrandTotal = grandTotal.toFixed(2); // This rounds the grand total to two decimal places for display
+    
+            // Set the grand total (rounded to two decimal places)
+            setGrandTotal(roundedGrandTotal);
+    
+            // Remove decimal part for word conversion
+            const integerGrandTotal = Math.floor(grandTotal);  // This removes the decimals
+            
+            console.log("-------------", integerGrandTotal); // Check the value passed to toWords
+    
+            // Check if rounded grandTotal is a valid number
+            const validGrandTotal = parseFloat(roundedGrandTotal);
+    
+            if (!isNaN(validGrandTotal) && isFinite(validGrandTotal)) {
+                try {
+                    const inWords = toWords(integerGrandTotal);  // Pass the integer part to toWords()
+                    const formattedWords = inWords.replace(/^(one lakh)/, 'One Lakh')
+                                                  .replace(/^(one crore)/, 'One Crore');
+                    setTotalInWords(formattedWords);
+                } catch (error) {
+                    console.error("Error converting grand total to words:", error);
+                    setTotalInWords("Error converting amount to words");
+                }
+            } else {
+                console.error("Invalid grand total:", validGrandTotal);
+                setTotalInWords("Invalid total amount");
+            }
+        }
+    }, [invoiceData]);
+    
 
     useEffect(() => {
         const fetchInvoiceData = async () => {
@@ -66,20 +84,20 @@ useEffect(() => {
         let totalSGST = 0;
         let totalIGST = 0;
         let grandTotal = 0;
-
+    
         mybillwithproduct.forEach(item => {
-            const taxable = parseFloat(item.taxable);
-            const cgst_Amount = parseFloat(item.cgst_Amount);
-            const sgst_Amount = parseFloat(item.sgst_Amount);
-            const igst_Amount = parseFloat(item.igst_Amount);
-
+            const taxable = parseFloat(item.taxable) || 0; // Safe parse
+            const cgst_Amount = parseFloat(item.cgst_Amount) || 0; // Safe parse
+            const sgst_Amount = parseFloat(item.sgst_Amount) || 0; // Safe parse
+            const igst_Amount = parseFloat(item.igst_Amount) || 0; // Safe parse
+    
             totalTaxable += taxable;
             totalCGST += cgst_Amount;
             totalSGST += sgst_Amount;
             totalIGST += igst_Amount;
             grandTotal += taxable + cgst_Amount + sgst_Amount + igst_Amount;
         });
-
+    
         return {
             totalTaxable,
             totalCGST,
@@ -90,7 +108,7 @@ useEffect(() => {
     };
 
     const { totalTaxable, totalCGST, totalSGST, totalIGST, grandTotal } = calculateTotal();
-   
+
     // print and download invoice
     const handlePrint = () => {
         window.print();
@@ -103,7 +121,7 @@ useEffect(() => {
             const element = invoiceRef.current;
             const opt = {
                 margin: 0.2,
-                filename: `invoice_${mybill.invoice_no}.pdf`,
+                filename: `invoice_${mybill.tax_invoice_no}.pdf`,
                 image: { type: 'jpeg', quality: 0.98 },
                 html2canvas: { scale: 2 },
                 jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
@@ -116,12 +134,9 @@ useEffect(() => {
         }
     };
 
-    
-
     return (
         <>
             {loading ? <div style={{ height: "100%", width: "100%", top: "0", display: "flex", justifyContent: "center", alignItems: "center", zIndex: "9999", position: "fixed", backgroundColor: "rgba(0,0,0,0.3)" }}> <PrimaryLoader /> </div> : (
-
                 <>
                     <div className="button-section  p-1">
                         <button onClick={handlePrint}>Print Invoice</button>
@@ -133,19 +148,22 @@ useEffect(() => {
                                 <img src={Icon} alt="Logo" />
                             </div>
                             <div className="invoice_page_border">
-                                {/* <h3>PROFORMA INVOICE</h3> */}
                                 <h3>TAX INVOICE</h3>
                             </div>
                             <div className="invoice-info">
                                 <div className="d-flex justify-content-around w-75">
                                     <div>Invoice Number:</div>
                                     <div><strong>{mybill.tax_invoice_no}</strong></div>
-                                    {/* <div><strong>TXT242520</strong></div> */}
                                 </div>
                                 <div className="d-flex justify-content-around w-75">
                                     <div className="">Invoice Date:</div>
-                                    {/* <div><strong>{new Date(mybill.bill_date).toLocaleDateString()}</strong></div> */}
-                                    <div><strong>30-8-2024</strong></div>
+                                    {/* <div><strong>{new Date(mybill?.bill_date).toLocaleDateString()}</strong></div> */}
+                                    <div><strong>{new Date(mybill?.bill_date).toLocaleDateString('en-GB', {
+    day: '2-digit',
+    month: '2-digit',
+    year: '2-digit'
+})}</strong></div>
+
                                 </div>
                             </div>
                         </div>
@@ -237,12 +255,16 @@ useEffect(() => {
                                             <td>{item.sgst_Amount}</td>
                                             <td>{item.igst_Rate}%</td>
                                             <td>{item.igst_Amount}</td>
-                                            <td>{parseFloat(item.taxable) + parseFloat(item.cgst_Amount) + parseFloat(item.sgst_Amount) + parseFloat(item.igst_Amount)}</td>
+                                            {/* <td>{parseFloat(item.taxable) + parseFloat(item.cgst_Amount) + parseFloat(item.sgst_Amount) + parseFloat(item.igst_Amount)} </td> */}
+                                            <td>
+  {(parseFloat(item.taxable) + parseFloat(item.cgst_Amount) + parseFloat(item.sgst_Amount) + parseFloat(item.igst_Amount)).toFixed(2)}
+</td>
+
                                         </tr>
                                     ))}
                                     <tr>
                                         <td colSpan="12">TOTAL</td>
-                                        <td>{grandTotal}</td>
+                                        <td>{grandtotall}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -250,11 +272,10 @@ useEffect(() => {
 
                         <div className="invoice-summary invoice_page_border p-1">
                             <div className="total-amount invoice_page_border text-center">
-                                <p className="pt-2" >Total Invoice Amount in Words: <strong></strong></p>
-                                {/* <p style={{ fontSize: '17px' , textTransform: 'uppercase', fontWeight: 'bold' }} >{totalInWords}</p> */}
-                                <p style={{ fontSize: '17px' , textTransform: 'uppercase', fontWeight: 'bold' }} >{totalInWords} Rupees Only</p>
-
-
+                                <p className="pt-2">Total Invoice Amount in Words:</p>
+                                <p style={{ fontSize: '17px', textTransform: 'uppercase', fontWeight: 'bold' }}>
+                                    {totalInWords} Rupees Only
+                                </p>
                             </div>
                             <div className="amount-summary invoice_page_border">
                                 <div className="table_data_invoice">
@@ -279,7 +300,7 @@ useEffect(() => {
                                 </div>
                                 <div className="table_data_invoice">
                                     <div>Final Amount:</div>
-                                    <div>{grandTotal}</div>
+                                    <div>{grandtotall}</div>
                                 </div>
                             </div>
                         </div>
@@ -335,7 +356,6 @@ useEffect(() => {
                 </>
             )}
         </>
-
     );
 };
 

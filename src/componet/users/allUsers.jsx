@@ -49,7 +49,6 @@ function AllUser() {
     try {
       const response = await makeApi(`/V1/influencers?${serachQuery}=${searchQuery}&verification=${selectedVerification}&level=${selectedLevel}&gender=${filterGender}&industry=${filterIndustry}&language=${filterLanguage}&primary_platform=${filterPrimaryPlatform}&ship_country=${filterCountry}&ship_state=${filterState}&ship_city=${filterCity}&perPage=50&page=${currentPage}`, 'GET');
       const Count = await makeApi('/V1/influencers/influencers-count', 'GET');
-      console.log(Count.data.data)
       setCountuser(Count.data.data)
       const newUsers = response.data.data;
       const total = response.data.dataCount;
