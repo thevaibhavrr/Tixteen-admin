@@ -33,7 +33,9 @@ const PaymentScheduleTraction = () => {
                         productRs: payment.campaignDetails.product_price,
                         infAmount: payment.amount,
                         reward: payment.rewards || 0,
-                        total: (parseFloat(payment.campaignDetails.product_price) + parseFloat(payment.amount) + parseFloat(payment.rewards || 0)).toFixed(2),
+                        // total: (parseFloat(payment.campaignDetails.product_price) + parseFloat(payment.amount) + parseFloat(payment.rewards || 0)).toFixed(2),
+                total: (parseFloat(payment?.amount) + parseFloat(payment?.rewards || 0)).toFixed(2),
+
                         actionDate: parseDate(payment.pay_scedule_date) || new Date().toISOString().split('T')[0],
                         campaign_no: payment.campaign_no,
                         influ_id: payment.influ_id,

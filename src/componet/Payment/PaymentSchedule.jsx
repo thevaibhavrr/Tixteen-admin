@@ -106,7 +106,7 @@ const PaymentSchedule = () => {
         } finally {
             setLoading(false);
         }
-    };
+    }; 
     
 
     const downloadExcel = () => {
@@ -173,7 +173,7 @@ const PaymentSchedule = () => {
                                         onChange={(e) => handleInputChange(e, index, 'infAmount')}
                                         className='form-control w-75'
                                     />
-                                </td>
+                                </td> 
                             {/* <td>{payment.reward}</td> */}
                             <td>
                                     <input
