@@ -233,6 +233,8 @@ function CreateCampaign() {
         followers,
         influencerData
       });
+      localStorage.removeItem('all-campaigns-for-admin');
+      localStorage.removeItem('campaigns-timestamp');
       toast("campaign created successfully", {
         onClose: () => {
           navigate("/campaign/CampaignList");

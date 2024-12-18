@@ -44,8 +44,7 @@ function CampaignUpdate() {
     influ_working_days: '',
     reward_days: '',
   });
-  console.log("---------", campaign);
-
+ 
   const fetchCampaignDetails = async () => {
     try {
       setLoading(true);
@@ -122,6 +121,8 @@ function CampaignUpdate() {
     try {
       setLoading(true);
       await makeApi(`/api/campaign/deliverable/${deliverableId}`, 'PUT', { deliverable: updatedName });
+      localStorage.removeItem('all-campaigns-for-admin');
+                    localStorage.removeItem('campaigns-timestamp');
       fetchCampaignDeliverables();
     } catch (error) {
       console.error('Error updating campaign deliverable:', error);
@@ -135,6 +136,8 @@ function CampaignUpdate() {
     try {
       setLoading(true);
       await makeApi('/api/campaign/deliverable', 'POST', { campaign_no: id, deliverable: newDeliverable });
+      localStorage.removeItem('all-campaigns-for-admin');
+                    localStorage.removeItem('campaigns-timestamp');
       setNewDeliverable("");
       fetchCampaignDeliverables();
     } catch (error) {
@@ -210,6 +213,8 @@ function CampaignUpdate() {
     e.preventDefault();
     try {
       const response = await makeApi(`/v1/campaign/update/${id}`, 'PUT', campaign);
+      localStorage.removeItem('all-campaigns-for-admin');
+      localStorage.removeItem('campaigns-timestamp');
       toast("campaign update successfully", {
         onClose: () => {
           navigate(`/campaign/campaign-details/${id}`);

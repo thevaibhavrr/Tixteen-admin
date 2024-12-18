@@ -6,6 +6,8 @@ import PrimaryLoader from '../../utils/PrimaryLoader.jsx';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import 'react-lazy-load-image-component/src/effects/blur.css';
 
+
+
 function AllUser() {
   const [users, setUsers] = useState([]);
 
@@ -64,74 +66,213 @@ function AllUser() {
   const fetchLanguages = async () => {
     setLoading(true);
     try {
-      const res = await makeApi('/v1/get-all-languages', 'GET');
-      setLanguageList(res.data.data);
+      const storedLanguages = JSON.parse(localStorage.getItem('languages'));
+      const currentTime = new Date().getTime();
+      if (storedLanguages && (currentTime - storedLanguages.timestamp < 180000)) {
+        setLanguageList(storedLanguages.data);
+      } else {
+        localStorage.removeItem('languages'); // Remove expired data
+        const res = await makeApi('/v1/get-all-languages', 'GET');
+        setLanguageList(res.data.data);
+        localStorage.setItem('languages', JSON.stringify({
+          data: res.data.data,
+          timestamp: currentTime,
+        }));
+      }
     } catch (error) {
       console.error(error);
     } finally {
       setLoading(false);
     }
   };
-
+  
   const fetchLevels = async () => {
     try {
       setLoading(true);
-      const response = await makeApi('/v1/get-all-levels', "GET");
-      setLevels(response.data.data);
+      const storedLevels = JSON.parse(localStorage.getItem('levels'));
+      const currentTime = new Date().getTime();
+      if (storedLevels && (currentTime - storedLevels.timestamp < 180000)) {
+        setLevels(storedLevels.data);
+      } else {
+        localStorage.removeItem('levels'); // Remove expired data
+        const response = await makeApi('/v1/get-all-levels', "GET");
+        setLevels(response.data.data);
+        localStorage.setItem('levels', JSON.stringify({
+          data: response.data.data,
+          timestamp: currentTime,
+        }));
+      }
     } catch (error) {
       console.error("Failed to fetch levels:", error);
     } finally {
       setLoading(false);
     }
   };
-
+  
   const FetchIndustryList = async () => {
     setLoading(true);
     try {
-      const res = await makeApi('/v1/get-all-industries', 'GET');
-      setIndustryList(res.data.data);
+      const storedIndustry = JSON.parse(localStorage.getItem('industries'));
+      const currentTime = new Date().getTime();
+      if (storedIndustry && (currentTime - storedIndustry.timestamp < 180000)) {
+        setIndustryList(storedIndustry.data);
+      } else {
+        localStorage.removeItem('industries'); // Remove expired data
+        const res = await makeApi('/v1/get-all-industries', 'GET');
+        setIndustryList(res.data.data);
+        localStorage.setItem('industries', JSON.stringify({
+          data: res.data.data,
+          timestamp: currentTime,
+        }));
+      }
     } catch (error) {
       console.log(error);
     } finally {
       setLoading(false);
     }
-  }
-
+  };
+  
   const FetchCountryList = async () => {
     setLoading(true);
     try {
-      const res = await makeApi('/v1/get-all-countries', 'GET');
-      setCountryList(res.data.data);
+      const storedCountry = JSON.parse(localStorage.getItem('countries'));
+      const currentTime = new Date().getTime();
+      if (storedCountry && (currentTime - storedCountry.timestamp < 180000)) {
+        setCountryList(storedCountry.data);
+      } else {
+        localStorage.removeItem('countries'); 
+        const res = await makeApi('/v1/get-all-countries', 'GET');
+        setCountryList(res.data.data);
+        localStorage.setItem('countries', JSON.stringify({
+          data: res.data.data,
+          timestamp: currentTime,
+        }));
+      }
     } catch (error) {
       console.log(error);
     } finally {
       setLoading(false);
     }
-  }
-
+  };
+  
   const FetchStateList = async () => {
     setLoading(true);
     try {
-      const res = await makeApi('/v1/get-all-states', 'GET');
-      setStatesList(res.data.data);
+      const storedStates = JSON.parse(localStorage.getItem('states'));
+      const currentTime = new Date().getTime();
+      if (storedStates && (currentTime - storedStates.timestamp < 180000)) {
+        setStatesList(storedStates.data);
+      } else {
+        localStorage.removeItem('states'); // Remove expired data
+        const res = await makeApi('/v1/get-all-states', 'GET');
+        setStatesList(res.data.data);
+        localStorage.setItem('states', JSON.stringify({
+          data: res.data.data,
+          timestamp: currentTime,
+        }));
+      }
     } catch (error) {
       console.log(error);
     } finally {
       setLoading(false);
     }
-  }
-
+  };
+  
   const FetchCitiesList = async () => {
     setLoading(true);
     try {
-      const res = await makeApi('/v1/get-all-cities', 'GET');
-      await setCitiesList(res.data.data);
+      const storedCities = JSON.parse(localStorage.getItem('cities'));
+      const currentTime = new Date().getTime();
+      if (storedCities && (currentTime - storedCities.timestamp < 180000)) {
+        setCitiesList(storedCities.data);
+      } else {
+        localStorage.removeItem('cities'); // Remove expired data
+        const res = await makeApi('/v1/get-all-cities', 'GET');
+        setCitiesList(res.data.data);
+        localStorage.setItem('cities', JSON.stringify({
+          data: res.data.data,
+          timestamp: currentTime,
+        }));
+      }
     } catch (error) {
       console.log(error);
     } finally {
       setLoading(false);
     }
-  }
+  };
+  
+
+  // const fetchLanguages = async () => {
+  //   setLoading(true);
+  //   try {
+  //     const res = await makeApi('/v1/get-all-languages', 'GET');
+  //     setLanguageList(res.data.data);
+  //   } catch (error) {
+  //     console.error(error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+  // const fetchLevels = async () => {
+  //   try {
+  //     setLoading(true);
+  //     const response = await makeApi('/v1/get-all-levels', "GET");
+  //     setLevels(response.data.data);
+  //   } catch (error) {
+  //     console.error("Failed to fetch levels:", error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+  // const FetchIndustryList = async () => {
+  //   setLoading(true);
+  //   try {
+  //     const res = await makeApi('/v1/get-all-industries', 'GET');
+  //     setIndustryList(res.data.data);
+  //   } catch (error) {
+  //     console.log(error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // }
+
+  // const FetchCountryList = async () => {
+  //   setLoading(true);
+  //   try {
+  //     const res = await makeApi('/v1/get-all-countries', 'GET');
+  //     setCountryList(res.data.data);
+  //   } catch (error) {
+  //     console.log(error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // }
+
+  // const FetchStateList = async () => {
+  //   setLoading(true);
+  //   try {
+  //     const res = await makeApi('/v1/get-all-states', 'GET');
+  //     setStatesList(res.data.data);
+  //   } catch (error) {
+  //     console.log(error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // }
+
+  // const FetchCitiesList = async () => {
+  //   setLoading(true);
+  //   try {
+  //     const res = await makeApi('/v1/get-all-cities', 'GET');
+  //     await setCitiesList(res.data.data);
+  //   } catch (error) {
+  //     console.log(error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // }
   useEffect(() => {
     FetchCitiesList();
     FetchIndustryList();

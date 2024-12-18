@@ -41,62 +41,141 @@ const App = () => {
   const [filterGender, setFilterGender] = useState("");
 
   // Fetch Industry
+  // const fetchIndustry = async () => {
+  //   setCampignLoading(true);
+  //   try {
+  //     const response = await makeApi("/v1/get-all-industries", "GET");
+  //     setIndustryList(response.data.data);
+  //   } catch (error) {
+  //     console.error('Error fetching industry:', error);
+  //   } finally {
+  //     setCampignLoading(false);
+  //   }
+  // };
+
+  // const fetchLevels = async () => {
+  //   try {
+  //     setḶevelLoading(true);
+  //     const response = await makeApi('/v1/get-all-levels', "GET");
+  //     setLevels(response.data.data);
+  //   } catch (error) {
+  //     console.error("Failed to fetch levels:", error);
+  //   } finally {
+  //     setḶevelLoading(false);
+  //   }
+  // };
+
+  // // Fetch Country
+  // const fetchCountry = async () => {
+  //   try {
+  //     const response = await makeApi("/v1/get-all-countries", "GET");
+  //     setCountryList(response.data.data);
+  //   } catch (error) {
+  //     console.error('Error fetching country:', error);
+  //   }
+  // };
+
+  // // Fetch City
+  // const fetchCity = async () => {
+  //   try {
+  //     const response = await makeApi("/v1/get-all-cities", "GET");
+  //     setCityList(response.data.data);
+  //   } catch (error) {
+  //     console.error('Error fetching city:', error);
+  //   }
+  // };
+  // const fetchLanguages = async () => {
+  //   // setLoading (true);
+  //   try {
+  //     const res = await makeApi('/v1/get-all-languages', 'GET');
+
+  //     setLanguages(res.data.data);
+  //   } catch (error) {
+  //     console.error(error);
+  //   } finally {
+  //     // setLoading (false);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   fetchIndustry();
+  //   fetchCountry();
+  //   fetchCity();
+  //   fetchLevels();
+  //   fetchLanguages();
+  // }, []);
+
   const fetchIndustry = async () => {
     setCampignLoading(true);
     try {
       const response = await makeApi("/v1/get-all-industries", "GET");
       setIndustryList(response.data.data);
+      localStorage.setItem("industryList", JSON.stringify(response.data.data));
+      setTimeout(() => {
+        localStorage.removeItem("industryList");
+      }, 180000);
     } catch (error) {
       console.error('Error fetching industry:', error);
     } finally {
       setCampignLoading(false);
     }
   };
-
+  
   const fetchLevels = async () => {
     try {
       setḶevelLoading(true);
       const response = await makeApi('/v1/get-all-levels', "GET");
       setLevels(response.data.data);
+      localStorage.setItem("levels", JSON.stringify(response.data.data));
+      setTimeout(() => {
+        localStorage.removeItem("levels");
+      }, 180000);
     } catch (error) {
       console.error("Failed to fetch levels:", error);
     } finally {
       setḶevelLoading(false);
     }
   };
-
-  // Fetch Country
+  
   const fetchCountry = async () => {
     try {
       const response = await makeApi("/v1/get-all-countries", "GET");
       setCountryList(response.data.data);
+      localStorage.setItem("countryList", JSON.stringify(response.data.data));
+      setTimeout(() => {
+        localStorage.removeItem("countryList");
+      }, 180000);
     } catch (error) {
       console.error('Error fetching country:', error);
     }
   };
-
-  // Fetch City
+  
   const fetchCity = async () => {
     try {
       const response = await makeApi("/v1/get-all-cities", "GET");
       setCityList(response.data.data);
+      localStorage.setItem("cityList", JSON.stringify(response.data.data));
+      setTimeout(() => {
+        localStorage.removeItem("cityList");
+      }, 180000);
     } catch (error) {
       console.error('Error fetching city:', error);
     }
   };
+  
   const fetchLanguages = async () => {
-    // setLoading (true);
     try {
       const res = await makeApi('/v1/get-all-languages', 'GET');
-
       setLanguages(res.data.data);
+      localStorage.setItem("languages", JSON.stringify(res.data.data));
+      setTimeout(() => {
+        localStorage.removeItem("languages");
+      }, 180000);
     } catch (error) {
       console.error(error);
-    } finally {
-      // setLoading (false);
     }
   };
-
+  
   useEffect(() => {
     fetchIndustry();
     fetchCountry();
@@ -104,6 +183,7 @@ const App = () => {
     fetchLevels();
     fetchLanguages();
   }, []);
+  
 
   useEffect(() => {
     const fetchCampaigns = async () => {
@@ -125,9 +205,7 @@ const App = () => {
   const fetchUsers = async (filters) => {
     setIsLoading(true);
     try {
-
       const response = await makeApi(`/V1/influencers?MultiLevels=${filterLevel}&industry=${filterIndustry}&language=${filterLanguage}&verification=Verified&gender=${filterGender}&perPage=50000000&page=${currentPage}`, 'GET');
-      console.log(response.data.data);
       setUserList(response.data.data);
       setFilteredUserList(response.data.data);
     } catch (error) {
@@ -227,9 +305,7 @@ const App = () => {
       });
     }
   };
-  const handleFilterLevelChecke = (e) => {
-    console.log(e.target.value)
-  }
+
 
   const handleCheckboxChange = (e) => {
     const userId = e.target.value;
@@ -252,7 +328,6 @@ const App = () => {
         };
       });
       const response = await makeApi("/v1/admin/api/send-message", "POST", { users: selectedUserDetails, campaignData: campaignDetails });
-      console.log("Messages sent successfully:", response.data);
       toast.success("Message sended. ")
       setLoading(false);
     } catch (error) {
