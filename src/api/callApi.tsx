@@ -21,7 +21,7 @@ export const makeApi = async (
 			method,
 			// url: `http://localhost:5001${endpoint}`, 
 			// url: `https://ritaz.in${endpoint}`, 
-			url: `https://tixtee.ritaz.in${endpoint}`, 
+			url: `https://tixteen.ritaz.in${endpoint}`, 
 			// url: `https://tixteen-backend.onrender.com${endpoint}`,
 			headers,
 			data,
