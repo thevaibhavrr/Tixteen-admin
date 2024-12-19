@@ -80,18 +80,12 @@ const CampaignList = () => {
                     return;
                 }
 
-                // Fetch from API if not in localStorage or data is older than 1 minute
                 const response = await makeApi('/v1/all-campaigns-for-admin', 'GET');
                 const campaigns = response?.data?.data || [];
-
-                console.log("campaigns-=-=-=-", campaigns);
-                // Store in state
                 setCampaignList(campaigns);
-                // Store in localStorage and set timestamp
                 localStorage.setItem('all-campaigns-for-admin', JSON.stringify(campaigns));
                 localStorage.setItem('campaigns-timestamp', currentTime.toString());
 
-                // Clear localStorage after 1 minute (60000 ms)
                 setTimeout(() => {
                     localStorage.removeItem('all-campaigns-for-admin');
                     localStorage.removeItem('campaigns-timestamp');
